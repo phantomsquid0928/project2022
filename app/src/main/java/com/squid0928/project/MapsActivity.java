@@ -1,4 +1,4 @@
-package com.example.project;
+package com.squid0928.project;
 
 import androidx.fragment.app.FragmentActivity;
 import android.os.Bundle;
@@ -9,7 +9,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.example.project.databinding.ActivityMapsBinding;
+import com.squid0928.project.databinding.ActivityMapsBinding;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 

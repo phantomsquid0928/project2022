@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.project'
+    namespace 'com.squid0928.project'
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.example.project"
+        applicationId "com.squid0928.project"
         minSdk 22
         targetSdk 32
         versionCode 1

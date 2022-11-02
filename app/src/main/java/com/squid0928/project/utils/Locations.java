@@ -1,4 +1,4 @@
-package com.example.project.utils;
+package com.squid0928.project.utils;
 
 import java.util.ArrayList;
 import java.util.List;

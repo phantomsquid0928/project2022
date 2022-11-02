@@ -1,4 +1,4 @@
-package com.example.project;
+package com.squid0928.project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
