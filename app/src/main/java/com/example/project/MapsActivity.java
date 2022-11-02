@@ -13,8 +13,10 @@ import com.example.project.databinding.ActivityMapsBinding;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    private double locx, locy;
+
     private GoogleMap mMap;
-private ActivityMapsBinding binding;
+    private ActivityMapsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
