@@ -1,7 +1,10 @@
 package com.squid0928.project;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -9,12 +12,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.squid0928.project.databinding.ActivityMapsBinding;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private double locx, locy;
 
+    public BottomNavigationView bottomNav;
+    private LinearLayout ly;
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
 
@@ -22,9 +29,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-     binding = ActivityMapsBinding.inflate(getLayoutInflater());
-     setContentView(binding.getRoot());
+        /*binding = ActivityMapsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());*/
+        setContentView(R.layout.activity_maps);
+        bottomNav = findViewById(R.id.bottomView);
+        ly = findViewById(R.id.home_layout);
+        bottomNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch(id) {
+                    case R.id.tab_map:
+                        break;
+                    case R.id.tab_friend:
+                        break;
+                    case R.id.tab_settings:
+                        break;
+                }
+                return true;
+            }
+        });
 
+        bottomNav.setSelectedItemId(R.id.tab_map);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
