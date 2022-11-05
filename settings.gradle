@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "project"
+rootProject.name = "firebaselogintest"
 include ':app'

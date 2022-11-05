@@ -1,4 +1,4 @@
-package com.example.project;
+package org.techtown.firebaselogintest;
 
 import org.junit.Test;
 
