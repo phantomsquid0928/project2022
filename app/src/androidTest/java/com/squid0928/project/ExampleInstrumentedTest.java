@@ -1,4 +1,4 @@
-package org.techtown.firebaselogintest;
+package com.squid0928.project;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("org.techtown.firebaselogintest", appContext.getPackageName());
+        assertEquals("com.squid0928.project", appContext.getPackageName());
     }
 }

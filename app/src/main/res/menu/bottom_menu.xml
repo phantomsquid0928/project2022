@@ -1,30 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/memo"
+        android:id="@+id/tab_map"
         android:enabled="true"
-        android:icon="@drawable/ic_memo"
-        android:title="메모 + 알람"
-        app:showAsAction="always"
-
-        ></item>
+        android:title="home" />  <!--@string/~~~로 변환 필요-->  <!--여기 -->
     <item
-        android:id="@+id/friend"
+        android:id="@+id/tab_friend"
         android:enabled="true"
-        android:icon="@drawable/ic_friend"
-        android:title="친구"
-        app:showAsAction="always"
-
-        ></item>
+        android:title="friend" />
     <item
-        android:id="@+id/setting"
+        android:id="@+id/tab_settings"
         android:enabled="true"
-        android:icon="@drawable/ic_setting"
-        android:title="설정"
-        app:showAsAction="always"
-
-        ></item>
-
+        android:title="settings" />     <!--android:icon = "@drawable:file-name" 추가-->
 
 </menu>

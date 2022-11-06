@@ -1,4 +1,4 @@
-package org.techtown.firebaselogintest;
+package com.squid0928.project;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squid0928.project.utils.UserAccount;
 
 public class RegisterActivity extends AppCompatActivity {
 
