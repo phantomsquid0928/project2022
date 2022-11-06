@@ -8,11 +8,13 @@ import java.util.Set;
 public class UserData {
     private HashMap<String, Locations> savedLocations = new HashMap<>();
     private String name;              //니이름
-    private List<String> friends;     //칭구
-    private List<String> blacklist;  //차단한 유저?
+    private List<UserData> friends;     //칭구
+    private List<UserData> blacklist;  //차단한 유저?
+    private UserAccount account;
 
-    public UserData (String name) {
+    public UserData (String name, UserAccount account) {
         this.name = name;
+        this.account = account;
     }
     public HashMap<String, Locations> getSavedLocations() {
         return savedLocations;
@@ -34,10 +36,11 @@ public class UserData {
         if (ret.isEmpty()) return null;
         return ret;
     }
-    public List<String> getFriends() {
+    public List<UserData> getFriends() {
         return friends;
     }
     public boolean addFriends(UserData friend) {
+        friends.add(friend);
         return false;
     }
 

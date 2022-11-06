@@ -1,4 +1,4 @@
-package org.techtown.firebaselogintest;
+package com.squid0928.project;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

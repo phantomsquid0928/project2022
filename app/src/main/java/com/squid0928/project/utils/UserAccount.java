@@ -1,4 +1,4 @@
-package org.techtown.firebaselogintest;
+package com.squid0928.project.utils;
 
 /**
  * 사용자 계정 정보 모델 클래스

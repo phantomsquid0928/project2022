@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:696787793145:android:2688fd3d52e7b6ecba9e28",
         "android_client_info": {
-          "package_name": "org.techtown.firebaselogintest"
+          "package_name": "com.squid0928.project"
         }
       },
       "oauth_client": [
