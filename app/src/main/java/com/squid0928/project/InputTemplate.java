@@ -1,4 +1,4 @@
-package com.example.project;
+package com.squid0928.project;
 
 import android.Manifest;
 import android.app.Dialog;
