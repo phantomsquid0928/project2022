@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/memo"
+        android:enabled="true"
+        android:icon="@drawable/ic_memo"
+        android:title="메모 + 알람"
+        app:showAsAction="always"
+
+        ></item>
+    <item
+        android:id="@+id/friend"
+        android:enabled="true"
+        android:icon="@drawable/ic_friend"
+        android:title="친구"
+        app:showAsAction="always"
+
+        ></item>
+    <item
+        android:id="@+id/setting"
+        android:enabled="true"
+        android:icon="@drawable/ic_setting"
+        android:title="설정"
+        app:showAsAction="always"
+
+        ></item>
+
+
+</menu>

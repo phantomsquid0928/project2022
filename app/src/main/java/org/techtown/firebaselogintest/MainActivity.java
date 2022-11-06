@@ -1,39 +1,55 @@
 package org.techtown.firebaselogintest;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.material.navigation.NavigationBarItemView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity
 {
-    private FirebaseAuth mFirebaseAuth;
+    MemoFragment memoFragment;
+    FriendFragment friendFragment;
+    SettingFragment settingFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btn_logout = findViewById(R.id.btn_logout);
-        btn_logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view)
-            {
-                Toast.makeText(MainActivity.this, "로그아웃합니다.", Toast.LENGTH_LONG).show();
-                mFirebaseAuth.signOut(); // 로그인 아웃
+        memoFragment = new MemoFragment();
+        friendFragment = new FriendFragment();
+        settingFragment = new SettingFragment();
 
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+        // 초기 화면은 MemoFragment 설정
+        getSupportFragmentManager().beginTransaction().replace(R.id.containers, memoFragment).commit();
+
+        NavigationBarView navigationBarView = findViewById(R.id.bottom_navigationview);
+        navigationBarView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch(item.getItemId())
+                {
+                    case R.id.memo:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.containers, memoFragment).commit();
+                        return true;
+                    case R.id.friend:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.containers, friendFragment).commit();
+                        return true;
+                    case R.id.setting:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.containers, settingFragment).commit();
+                }
+                return false;
             }
         });
 
-        // 탈퇴 처리
-        // mFirebaseAuth.getCurrentUser().delete();
     }
 }
