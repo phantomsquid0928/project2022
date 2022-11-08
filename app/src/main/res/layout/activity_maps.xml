@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MapsActivity">
+
     <LinearLayout
         android:id="@+id/home_layout"
         android:layout_width="match_parent"
@@ -24,6 +25,7 @@
             android:layout_height="match_parent"
             android:name="com.google.android.gms.maps.SupportMapFragment">
         </fragment>
+
     </LinearLayout>
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id = "@+id/bottomView"
