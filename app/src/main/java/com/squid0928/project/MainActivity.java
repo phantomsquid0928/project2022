@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // mapOpen 페이지 버튼 -> 누르면 mapOpen activity = MapsActivity로 넘어감
         Button button = findViewById(R.id.mapOpen);
         button.setOnClickListener(new View.OnClickListener() {
 
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // 로그아웃 페이지
         Button btn_logout = findViewById(R.id.btn_logout);
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override

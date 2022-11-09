@@ -25,13 +25,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
 
+    SettingsFragment settingsFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         /*binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());*/
         setContentView(R.layout.activity_maps);
+
+        settingsFragment = new SettingsFragment();
+
         bottomNav = findViewById(R.id.bottomView);
         ly = findViewById(R.id.home_layout);
         bottomNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -40,13 +44,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 int id = item.getItemId();
                 switch(id) {
                     case R.id.tab_map:
-                        break;
+                        return true;
                     case R.id.tab_friend:
-                        break;
+                        return true;
                     case R.id.tab_settings:
-                        break;
+                        getSupportFragmentManager().beginTransaction().replace(R.id.map, settingsFragment).commit();
+                        return true;
                 }
-                return true;
+                // 에러 처리
+                return false;
             }
         });
 
