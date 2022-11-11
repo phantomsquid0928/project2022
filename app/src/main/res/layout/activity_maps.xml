@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             xmlns:map="http://schemas.android.com/apk/res-auto"
             android:id="@+id/map"
+            map:mapType = "normal"
             android:layout_height="match_parent"
             android:name="com.google.android.gms.maps.SupportMapFragment">
         </fragment>

@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squid0928.project.utils.UserAccount;
+import com.squid0928.project.utils.UserData;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -62,6 +63,9 @@ public class RegisterActivity extends AppCompatActivity {
                             account.setIdToken(firebaseUser.getUid());
                             account.setEmailId(firebaseUser.getEmail());
                             account.setPassword(strPwd);
+
+                            //UserData data = new UserData(firebaseUser.getEmail(), account);
+                            //userdata.put(firebaseUser.getEmail(), data);
 
                             // setValue : database에 insert 삽입하는 행위
                             mDatabaseRef.child("UserAccount").child(firebaseUser.getUid()).setValue(account);

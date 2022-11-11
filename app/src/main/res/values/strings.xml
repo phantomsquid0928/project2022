@@ -2,4 +2,6 @@
     <string name="app_name">project</string>
     <string name="title_activity_maps_main">MapsMainActivity</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="search">search</string>
 </resources>

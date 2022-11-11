@@ -1,12 +1,14 @@
 package com.squid0928.project.utils;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class Locations implements Comparable<Locations>{
     private String name;      //약속이름잇겟지머
-    private double locx, locy;//위치정보
+    private LatLng latLng;
     private String[] locName; //위치이름
     private double timeStart, timeEnd;//시작시간 끝시간
     private int type;         //추억? 약속?
@@ -16,8 +18,7 @@ public class Locations implements Comparable<Locations>{
 
     public Locations(String name, double locx, double locy, String[] locName, double timeStart, double timeEnd, int type, String[] args) {
         this.name = name;
-        this.locx = locx;
-        this.locy = locy;
+        this.latLng = new LatLng(locx, locy);
         this.locName = locName;
         this.timeStart = timeStart;
         this.timeEnd = timeEnd;
@@ -27,8 +28,7 @@ public class Locations implements Comparable<Locations>{
     }
     public Locations(String name, double locx, double locy, String[] locName, double timeStart, double timeEnd, int type) {   //메모 없이 걍 추가
         this.name = name;
-        this.locx = locx;
-        this.locy = locy;
+        this.latLng = new LatLng(locx, locy);
         this.locName = locName;
         this.timeStart = timeStart;
         this.timeEnd = timeEnd;
@@ -37,8 +37,7 @@ public class Locations implements Comparable<Locations>{
     }
     public Locations(Locations locations, UUID locUUID) { //친구와 약속 공유시
         this.name = locations.getName();
-        this.locx = locations.getLocx();
-        this.locy = locations.getLocy();
+        this.latLng = locations.getLatLng();
         this.locName = locations.getLocName();
         this.timeStart = locations.getTimeStart();
         this.timeEnd = locations.getTimeEnd();
@@ -110,8 +109,7 @@ public class Locations implements Comparable<Locations>{
     //이 클래스의 get애들
 
     public String getName() {return name;}
-    public double getLocx() {return locx;}
-    public double getLocy() {return locy;}
+    public LatLng getLatLng() {return latLng;}
     public double getTimeStart() {return timeStart;}
     public double getTimeEnd() {return timeEnd;}
     public String[] getLocName() {return locName;}
