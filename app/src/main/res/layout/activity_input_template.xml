@@ -27,7 +27,8 @@
             android:background="@drawable/no_image"
             app:layout_constraintDimensionRatio="1"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:scaleType="centerCrop"/>
 
         <!--추억 or 약속 선택 - default 값은 추억-->
         <RadioGroup
@@ -41,18 +42,18 @@
             app:layout_constraintRight_toLeftOf="@id/memo"
             app:layout_constraintTop_toBottomOf="@id/photo">
             <RadioButton
-                android:id="@+id/memory"
+                android:id="@+id/btn_memory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="추억"
-                android:checked="true" />
+                android:checked="true"/>
             <RadioButton
-                android:id="@+id/promise"
+                android:id="@+id/btn_promise"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="약속" />
+                android:text="약속"/>
         </RadioGroup>
 
         <!--추억 or 약속에 따른 범주 설정 - 사용자 설정에 따라-->
@@ -64,30 +65,70 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/memo"
-            app:layout_constraintTop_toBottomOf="@id/memory_or_promise" />
+            app:layout_constraintTop_toBottomOf="@id/memory_or_promise"/>
 
-        <!--머문 시간 입력 여부-->
-        <CheckBox
-            android:id="@+id/check_stayed_time"
+        <FrameLayout
+            android:id="@+id/basedOnRadioBtn"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.1"
-            android:text="머문 시간 입력"
-            app:layout_constraintBottom_toTopOf="@id/stayed_time"
-            app:layout_constraintLeft_toRightOf="@id/photo"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/stayed_time"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.3"
-            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/memo"
             app:layout_constraintLeft_toRightOf="@id/photo"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/check_stayed_time"/>
+            app:layout_constraintHeight_percent="0.4">
+
+            <!--추억-->
+            <LinearLayout
+                android:id="@+id/checked_memory"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <!--추억:머문 시간 입력 여부-->
+                <CheckBox
+                    android:id="@+id/check_stayed_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.25"
+                    android:text="머문 시간 입력"/>
+
+                <!--추억:머문 날짜, 시간 표시-->
+                <TextView
+                    android:id="@+id/stayed_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.75"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <!--약속-->
+            <LinearLayout
+                android:id="@+id/checked_promise"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!--약속:날짜, 시간 표시-->
+                <TextView
+                    android:id="@+id/promised_date_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.6"
+                    android:textSize="20sp">
+                </TextView>
+
+                <!--약속:알람 설정-->
+                <Button
+                    android:id="@+id/btn_setAlarm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.4"
+                    android:text="알람 설정하기">
+                </Button>
+            </LinearLayout>
+
+        </FrameLayout>
 
         <!--메모-->
         <EditText
@@ -102,7 +143,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/photo"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/check_stayed_time" />
+            app:layout_constraintTop_toBottomOf="@id/basedOnRadioBtn"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

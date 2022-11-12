@@ -6,7 +6,7 @@
     android:gravity="center">
 
     <DatePicker
-        android:id="@+id/stayed_date"
+        android:id="@+id/stayed_date_time_date"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="0.5"
@@ -14,26 +14,26 @@
         android:scaleY="0.7"
         android:datePickerMode="calendar"/>
     <TimePicker
-        android:id="@+id/stayed_time_from"
+        android:id="@+id/stayed_date_time_from"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="0.2"
         android:timePickerMode="spinner" />
     <TextView
-        android:id="@+id/tilde"
+        android:id="@+id/stayed_date_time_tilde"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="~"
         android:textSize="30sp"
         android:gravity="center"/>
     <TimePicker
-        android:id="@+id/stayed_time_to"
+        android:id="@+id/stayed_date_time_to"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="0.2"
         android:timePickerMode="spinner"/>
     <Button
-        android:id="@+id/acceptBtn"
+        android:id="@+id/acceptBtn_stayedTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="확인"
