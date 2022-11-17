@@ -67,10 +67,10 @@ public class InputTemplateFragment extends Fragment {
     LinearLayout view_check_promise;
     InputData inputData = new InputData();
     String[] items_category = {"맛집", "숙소"};
-    String photoPath;
     Uri photoUri;
 
     private File createImageFile() throws IOException {
+        String photoPath;
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -78,7 +78,6 @@ public class InputTemplateFragment extends Fragment {
                 imageFileName, ".jpg",
                 storageDir
         );
-        photoPath = image.getAbsolutePath();
         return image;
     }
 
