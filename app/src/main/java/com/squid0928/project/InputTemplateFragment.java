@@ -47,7 +47,11 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
+import java.util.Calendar;
 import java.util.Date;
 
 public class InputTemplateFragment extends Fragment {
@@ -315,6 +319,9 @@ public class InputTemplateFragment extends Fragment {
             dialog_stayed_date_time.show();
         Window window = dialog_stayed_date_time.getWindow();
         window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        //  추억: 현재보다 이후 날짜 선택 불가
+        long date_now = System.currentTimeMillis();
+        dialog_stayed_date_from.setMaxDate(date_now);   //
         dialog_acceptBtn_stayedTime.setOnClickListener(new Button.OnClickListener() {   // 확인 버튼
             @Override
             public void onClick(View view) {
@@ -359,6 +366,9 @@ public class InputTemplateFragment extends Fragment {
             dialog_promised_date_time.show();
         Window window = dialog_promised_date_time.getWindow();
         window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        //  약속: 현재보다 이전 날짜 선택 불가
+        long date_now = System.currentTimeMillis();
+        dialog_promised_date.setMinDate(date_now);  //
         dialog_acceptBtn_promisedTime.setOnClickListener(new Button.OnClickListener() { //  확인 버튼
             @Override
             public void onClick(View view) {
