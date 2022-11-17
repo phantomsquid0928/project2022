@@ -2,41 +2,54 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="vertical">
 
     <DatePicker
-        android:id="@+id/stayed_date_time_date"
+        android:id="@+id/stayed_date_time_date_from"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="0.5"
-        android:scaleX="0.7"
-        android:scaleY="0.7"
-        android:datePickerMode="calendar"/>
+        android:layout_weight="0.3"
+        android:datePickerMode="calendar"
+        android:scaleX="0.5"
+        android:scaleY="0.5" />
+
     <TimePicker
         android:id="@+id/stayed_date_time_from"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="0.2"
         android:timePickerMode="spinner" />
+
     <TextView
         android:id="@+id/stayed_date_time_tilde"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="~"
-        android:textSize="30sp"
-        android:gravity="center"/>
+        android:textSize="30sp" />
+
+    <DatePicker
+        android:id="@+id/stayed_date_time_date_to"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:datePickerMode="calendar"
+        android:scaleX="0.5"
+        android:scaleY="0.5" />
+
     <TimePicker
         android:id="@+id/stayed_date_time_to"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="0.2"
-        android:timePickerMode="spinner"/>
+        android:timePickerMode="spinner" />
+
     <Button
         android:id="@+id/acceptBtn_stayedTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="확인"
-        android:layout_gravity="bottom|center"/>
+        android:layout_gravity="bottom|center"
+        android:text="확인" />
 
 </LinearLayout>
