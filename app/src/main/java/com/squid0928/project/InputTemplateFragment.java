@@ -365,6 +365,7 @@ public class InputTemplateFragment extends Fragment {
                 LocalDate localDate = LocalDate.of(dialog_promised_date.getYear(), dialog_promised_date.getMonth(),
                         dialog_promised_date.getDayOfMonth());
                 LocalTime localTime = LocalTime.of(dialog_promised_time.getHour(), dialog_promised_time.getMinute());
+                //  날짜, 시간 TextView에 띄우기
                 view_promised_time.setText(localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
                         + " " + localTime.format(DateTimeFormatter.ofPattern("hh:mm")));
                 //  DB에 저장
