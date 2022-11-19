@@ -9,6 +9,10 @@
         android:enabled="true"
         android:title="friend" />
     <item
+        android:id="@+id/tab_timetable"
+        android:enabled="true"
+        android:title="time table" />
+    <item
         android:id="@+id/tab_settings"
         android:enabled="true"
         android:title="settings" />     <!--android:icon = "@drawable:file-name" 추가-->

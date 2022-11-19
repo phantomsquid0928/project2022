@@ -31,8 +31,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         app:menu="@menu/bottom_menu"
-        app:itemBackground="@android:color/white"
-        >
+        app:itemBackground="@android:color/white">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 

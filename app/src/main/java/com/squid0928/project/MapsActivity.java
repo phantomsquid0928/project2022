@@ -26,6 +26,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ActivityMapsBinding binding;
 
     SettingsFragment settingsFragment;
+    TimetableFragment timetableFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         settingsFragment = new SettingsFragment();
+        timetableFragment = new TimetableFragment();
 
         bottomNav = findViewById(R.id.bottomView);
         ly = findViewById(R.id.home_layout);
@@ -46,6 +48,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     case R.id.tab_map:
                         return true;
                     case R.id.tab_friend:
+                        return true;
+                    case R.id.tab_timetable:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.map, timetableFragment).commit();
                         return true;
                     case R.id.tab_settings:
                         getSupportFragmentManager().beginTransaction().replace(R.id.map, settingsFragment).commit();
