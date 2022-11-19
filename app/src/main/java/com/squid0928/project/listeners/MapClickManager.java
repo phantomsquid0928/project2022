@@ -2,7 +2,6 @@ package com.squid0928.project.listeners;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -14,7 +13,7 @@ import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
 import com.squid0928.project.fragments.PopupFragment;
 
-public class MapClickManager implements GoogleMap.OnMapClickListener{
+public class MapClickManager implements GoogleMap.OnMapClickListener {
     private MapsActivity mapsActivity;
     private GoogleMap map;
 
@@ -22,6 +21,7 @@ public class MapClickManager implements GoogleMap.OnMapClickListener{
         this.mapsActivity = mapsActivity;
         this.map = map;
     }
+
 
     @Override
     public void onMapClick(@NonNull LatLng latLng) { // ui 표시 후 마커 추가
