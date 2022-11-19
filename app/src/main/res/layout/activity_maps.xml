@@ -36,7 +36,5 @@
         app:menu="@menu/bottom_menu"
         app:itemBackground="@android:color/white"
         >
-
     </com.google.android.material.bottomnavigation.BottomNavigationView>
-
 </LinearLayout>
