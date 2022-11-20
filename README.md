@@ -1,5 +1,8 @@
 # project2022
 
+2022-11-20
+branch master-map_complete-squid0928, inhee, yw824내용 master에 merge
+
 2022-11-19
 상단 장소 찾는 fragment 오류 해결, google places 기능 추가
 상단 장소 찾는 fragment 맵 이동시 사라지는 기능 추가
