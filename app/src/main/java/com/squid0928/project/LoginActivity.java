@@ -47,6 +47,12 @@ public class LoginActivity extends AppCompatActivity {
                 String strEmail = mEtEmail.getText().toString();
                 String strPwd = mEtPwd.getText().toString();
 
+                if(strEmail.length() == 0 || strPwd.length() == 0)
+                {
+                    Toast.makeText(LoginActivity.this, "이메일 혹은 비밀번호를 입력하지 않았습니다.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 mFirebaseAuth.signInWithEmailAndPassword(strEmail, strPwd).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task)

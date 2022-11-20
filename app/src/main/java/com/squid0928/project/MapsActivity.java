@@ -80,6 +80,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private PlacesClient placesClient;
     final String apiKey = BuildConfig.MAPS_API_KEY;
 
+    SettingsFragment settingsFragment;
+    TimetableFragment timetableFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +91,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         /*binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());*/
         setContentView(R.layout.activity_maps);
+
+        settingsFragment = new SettingsFragment();
+        timetableFragment = new TimetableFragment();
+
         bottomNav = findViewById(R.id.bottomView);
         ly = findViewById(R.id.home_layout);
         Places.initialize(getApplicationContext(), apiKey);
@@ -101,7 +108,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         break;
                     case R.id.tab_friend:
                         break;
+                    case R.id.tab_timetable:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.map, timetableFragment).commit();
+                        break;
                     case R.id.tab_settings:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.map, settingsFragment).commit();
                         break;
                 }
                 return true;
