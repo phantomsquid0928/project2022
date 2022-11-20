@@ -9,6 +9,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squid0928.project.InputTemplateFragment;
 import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
 import com.squid0928.project.fragments.PopupFragment;
@@ -39,7 +40,7 @@ public class MapClickManager implements GoogleMap.OnMapClickListener {
             }
             return;
         }
-        transaction.add(R.id.map, new PopupFragment(), "fff");
+        transaction.add(R.id.map, new InputTemplateFragment(), "fff");
         transaction.commit();
         MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("dd");//ui 에서 input
         Marker marker = map.addMarker(markerOptions);

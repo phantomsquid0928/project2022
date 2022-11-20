@@ -246,7 +246,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             transaction.commit();
             return;
         }
-        transaction.add(R.id.map, new PopupFragment(), "fff");
+        transaction.add(R.id.map, new InputTemplateFragment(), "fff");
         transaction.commit();
         MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("dd");//ui 에서 input
         Marker marker = mMap.addMarker(markerOptions);
