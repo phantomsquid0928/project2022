@@ -42,9 +42,9 @@ import com.squid0928.project.utils.InputData;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalTime;
+import org.threeten.bp.format.DateTimeFormatter;
 import java.util.Date;
 
 public class InputTemplateFragment extends Fragment {
