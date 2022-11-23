@@ -63,7 +63,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FusedLocationProviderClient locationProviderClient;
 
     private PlacesClient placesClient;
-    final String apiKey = BuildConfig.MAPS_API_KEY;
+    //final String apiKey = BuildConfig.MAPS_API_KEY;
 
     SettingsFragment settingsFragment;
     TimetableFragment timetableFragment;
@@ -82,8 +82,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         bottomNav = findViewById(R.id.bottomView);
         ly = findViewById(R.id.home_layout);
-        Places.initialize(getApplicationContext(), apiKey);
-        placesClient = Places.createClient(this);
+        //Places.initialize(getApplicationContext(), apiKey);
+        //placesClient = Places.createClient(this);
         bottomNav.setOnItemSelectedListener(item -> {
                 int id = item.getItemId();
             switch (id) {
@@ -167,11 +167,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (mLocationPermissionsGranted) {
                 Log.i("ff", "trying...");
                 Task<Location> locationResult = locationProviderClient.getLastLocation();
-                if (locationResult == null) Log.i("ff", "DANGER");
                 locationResult.addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
                         Location currentLocation = task.getResult();
+                        if (currentLocation == null) {
+                            Log.i("ff", "DANGER");
+                            return;
+                        }
                         Log.i("ff", "" + currentLocation.getLatitude());
                         LatLng latLocation = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                         Marker marker = mMap.addMarker(new MarkerOptions().position(latLocation).title("ur location"));
