@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.ImageDecoder;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -46,13 +43,9 @@ import com.squid0928.project.utils.InputData;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoField;
-import java.util.Calendar;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalTime;
+import org.threeten.bp.format.DateTimeFormatter;
 import java.util.Date;
 
 public class InputTemplateFragment extends Fragment {
@@ -75,7 +68,6 @@ public class InputTemplateFragment extends Fragment {
     Uri photoUri;
 
     private File createImageFile() throws IOException {
-        String photoPath;
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -129,8 +121,11 @@ public class InputTemplateFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup
             container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_input_template, container, false);
+        return inflater.inflate(R.layout.fragment_input_template, container, false);
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         //  View 객체 획득
         view_photo = view.findViewById(R.id.photo);
         view_memory_or_promise = view.findViewById(R.id.memory_or_promise);
@@ -297,7 +292,6 @@ public class InputTemplateFragment extends Fragment {
         });
 
 
-        return view;
     }
 
     //  추억_날짜, 머문 시간 입력
@@ -333,11 +327,12 @@ public class InputTemplateFragment extends Fragment {
                         dialog_stayed_date_to.getDayOfMonth());
                 LocalTime localTime_end = LocalTime.of(dialog_stayed_time_to.getHour(), dialog_stayed_time_to.getMinute());
                 //  날짜, 시간 TextView에 띄우기
-                view_stayed_time.setText(localDate_from.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                String concat = localDate_from.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
                         + " " + localTime_start.format(DateTimeFormatter.ofPattern("HH:mm"))
                         + " ~ " + "\n"
                         + localDate_to.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-                        + " " + localTime_end.format(DateTimeFormatter.ofPattern("HH:mm")));
+                        + " " + localTime_end.format(DateTimeFormatter.ofPattern("HH:mm"));
+                view_stayed_time.setText(concat);
                 //  DB에 저장
                 inputData.setDateFrom(localDate_from);
                 inputData.setTimeStart(localTime_start);
@@ -377,8 +372,9 @@ public class InputTemplateFragment extends Fragment {
                         dialog_promised_date.getDayOfMonth());
                 LocalTime localTime = LocalTime.of(dialog_promised_time.getHour(), dialog_promised_time.getMinute());
                 //  날짜, 시간 TextView에 띄우기
-                view_promised_time.setText(localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-                        + " " + localTime.format(DateTimeFormatter.ofPattern("hh:mm")));
+                String concat = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                        + " " + localTime.format(DateTimeFormatter.ofPattern("hh:mm"));
+                view_promised_time.setText(concat);
                 //  DB에 저장
                 inputData.setDateFrom(localDate);
                 inputData.setTimeStart(localTime);  //

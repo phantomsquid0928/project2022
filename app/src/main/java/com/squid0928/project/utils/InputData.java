@@ -2,7 +2,7 @@ package com.squid0928.project.utils;
 
 import android.net.Uri;
 
-import java.time.*;
+import org.threeten.bp.*;
 
 public class InputData {
     private Uri photo;
@@ -22,7 +22,6 @@ public class InputData {
     public void setPhoto(Uri photo) {
         this.photo = photo;
     }
-
     public Uri getPhoto() {
         return photo;
     }
@@ -30,7 +29,6 @@ public class InputData {
     public void setType(int type) {
         this.type = type;
     }
-
     public int getType() {
         return type;
     }
@@ -38,7 +36,6 @@ public class InputData {
     public void setCategory(int category) {
         this.category = category;
     }
-
     public int getCategory() {
         return category;
     }
@@ -46,7 +43,6 @@ public class InputData {
     public void setDateFrom(LocalDate date) {
         this.dateFrom = date;
     }
-
     public LocalDate getDateFrom() {
         return dateFrom;
     }
@@ -54,7 +50,6 @@ public class InputData {
     public void setDateTo(LocalDate dateTo) {
         this.dateTo = dateTo;
     }
-
     public LocalDate getDateTo() {
         return dateTo;
     }
@@ -62,7 +57,6 @@ public class InputData {
     public void setTimeStart(LocalTime timeStart) {
         this.timeStart = timeStart;
     }
-
     public LocalTime getTimeStart() {
         return timeStart;
     }
@@ -70,7 +64,6 @@ public class InputData {
     public void setTimeEnd(LocalTime timeEnd) {
         this.timeEnd = timeEnd;
     }
-
     public LocalTime getTimeEnd() {
         return timeEnd;
     }
@@ -78,7 +71,6 @@ public class InputData {
     public void setMemo(String memo) {
         this.memo = memo;
     }
-
     public String getMemo() {
         return memo;
     }
