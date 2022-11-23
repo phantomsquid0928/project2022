@@ -1,6 +1,5 @@
-package com.squid0928.project;
+package com.squid0928.project.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squid0928.project.R;
 
 /**
  * A simple {@link Fragment} subclass.

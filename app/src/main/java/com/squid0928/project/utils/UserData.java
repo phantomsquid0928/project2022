@@ -11,6 +11,7 @@ public class UserData {
     private List<UserData> friends;     //칭구
     private List<UserData> blacklist;  //차단한 유저?
     private UserAccount account;
+    private HashMap<String, InputData> savedInputMarkers = new HashMap<>();
 
     public UserData (String name, UserAccount account) {
         this.name = name;
@@ -43,5 +44,10 @@ public class UserData {
         friends.add(friend);
         return false;
     }
-
+    public InputData getMarker(String key) {
+        return savedInputMarkers.get(key);
+    }
+    public HashMap<String, InputData> getSavedInputMarkers() {
+        return savedInputMarkers;
+    }
 }

@@ -1,19 +1,12 @@
 package com.squid0928.project;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.LinearLayout;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -22,7 +15,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -37,26 +29,19 @@ import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.squid0928.project.databinding.ActivityMapsBinding;
-import com.squid0928.project.fragments.PopupFragment;
+import com.squid0928.project.fragments.InputTemplateFragment;
+import com.squid0928.project.fragments.SettingsFragment;
+import com.squid0928.project.fragments.TimetableFragment;
 import com.squid0928.project.fragments.TopSearchFragment;
 import com.squid0928.project.listeners.MapClickManager;
 import com.squid0928.project.listeners.MapMarkerManager;
 import com.squid0928.project.listeners.MapMotionManager;
 import com.squid0928.project.utils.UserData;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleMap.OnMyLocationClickListener,
@@ -99,25 +84,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ly = findViewById(R.id.home_layout);
         Places.initialize(getApplicationContext(), apiKey);
         placesClient = Places.createClient(this);
-        bottomNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        bottomNav.setOnItemSelectedListener(item -> {
                 int id = item.getItemId();
-                switch (id) {
-                    case R.id.tab_map:
-                        break;
-                    case R.id.tab_friend:
-                        break;
-                    case R.id.tab_timetable:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.map, timetableFragment).commit();
-                        break;
-                    case R.id.tab_settings:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.map, settingsFragment).commit();
-                        break;
-                }
-                return true;
+            switch (id) {
+                case R.id.tab_map:
+                    break;
+                case R.id.tab_friend:
+                    break;
+                case R.id.tab_timetable:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.map, timetableFragment).commit();
+                    break;
+                case R.id.tab_settings:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.map, settingsFragment).commit();
+                    break;
             }
+            return true;
         });
+        bottomNav.setSelectedItemId(R.id.tab_map);
 
         getLocationPermission(); //permission 후 자동 맵 호출
     }
@@ -127,7 +110,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.add(R.id.map, new TopSearchFragment(this), "topsearch");
         transaction.commit();
-        bottomNav.setSelectedItemId(R.id.tab_map);
     }
     private void initMap() {
         createTopSearch();

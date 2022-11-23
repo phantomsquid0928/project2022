@@ -1,4 +1,4 @@
-package com.squid0928.project;
+package com.squid0928.project.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -13,15 +13,13 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squid0928.project.R;
 
-import java.sql.Array;
-import java.sql.Time;
 import java.util.ArrayList;
 
 /**

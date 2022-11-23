@@ -1,4 +1,4 @@
-package com.squid0928.project;
+package com.squid0928.project.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -40,6 +40,7 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.squid0928.project.R;
 import com.squid0928.project.utils.InputData;
 
 import java.io.File;

@@ -1,4 +1,4 @@
-package com.squid0928.project;
+package com.squid0928.project.utils;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 

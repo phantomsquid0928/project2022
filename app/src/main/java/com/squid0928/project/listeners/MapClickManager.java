@@ -9,10 +9,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.squid0928.project.InputTemplateFragment;
+import com.squid0928.project.fragments.InputTemplateFragment;
 import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
-import com.squid0928.project.fragments.PopupFragment;
 
 public class MapClickManager implements GoogleMap.OnMapClickListener {
     private MapsActivity mapsActivity;
