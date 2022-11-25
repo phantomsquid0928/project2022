@@ -19,6 +19,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
@@ -30,6 +33,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.squid0928.project.MainActivity;
 import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
+import com.squid0928.project.listeners.MapMarkerManager;
 
 import org.w3c.dom.Text;
 
@@ -37,9 +41,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class TopSearchFragment extends Fragment implements View.OnClickListener{
-    private MapsActivity maps;
-    public TopSearchFragment(MapsActivity maps) {
-        this.maps = maps;
+    private MapsActivity mapsActivity;
+    private GoogleMap map;
+    public TopSearchFragment(MapsActivity maps, GoogleMap map) {
+        this.mapsActivity = maps;
+        this.map = map;
     }
 
     @Override
@@ -86,7 +92,9 @@ public class TopSearchFragment extends Fragment implements View.OnClickListener{
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
-                Log.i("ff", "Place: " + place.getName() + ", " + place.getId());
+                Marker marker = MapMarkerManager.addMarker(place);
+                mapsActivity.markers.put(place.getName(), marker);          ///TODO change whether mapmarkermanager do this or not
+                map.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);

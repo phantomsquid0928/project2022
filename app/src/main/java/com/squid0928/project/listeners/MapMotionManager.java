@@ -9,7 +9,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
-import com.squid0928.project.fragments.PopupFragment;
 
 public class MapMotionManager implements GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraIdleListener{
     private MapsActivity mapsActivity;
@@ -28,6 +27,7 @@ public class MapMotionManager implements GoogleMap.OnCameraMoveStartedListener, 
             case REASON_API_ANIMATION:
             case REASON_GESTURE:
             {
+                if(MapMarkerManager.isMarkerClicked() == true) break;
                 FragmentManager manager = mapsActivity.getSupportFragmentManager();
                 Fragment createdsearch = manager.findFragmentByTag("topsearch");
                 FragmentTransaction transaction = manager.beginTransaction();

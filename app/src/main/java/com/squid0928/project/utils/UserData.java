@@ -1,5 +1,8 @@
 package com.squid0928.project.utils;
 
+import android.graphics.Bitmap;
+import android.media.Image;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,14 +11,17 @@ import java.util.Set;
 public class UserData {
     private HashMap<String, Locations> savedLocations = new HashMap<>();
     private String name;              //니이름
-    private List<UserData> friends;     //칭구
-    private List<UserData> blacklist;  //차단한 유저?
+    private List<UserData> friends = new ArrayList<>();     //칭구
+    private List<UserData> blacklist = new ArrayList<>();  //차단한 유저?
     private UserAccount account;
+    private Bitmap accountPhoto;
     private HashMap<String, InputData> savedInputMarkers = new HashMap<>();
 
     public UserData (String name, UserAccount account) {
         this.name = name;
         this.account = account;
+        this.accountPhoto = null;
+        //this.accountPhoto = account.getPhoto(); //TODO accounts have their own profile photo
     }
     public HashMap<String, Locations> getSavedLocations() {
         return savedLocations;
@@ -50,4 +56,6 @@ public class UserData {
     public HashMap<String, InputData> getSavedInputMarkers() {
         return savedInputMarkers;
     }
+    public String getName() {return name;}
+    public Bitmap getAccountPhoto() { return accountPhoto;}
 }

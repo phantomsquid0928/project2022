@@ -10,7 +10,7 @@ public class UserAccount
     private String idToken; // firebase UID : 고유 토큰정보
     private String emailId; // 이메일 아이디
     private String password; // 비밀번호
-
+    //TODO profile 사진 저장용 필요
 
     // constructor : Alt + Insert
     public UserAccount() {
