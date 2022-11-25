@@ -1,13 +1,18 @@
 package com.squid0928.project;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -63,7 +68,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FusedLocationProviderClient locationProviderClient;
 
     private PlacesClient placesClient;
-    //final String apiKey = BuildConfig.MAPS_API_KEY;
+    final String apiKey = BuildConfig.MAPS_API_KEY;
+    final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
     SettingsFragment settingsFragment;
     TimetableFragment timetableFragment;
@@ -72,6 +78,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            buildAlertMessageNoGps();
+        }
 
         /*binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());*/
@@ -82,8 +92,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         bottomNav = findViewById(R.id.bottomView);
         ly = findViewById(R.id.home_layout);
-        //Places.initialize(getApplicationContext(), apiKey);
-        //placesClient = Places.createClient(this);
+        Places.initialize(getApplicationContext(), apiKey);
+        placesClient = Places.createClient(this);
         bottomNav.setOnItemSelectedListener(item -> {
                 int id = item.getItemId();
             switch (id) {
@@ -103,6 +113,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         bottomNav.setSelectedItemId(R.id.tab_map);
 
         getLocationPermission(); //permission 후 자동 맵 호출
+    }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
     public void createTopSearch() {
         FragmentManager manager = getSupportFragmentManager();
