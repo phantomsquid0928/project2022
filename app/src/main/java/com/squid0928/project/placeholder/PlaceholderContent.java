@@ -34,11 +34,13 @@ public class PlaceholderContent {
     static {
         // Add some sample items.
         UserData data = MapsActivity.user_data.get("phantomsquid0928"); //TODO server must give this info
-        List<UserData> temp = data.getFriends();
-        COUNT = temp.size();
+        List<UserData> friends = data.getFriends();
+        COUNT = friends.size();
         for (int i = 0; i < COUNT; i++) {
-            Bitmap image = temp.get(i).getAccountPhoto();
-            addItem(createPlaceholderItem(i, image));
+            UserData friend = friends.get(i);
+            Bitmap image = friend.getAccountPhoto();
+            String friendName = friend.getName();
+            addItem(createPlaceholderItem(i, image, friendName));
         }
     }
 
@@ -47,8 +49,8 @@ public class PlaceholderContent {
         ITEM_MAP.put(item.id, item);
     }
 
-    private static PlaceholderItem createPlaceholderItem(int position, Bitmap image) {
-        return new PlaceholderItem(image, String.valueOf(position), "Item " + position, makeDetails(position));
+    private static PlaceholderItem createPlaceholderItem(int position, Bitmap image, String friendName) {
+        return new PlaceholderItem(image, String.valueOf(position), friendName, makeDetails(position));
     }
 
     private static String makeDetails(int position) {

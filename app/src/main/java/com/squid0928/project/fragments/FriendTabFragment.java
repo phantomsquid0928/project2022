@@ -8,17 +8,24 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
 import com.squid0928.project.placeholder.PlaceholderContent;
+import com.squid0928.project.utils.User;
+import com.squid0928.project.utils.UserData;
+
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
  */
-public class FriendTabFragment extends Fragment {
+public class FriendTabFragment extends Fragment implements MyItemRecyclerViewAdapter.OnItemClicked {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -66,8 +73,20 @@ public class FriendTabFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(PlaceholderContent.ITEMS));
+            MyItemRecyclerViewAdapter adapter = new MyItemRecyclerViewAdapter(PlaceholderContent.ITEMS);
+            adapter.setClickListener(this);
+            recyclerView.setAdapter(adapter);
         }
         return view;
+    }
+
+    @Override
+    public void onItemClick(View v, int position) {
+        UserData data = MapsActivity.user_data.get("phantomsquid0928");
+        List<UserData> friends = data.getFriends();
+        UserData clickedFriend = friends.get(position);
+        Toast.makeText(v.getContext(), "fsf", Toast.LENGTH_SHORT);
+        Log.i("ff", "itemclick " + position + " on view :" + v.toString());
+
     }
 }

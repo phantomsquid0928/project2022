@@ -89,6 +89,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     SettingsFragment settingsFragment;
     TimetableFragment timetableFragment;
 
+    private int status = 0; // home
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,14 +113,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             FragmentTransaction transaction = manager.beginTransaction();
             switch (id) {
                 case R.id.tab_map:
+                    if (status == 1) break;
                     Fragment friendListFragment = manager.findFragmentByTag("friendList");
                     if(friendListFragment == null) break;
                     if(friendListFragment.isAdded()) transaction.remove(friendListFragment);
                     transaction.commit();
+                    status = 1;
                     break;
                 case R.id.tab_friend:
+                    if (status == 2) break;
                     transaction.add(R.id.map, new FriendTabFragment(), "friendList");
                     transaction.commit();
+                    status = 2;
                     break;
                 case R.id.tab_timetable:
                     getSupportFragmentManager().beginTransaction().replace(R.id.map, timetableFragment).commit();
@@ -254,7 +259,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //TODO change below code can access to server data
     private void restoreUserMarkers() {
         UserData tempInfo = new UserData("phantomsquid0928", null);
-        LatLng tempLng = new LatLng(-33.865143, 151.209900);
+        UserData tempInfo2 = new UserData("ffff", null);
+        UserData tempInfo3 = new UserData("ssss", null);
+        tempInfo.getFriends().add(tempInfo2);
+        tempInfo.getFriends().add(tempInfo3);
+        LatLng tempLng = new LatLng(-33.865143, 151.209900); //user has sydney as his own marker
         Locations tempLoc = new Locations("ff", tempLng, null, 0, 0, 1);
         tempInfo.getSavedLocations().put("ff", tempLoc);
         user_data.put("phantomsquid0928", tempInfo);
