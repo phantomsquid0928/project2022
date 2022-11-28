@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="array_memory">
+        <item>맛집</item>
+        <item>숙소</item>
+    </string-array>
+    <string-array name="array_promise">
+        <item>식사</item>
+        <item>강의</item>
+    </string-array>
+</resources>

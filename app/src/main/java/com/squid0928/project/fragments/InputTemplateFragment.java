@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -27,6 +28,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -35,18 +37,22 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
+import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
 import com.squid0928.project.utils.InputData;
+
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalTime;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.LocalTime;
-import org.threeten.bp.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
 
 public class InputTemplateFragment extends Fragment {
 
@@ -63,9 +69,12 @@ public class InputTemplateFragment extends Fragment {
     Button view_btn_setAlarm;
     LinearLayout view_check_memory;
     LinearLayout view_check_promise;
+    TextView view_save;
+    TextView view_cancel;
     InputData inputData = new InputData();
-    String[] items_category = {"맛집", "숙소"};
     Uri photoUri;
+    HashMap<String, InputData> inputDataHashMap = new HashMap<>();
+    //String hashKey = UserID + Location?
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -139,6 +148,14 @@ public class InputTemplateFragment extends Fragment {
         view_check_memory = view.findViewById(R.id.checked_memory);
         view_check_promise = view.findViewById(R.id.checked_promise);
         view_btn_setAlarm = view.findViewById(R.id.btn_setAlarm);
+        view_save = view.findViewById(R.id.textview_save);
+        view_cancel = view.findViewById(R.id.textview_cancel);
+        ArrayAdapter<String> arrayAdapter_memory = new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.array_memory));
+        ArrayAdapter<String> arrayAdapter_promise = new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.array_promise));
+        view_category.setAdapter(arrayAdapter_memory);  //  기본은 추억 범주
+
 
         //  이미지뷰를 클릭했을 때
         view_photo.setOnClickListener(new ImageView.OnClickListener() {
@@ -207,7 +224,6 @@ public class InputTemplateFragment extends Fragment {
             }
         });
 
-
         //  추억 or 약속 체크
         view_memory_or_promise.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -217,36 +233,37 @@ public class InputTemplateFragment extends Fragment {
                         inputData.setType(InputData.MEMORY);
                         view_check_promise.setVisibility(View.GONE);
                         view_check_memory.setVisibility(View.VISIBLE);
-                        //  사용자의 추억 범주 불러오기 (SharedPreference)
-                        //items_category=getResources().getStringArray(~);
+                        //  사용자의 추억 범주 불러오기 (SharedPreferences?)
+                        view_category.setAdapter(arrayAdapter_memory);
                         break;
                     case R.id.btn_promise:
                         inputData.setType(InputData.PROMISE);
                         view_check_memory.setVisibility(View.GONE);
                         view_check_promise.setVisibility(View.VISIBLE);
                         setPromise(); //    약속으로 설정 시 바로 시간 설정
-                        //  사용자의 약속 범주 불러오기 (SharedPreference)
-                        //items_category=getResources().getStringArray(~);
+                        //  사용자의 약속 범주 불러오기 (SharedPreferences?)
+                        view_category.setAdapter(arrayAdapter_promise);
                         break;
                 }
             }
         });
 
-        //  Spinner item 설정
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                getActivity(), android.R.layout.simple_spinner_item, items_category
-        );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        view_category.setAdapter(adapter);
-        /*view_category.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //  범주 선택
+        view_category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 inputData.setCategory(position);
             }
-        });*/
 
-        /*  약속으로 설정한 시간을 바탕으로 알람을 설정.
-        다만 날짜까지는 설정할 수가 없어 바로 전날에만 활성화되도록 하던지 하는 방식으로 생각 중입니다. */
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+        /*
+        약속으로 설정한 시간을 바탕으로 알람을 설정.
+        다만 날짜까지는 설정할 수가 없어 바로 전날에만 활성화되도록 하던지 하는 방식으로 생각 중입니다.
+        */
         view_btn_setAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -259,9 +276,10 @@ public class InputTemplateFragment extends Fragment {
             }
         });
 
-        /*  머문 시간을 기록할 것인지 체크박스를 통해 묻고
+        /*
+        머문 시간을 기록할 것인지 체크박스를 통해 묻고
         기록한다 하면 다이얼로그를 띄워 저장.
-        이후 타임테이블 만들 때 이 데이터를 사용하면 될 듯 합니다.  */
+        */
         view_check_stayed_time.setOnClickListener(new CheckBox.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -291,11 +309,33 @@ public class InputTemplateFragment extends Fragment {
             }
         });
 
+        view_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //  저장
+                inputDataHashMap.put("hashKey", inputData);
+                Intent intent = new Intent(getActivity(), MapsActivity.class);
+                intent.putExtra("key",inputDataHashMap);
+                startActivity(intent);
+                Toast.makeText(getActivity(), "저장되었습니다.", Toast.LENGTH_SHORT).show();
+//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                fragmentManager.beginTransaction().remove(InputTemplateFragment.this).commit();
+//                fragmentManager.popBackStack();
+            }
+        });
+        view_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //  취소
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction().remove(InputTemplateFragment.this).commit();
+                fragmentManager.popBackStack();
+            }
+        });
 
     }
 
     //  추억_날짜, 머문 시간 입력
-
     private void setMemory() {
         Button dialog_acceptBtn_stayedTime;
         DatePicker dialog_stayed_date_from;

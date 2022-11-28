@@ -12,9 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:orientation="vertical"
-        android:background="@color/white"
+        android:background="@drawable/border_topbot"
         app:behavior_hideable="true"
-        app:behavior_peekHeight="250dp"
+        app:behavior_peekHeight="300dp"
         app:behavior_draggable="false"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
@@ -30,6 +30,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:scaleType="centerCrop"
+            android:layout_marginTop="2dp"
             android:contentDescription="photo"/>
 
         <!--추억 or 약속 선택 - default 값은 추억-->
@@ -64,6 +65,7 @@
             android:layout_width="0dp"
             app:layout_constraintWidth_percent="0.48"
             android:layout_height="0dp"
+            android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/memo"
@@ -77,7 +79,7 @@
             app:layout_constraintBottom_toTopOf="@id/memo"
             app:layout_constraintLeft_toRightOf="@id/photo"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintHeight_percent="0.4">
+            app:layout_constraintHeight_percent="0.35">
 
             <!--추억-->
             <LinearLayout
@@ -137,16 +139,50 @@
             android:id="@+id/memo"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.6"
-            android:hint="메모를 입력해 주세요."
+            app:layout_constraintHeight_percent="0.55"
+            android:hint=" 메모를 입력해 주세요."
+            android:background="@drawable/border_topbot"
             android:inputType="text"
             android:maxLines="5"
             android:scrollbars="vertical"
             android:fadeScrollbars="false"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/photo"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/basedOnRadioBtn"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.1"
+            android:orientation="horizontal"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/memo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/category"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:id="@+id/textview_save"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="top"
+                android:text="저장"
+                android:textStyle="bold"
+                android:textColor="#33F">
+            </TextView>
+            <TextView
+                android:layout_width="25dp"
+                android:layout_height="match_parent">
+            </TextView>
+            <TextView
+                android:id="@+id/textview_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="취소"
+                android:textStyle="bold"
+                android:layout_gravity="top"
+                android:textColor="#33F">
+            </TextView>
+        </LinearLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,9 @@ import android.net.Uri;
 
 import org.threeten.bp.*;
 
-public class InputData {
+import java.io.Serializable;
+
+public class InputData implements Serializable {
     private Uri photo;
     private int type;
     private int category;
@@ -71,7 +73,5 @@ public class InputData {
     public void setMemo(String memo) {
         this.memo = memo;
     }
-    public String getMemo() {
-        return memo;
-    }
+    public String getMemo() { return memo; }
 }

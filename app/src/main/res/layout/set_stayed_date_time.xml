@@ -1,55 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="horizontal"
+    android:columnCount="2">
 
     <DatePicker
         android:id="@+id/stayed_date_time_date_from"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="0.3"
-        android:datePickerMode="calendar"
-        android:scaleX="0.5"
-        android:scaleY="0.5" />
+        android:layout_columnWeight="0.45"
+        android:layout_rowWeight="1"
+        android:datePickerMode="calendar"/>
 
     <TimePicker
         android:id="@+id/stayed_date_time_from"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="0.2"
-        android:timePickerMode="spinner" />
+        android:layout_columnWeight="0.55"
+        android:layout_rowWeight="1"
+        android:timePickerMode="spinner"/>
 
     <TextView
         android:id="@+id/stayed_date_time_tilde"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_gravity="center"
         android:text="~"
-        android:textSize="30sp" />
+        android:layout_columnSpan="2"
+        android:textSize="30sp"/>
 
     <DatePicker
         android:id="@+id/stayed_date_time_date_to"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="0.3"
-        android:datePickerMode="calendar"
-        android:scaleX="0.5"
-        android:scaleY="0.5" />
+        android:layout_columnWeight="0.45"
+        android:layout_rowWeight="1"
+        android:datePickerMode="calendar"/>
 
     <TimePicker
         android:id="@+id/stayed_date_time_to"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="0.2"
-        android:timePickerMode="spinner" />
+        android:layout_columnWeight="0.55"
+        android:layout_rowWeight="1"
+        android:timePickerMode="spinner"/>
 
     <Button
         android:id="@+id/acceptBtn_stayedTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:text="확인" />
+        android:layout_gravity="center"
+        android:layout_columnSpan="2"
+        android:text="확인"/>
 
-</LinearLayout>
+</GridLayout>
