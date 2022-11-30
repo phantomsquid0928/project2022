@@ -42,6 +42,7 @@ import com.squid0928.project.listeners.MapMotionManager;
 import com.squid0928.project.utils.UserData;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleMap.OnMyLocationClickListener,
@@ -85,17 +86,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Places.initialize(getApplicationContext(), apiKey);
         placesClient = Places.createClient(this);
         bottomNav.setOnItemSelectedListener(item -> {
-                int id = item.getItemId();
+            int id = item.getItemId();
             switch (id) {
                 case R.id.tab_map:
+                    MapsActivity.this.getSupportFragmentManager().popBackStack();
                     break;
                 case R.id.tab_friend:
+                    MapsActivity.this.getSupportFragmentManager().popBackStack();
                     break;
                 case R.id.tab_timetable:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.map, timetableFragment).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.map, timetableFragment, "table").commit();
+
                     break;
                 case R.id.tab_settings:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.map, settingsFragment).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.map, settingsFragment, "settings").commit();
                     break;
             }
             return true;
@@ -167,11 +171,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (mLocationPermissionsGranted) {
                 Log.i("ff", "trying...");
                 Task<Location> locationResult = locationProviderClient.getLastLocation();
-                if (locationResult == null) Log.i("ff", "DANGER");
                 locationResult.addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
                         Location currentLocation = task.getResult();
+                        if (currentLocation == null) {
+                            Log.i("ff", "DANGER");
+                            return;
+                        }
                         Log.i("ff", "" + currentLocation.getLatitude());
                         LatLng latLocation = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                         Marker marker = mMap.addMarker(new MarkerOptions().position(latLocation).title("ur location"));
@@ -188,14 +195,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void getLocationPermission() {
         String[] permissions = {
-            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
         };
 
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(), permissions[0]) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
         }
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(), permissions[0]) == PackageManager.PERMISSION_GRANTED &&
-        ContextCompat.checkSelfPermission(this.getApplicationContext(), permissions[1]) == PackageManager.PERMISSION_GRANTED) {
+                ContextCompat.checkSelfPermission(this.getApplicationContext(), permissions[1]) == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionsGranted = true;
             initMap();
         }

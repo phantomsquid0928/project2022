@@ -3,12 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#ffffff"
     >
 
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:orientation="vertical">
 
         <TextView
@@ -16,11 +17,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="내 정보"
-            android:textSize="25dp"
-            android:gravity="center"
+            android:textSize="20dp"
+            android:gravity="right"
+            android:layout_marginRight="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"/>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginLeft = "10dp"
+        android:layout_marginRight = "10dp"
+        android:background="#D3D3D3" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -56,63 +65,77 @@
             android:layout_below="@id/userName"
             android:layout_marginTop="7dp"
             android:background="#ffffff"
-            android:text="sunday@gmail.com"
+            android:text="defaultSettings@{emailURL}"
             android:textColor="#000000" />
 
     </RelativeLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginBottom = "10dp"
+        android:layout_marginLeft = "10dp"
+        android:layout_marginRight = "10dp"
+        android:background="#D3D3D3" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="60dp"
+        android:layout_margin="10dp"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/generalImage"
             android:layout_width="0dp"
-            android:layout_height="80dp"
+            android:layout_height="48dp"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:background="#ffffff"
 
-            android:scaleType="fitXY"
 
-            android:src="@drawable/ic_brightness_high_black_48dp" />
+            android:src="@drawable/ic_settings_black_48dp" />
 
         <TextView
             android:id="@+id/generalText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="3"
-            android:layout_marginLeft="20dp"
             android:layout_alignBaseline="@+id/generalImage"
-            android:text="일반 설정 " />
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="3"
+            android:text="일반 설정 "
+            android:textSize="18dp" />
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginLeft = "10dp"
+        android:layout_marginRight = "10dp"
+        android:background="#D3D3D3" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="60dp"
+        android:layout_margin = "10dp"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/colorImage"
             android:layout_width="0dp"
-            android:layout_height="80dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:background="#ffffff"
 
-            android:scaleType="fitXY"
-
-            android:src="@drawable/ic_palette_black_48dp" />
+            android:src="@drawable/ic_color_lens_black_48dp" />
 
         <TextView
             android:id="@+id/ColorText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="3"
             android:layout_marginLeft="20dp"
@@ -121,22 +144,28 @@
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginLeft = "10dp"
+        android:layout_marginRight = "10dp"
+        android:background="#D3D3D3" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="60dp"
+        android:layout_margin = "10dp"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/shareImage"
             android:layout_width="0dp"
-            android:layout_height="80dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:background="#ffffff"
 
-            android:scaleType="fitXY"
-
-            android:src="@drawable/ic_remove_red_eye_black_48dp" />
+            android:src="@drawable/ic_share_black_48dp" />
 
         <TextView
             android:id="@+id/shareText"
@@ -147,25 +176,31 @@
             android:layout_marginLeft="20dp"
             android:layout_weight="3"
             android:text="공유 설정"
-            android:textSize="20dp" />
+            android:textSize="18dp" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginLeft = "10dp"
+        android:layout_marginRight = "10dp"
+        android:background="#D3D3D3" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
+        android:layout_margin = "10dp"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/accountImage"
             android:layout_width="0dp"
-            android:layout_height="80dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:background="#ffffff"
 
-            android:scaleType="fitXY"
-
-            android:src="@drawable/ic_portrait_black_48dp" />
+            android:src="@drawable/ic_account_circle_black_48dp" />
 
         <TextView
             android:id="@+id/accountText"
@@ -176,7 +211,14 @@
             android:layout_marginLeft="20dp"
             android:layout_weight="3"
             android:text="계정 설정"
-            android:textSize="20dp" />
+            android:textSize="18dp" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginLeft = "10dp"
+        android:layout_marginRight = "10dp"
+        android:background="#D3D3D3" />
 
 </LinearLayout>
