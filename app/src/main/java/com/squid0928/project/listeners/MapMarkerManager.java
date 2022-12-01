@@ -1,9 +1,12 @@
 package com.squid0928.project.listeners;
 
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -31,6 +34,26 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
 
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) { //마커에 입력된 데이터 불러오기
+        FragmentManager manager = mapsActivity.getSupportFragmentManager();
+        if (markerClicked == true) {
+            LatLng latLng = marker.getPosition();
+            manager.setFragmentResultListener("key", mapsActivity, new FragmentResultListener() {
+                @Override
+                public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                    InputData res = (InputData)result.getSerializable("inputData");
+                    if (res == null) return;
+                    UserData target = mapsActivity.user_data.get("phantomsquid0928");
+
+                    MapMarkerManager.addMarker(latLng.toString(), latLng); //TODO 바꿔라
+                    target.getSavedInputMarkers().put(latLng.toString(), res);
+                    Locations loc = new Locations(null, latLng, null, 0, 0, res.getType());
+                    //target.getSavedLocations().put();
+                    if (!res.isEmpty()) { // TODO : no safe checker
+
+                    }
+                }
+            });
+        }
         markerClicked = true;
         marker.showInfoWindow();
 
@@ -45,23 +68,17 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
         // change below code can access to serverside
         InputData inputData = mapsActivity.user_data.get("phantomsquid0928").getMarker(target); //서버에서 이미 받은 유저 정보 존재해야 함
 
-        FragmentManager manager = mapsActivity.getSupportFragmentManager();
         Fragment createdLast = manager.findFragmentByTag("fff");
         FragmentTransaction transaction = manager.beginTransaction();
         if (createdLast != null) {
             transaction.remove(createdLast);
             transaction.commit();
-            if (mapsActivity.markers.containsKey("poi")) {
-                mapsActivity.markers.get("poi").remove();
-            }
-            if (mapsActivity.markers.containsKey("click")) { //아무거도 입력 안할시 그냥 삭제로 바꾸기
-                mapsActivity.markers.get("click").remove();
-            }
             return true;
         }
 
-        transaction.add(R.id.map, new InputTemplateFragment(), "fff");  //TODO change this code that imputtemplate can show old inputdata
+       // transaction.add(R.id.map, new InputTemplateFragment(), "fff");  //TODO change this code that imputtemplate can show old inputdata
         //InputTemplateFragment.instantiate(InputData old) -> 예전에 입력한 정보 보여주기
+
 
         transaction.commit();
 

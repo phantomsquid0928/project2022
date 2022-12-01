@@ -50,7 +50,7 @@ public class PlaceholderContent {
     }
 
     private static PlaceholderItem createPlaceholderItem(int position, Bitmap image, String friendName) {
-        return new PlaceholderItem(image, String.valueOf(position), friendName, makeDetails(position));
+        return new PlaceholderItem(/*image, */String.valueOf(position), friendName, makeDetails(position));
     }
 
     private static String makeDetails(int position) {
@@ -66,13 +66,13 @@ public class PlaceholderContent {
      * A placeholder item representing a piece of content.
      */
     public static class PlaceholderItem {
-        public final Bitmap userImage;
+        //public final Bitmap userImage;
         public final String id;
         public final String content;
         public final String details;
 
-        public PlaceholderItem(Bitmap userImage, String id, String content, String details) {
-            this.userImage = userImage;
+        public PlaceholderItem(/*Bitmap userImage, */String id, String content, String details) {
+            //this.userImage = userImage;
             this.id = id;
             this.content = content;
             this.details = details;
