@@ -14,6 +14,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -43,6 +47,8 @@ import java.util.List;
 public class TopSearchFragment extends Fragment implements View.OnClickListener{
     private MapsActivity mapsActivity;
     private GoogleMap map;
+    private ActivityResultLauncher<Intent> launcher;
+
     public TopSearchFragment(MapsActivity maps, GoogleMap map) {
         this.mapsActivity = maps;
         this.map = map;
@@ -54,6 +60,9 @@ public class TopSearchFragment extends Fragment implements View.OnClickListener{
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setExitTransition(inflater.inflateTransition(R.transition.top_slide_up));
         setEnterTransition(inflater.inflateTransition(R.transition.top_slide_down));
+
+        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> handleActivityResult(result));
     }
 
     @Nullable
@@ -83,28 +92,17 @@ public class TopSearchFragment extends Fragment implements View.OnClickListener{
         if (view instanceof EditText) {
             Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY,
                     Arrays.asList(Place.Field.ID, Place.Field.NAME)).build(this.getContext());
-
-            startActivityForResult(intent, 1);
+            launcher.launch(intent);
         }
     }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                Place place = Autocomplete.getPlaceFromIntent(data);
-                Marker marker = MapMarkerManager.addMarker(place);
-                mapsActivity.markers.put(place.getName(), marker);          ///TODO change whether mapmarkermanager do this or not
-                map.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
-            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                // TODO: Handle the error.
-                Status status = Autocomplete.getStatusFromIntent(data);
-                Log.i("ff", status.getStatusMessage());
-            } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
-            }
-            return;
+    public void handleActivityResult(ActivityResult result) {
+        Intent intent = result.getData();
+        if (result.getResultCode() != RESULT_OK) {
+            Status status = Autocomplete.getStatusFromIntent(intent);
+            Log.i("ff", status.getStatusMessage());
         }
-        super.onActivityResult(requestCode, resultCode, data);
+        Place place = Autocomplete.getPlaceFromIntent(intent);
+
     }
 
 }

@@ -123,6 +123,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
                     }
                     transaction.commit();
+                    break;
                 case R.id.tab_friend:
                     transaction.add(R.id.map, new FriendTabFragment(), "friendList");
                     transaction.commit();
