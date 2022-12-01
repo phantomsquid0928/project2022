@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "696787793145",
+    "project_id": "fir-logintest-145ae",
+    "storage_bucket": "fir-logintest-145ae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696787793145:android:2688fd3d52e7b6ecba9e28",
+        "android_client_info": {
+          "package_name": "com.squid0928.project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "696787793145-gn6jfvmmrrd22gk0ol6sd962m75fr69j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB04b1KoySdzyrWbPXMWfMpv39j3Mo55qY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "696787793145-gn6jfvmmrrd22gk0ol6sd962m75fr69j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

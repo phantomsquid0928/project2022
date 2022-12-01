@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -42,6 +43,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.squid0928.project.databinding.ActivityMapsBinding;
 import com.squid0928.project.fragments.FABFragment;
 import com.squid0928.project.fragments.FriendTabFragment;
@@ -113,6 +115,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             FragmentTransaction transaction = manager.beginTransaction();
             switch (id) {
                 case R.id.tab_map:
+                    
+
                     break;
                 case R.id.tab_friend:
                     if (status == 2) break;
@@ -129,6 +133,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             return true;
         });
+        bottomNav.setOnItemReselectedListener(item -> {
+            return;
+        });
+
         bottomNav.setSelectedItemId(R.id.tab_map);
 
         getLocationPermission(); //permission 후 자동 맵 호출
