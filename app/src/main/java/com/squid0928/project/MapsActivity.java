@@ -123,10 +123,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                     transaction.commit();
                 case R.id.tab_friend:
-                    if (status == 2) break;
                     transaction.add(R.id.map, new FriendTabFragment(), "friendList");
                     transaction.commit();
-                    status = 2;
                     break;
                 case R.id.tab_timetable:
                     getSupportFragmentManager().beginTransaction().replace(R.id.map, timetableFragment, "time").commit();
@@ -136,6 +134,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     break;
             }
             return true;
+        });
+        bottomNav.setOnItemReselectedListener(item -> {
+            return;
         });
         bottomNav.setSelectedItemId(R.id.tab_map);
 
