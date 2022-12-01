@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
 import com.squid0928.project.placeholder.PlaceholderContent;
-import com.squid0928.project.utils.User;
 import com.squid0928.project.utils.UserData;
 
 import java.util.List;

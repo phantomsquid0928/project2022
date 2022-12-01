@@ -56,7 +56,6 @@ import com.squid0928.project.listeners.MapMarkerManager;
 import com.squid0928.project.listeners.MapMotionManager;
 import com.squid0928.project.utils.InputData;
 import com.squid0928.project.utils.Locations;
-import com.squid0928.project.utils.User;
 import com.squid0928.project.utils.UserData;
 
 import java.util.Collection;
@@ -85,7 +84,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private View mapView;
 
     private PlacesClient placesClient;
-    final String apiKey = "ff";//BuildConfig.MAPS_API_KEY;
+    final String apiKey = BuildConfig.MAPS_API_KEY;
     private LocationManager manager = null;
 
     SettingsFragment settingsFragment;
@@ -115,8 +114,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             FragmentTransaction transaction = manager.beginTransaction();
             switch (id) {
                 case R.id.tab_map:
-                    
-
+                    Fragment fragment = manager.findFragmentByTag("friendList");
+                    transaction.remove(fragment);
+                    transaction.commit();
                     break;
                 case R.id.tab_friend:
                     if (status == 2) break;
