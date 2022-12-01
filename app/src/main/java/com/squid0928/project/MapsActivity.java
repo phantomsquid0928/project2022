@@ -113,13 +113,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             FragmentTransaction transaction = manager.beginTransaction();
             switch (id) {
                 case R.id.tab_map:
-                    if (status == 1) break;
-                    Fragment friendListFragment = manager.findFragmentByTag("friendList");
-                    if(friendListFragment == null) break;
-                    if(friendListFragment.isAdded()) transaction.remove(friendListFragment);
+                    Fragment[] fragment = {manager.findFragmentByTag("friendList"),
+                            manager.findFragmentByTag("time"),
+                            manager.findFragmentByTag("setting")};
+                    for(int i = 0; i < fragment.length; i++) {
+                        if(fragment[i] != null) {
+                            transaction.remove(fragment[i]);
+                        }
+                    }
                     transaction.commit();
-                    status = 1;
-                    break;
                 case R.id.tab_friend:
                     if (status == 2) break;
                     transaction.add(R.id.map, new FriendTabFragment(), "friendList");
@@ -127,10 +129,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     status = 2;
                     break;
                 case R.id.tab_timetable:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.map, timetableFragment).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.map, timetableFragment, "time").commit();
                     break;
                 case R.id.tab_settings:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.map, settingsFragment).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.map, settingsFragment, "setting").commit();
                     break;
             }
             return true;
