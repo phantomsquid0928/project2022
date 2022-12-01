@@ -1,5 +1,8 @@
 # project2022
 
+2022-12-01
+branch master-map_complete-v2-squid0928, inhee, yw824 내용 master에 merge
+
 2022-11-20
 branch master-map_complete-squid0928, inhee, yw824내용 master에 merge
 
