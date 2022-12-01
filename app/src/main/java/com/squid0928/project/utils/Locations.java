@@ -35,6 +35,15 @@ public class Locations implements Comparable<Locations>{
         this.type = type;
         this.locUUID = UUID.randomUUID();
     }
+    public Locations(String name, LatLng latLng, String[] locName, double timeStart, double timeEnd, int type) {   //메모 없이 걍 추가
+        this.name = name;
+        this.latLng = latLng;
+        this.locName = locName;
+        this.timeStart = timeStart;
+        this.timeEnd = timeEnd;
+        this.type = type;
+        this.locUUID = UUID.randomUUID();
+    }
     public Locations(Locations locations, UUID locUUID) { //친구와 약속 공유시
         this.name = locations.getName();
         this.latLng = locations.getLatLng();

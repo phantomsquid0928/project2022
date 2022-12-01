@@ -11,6 +11,7 @@ import android.provider.AlarmClock;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,6 +125,14 @@ public class InputTemplateFragment extends Fragment {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
             StartForResult_camera.launch(intent);
         }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        TransitionInflater inflater = TransitionInflater.from(requireContext());
+        setEnterTransition(inflater.inflateTransition(R.transition.bottom_slide_up));
+        setExitTransition(inflater.inflateTransition(R.transition.bottom_slide_down));
     }
 
     @Nullable
