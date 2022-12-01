@@ -26,15 +26,6 @@
                 android:layout_height="wrap_content"
                 android:hint="place" />
         </com.google.android.material.textfield.TextInputLayout>
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:text="@string/search"
-            android:id="@+id/button_search"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="4"/>
     </LinearLayout>
 
 

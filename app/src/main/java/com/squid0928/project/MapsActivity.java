@@ -112,16 +112,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             int id = item.getItemId();
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
+            Fragment[] fragment = {manager.findFragmentByTag("friendList"),
+                    manager.findFragmentByTag("time"),
+                    manager.findFragmentByTag("setting")};
+            for(int i = 0; i < fragment.length; i++) {
+                if(fragment[i] != null) {
+                    transaction.remove(fragment[i]);
+                }
+            }
             switch (id) {
                 case R.id.tab_map:
-                    Fragment[] fragment = {manager.findFragmentByTag("friendList"),
-                            manager.findFragmentByTag("time"),
-                            manager.findFragmentByTag("setting")};
-                    for(int i = 0; i < fragment.length; i++) {
-                        if(fragment[i] != null) {
-                            transaction.remove(fragment[i]);
-                        }
-                    }
                     transaction.commit();
                     break;
                 case R.id.tab_friend:
@@ -129,10 +129,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     transaction.commit();
                     break;
                 case R.id.tab_timetable:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.map, timetableFragment, "time").commit();
+                    transaction.add(R.id.map, timetableFragment, "time");
+                    transaction.commit();
                     break;
                 case R.id.tab_settings:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.map, settingsFragment, "setting").commit();
+                    transaction.add(R.id.map, settingsFragment, "setting");
+                    transaction.commit();
                     break;
             }
             return true;
@@ -165,7 +167,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         FragmentManager manager = getSupportFragmentManager();
         //Fragment createdLast = manager.findFragmentByTag("topsearch");
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(R.id.map, new TopSearchFragment(this, mMap), "topsearch");
+        transaction.add(R.id.map, new TopSearchFragment(this, mMap, placesClient), "topsearch");
         transaction.commit();
     }
     public void createFab() {
@@ -266,11 +268,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         UserData tempInfo = new UserData("phantomsquid0928", null);
         UserData tempInfo2 = new UserData("ffff", null);
         UserData tempInfo3 = new UserData("ssss", null);
-        tempInfo.getFriends().add(tempInfo2);
-        tempInfo.getFriends().add(tempInfo3);
+        tempInfo.addFriends(tempInfo2);
+        tempInfo.addFriends(tempInfo3);
         LatLng tempLng = new LatLng(-33.865143, 151.209900); //user has sydney as his own marker
         Locations tempLoc = new Locations("ff", tempLng, null, 0, 0, 1);
         tempInfo.getSavedLocations().put("ff", tempLoc);
+
         user_data.put("phantomsquid0928", tempInfo);
         UserData userData = user_data.get("phantomsquid0928"); //서버에서 받아야함
 
@@ -302,9 +305,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
                         Log.i("ff", "" + currentLocation.getLatitude());
                         LatLng latLocation = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                        Marker marker = mMap.addMarker(new MarkerOptions().position(latLocation).title("ur location"));
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLocation));
-                        markers.put("myloc", marker);
                     }
                 });
             }
@@ -365,7 +366,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         transaction.add(R.id.map, new InputTemplateFragment(), "fff");
         transaction.commit();
-        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("dd");//ui 에서 input
+        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("your location");//ui 에서 input
         Marker marker = mMap.addMarker(markerOptions);
         markers.put("myloc", marker);
     }

@@ -10,11 +10,11 @@ public class Locations implements Comparable<Locations>{
     private String name;      //약속이름잇겟지머
     private LatLng latLng;
     private String[] locName; //위치이름
-    private double timeStart, timeEnd;//시작시간 끝시간
+    private double timeStart, timeEnd;//시작시간 끝시간     //todo FFFF
     private int type;         //추억? 약속?
-    private String[] args;    //메모
-    private List<UserData> targetFriends = new ArrayList<>();
-    private UUID locUUID;     //같은 약속, 추억 -> 같은 uuid
+    private String[] args;    //메모                       //todo ffff
+    private List<UserData> targetFriends = new ArrayList<>(); //todo ffff
+    private UUID locUUID;     //같은 약속, 추억 -> 같은 uuid    //todo ffff
 
     public Locations(String name, double locx, double locy, String[] locName, double timeStart, double timeEnd, int type, String[] args) {
         this.name = name;

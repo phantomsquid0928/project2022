@@ -2,6 +2,8 @@ package com.squid0928.project.utils;
 
 import android.net.Uri;
 
+import androidx.annotation.Nullable;
+
 import org.threeten.bp.*;
 
 import java.io.Serializable;
@@ -74,4 +76,13 @@ public class InputData implements Serializable {
         this.memo = memo;
     }
     public String getMemo() { return memo; }
+
+    public boolean isEmpty() {
+        boolean checker = false;
+        if (getTimeEnd() == null) checker = true;
+        if (getTimeStart() == null) checker = true;
+        if (getDateTo() == null) checker = true;
+        if (getDateFrom() == null) checker = true;
+        return checker;
+    }
 }

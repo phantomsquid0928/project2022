@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,8 +75,8 @@ public class InputTemplateFragment extends Fragment {
     TextView view_cancel;
     InputData inputData = new InputData();
     Uri photoUri;
-    HashMap<String, InputData> inputDataHashMap = new HashMap<>();
     //String hashKey = UserID + Location?
+
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -133,6 +134,15 @@ public class InputTemplateFragment extends Fragment {
         TransitionInflater inflater = TransitionInflater.from(requireContext());
         setEnterTransition(inflater.inflateTransition(R.transition.bottom_slide_up));
         setExitTransition(inflater.inflateTransition(R.transition.bottom_slide_down));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i("ff", "destroy");
+        Bundle result = new Bundle();
+        result.putSerializable("inputData", null); //맵 밖 클릭시 저장되게 할지 아님 버튼눌러서 하게할지
+        getActivity().getSupportFragmentManager().setFragmentResult("key", result);
     }
 
     @Nullable
@@ -322,20 +332,25 @@ public class InputTemplateFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //  저장
-                inputDataHashMap.put("hashKey", inputData);
-                Intent intent = new Intent(getActivity(), MapsActivity.class);
-                intent.putExtra("key",inputDataHashMap);
-                startActivity(intent);
+
+                Bundle result = new Bundle();
+                result.putSerializable("inputData", inputData);
+                getActivity().getSupportFragmentManager().setFragmentResult("key", result);
+
                 Toast.makeText(getActivity(), "저장되었습니다.", Toast.LENGTH_SHORT).show();
-//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//                fragmentManager.beginTransaction().remove(InputTemplateFragment.this).commit();
-//                fragmentManager.popBackStack();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction().remove(InputTemplateFragment.this).commit();
+                fragmentManager.popBackStack();
             }
         });
         view_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //  취소
+                Bundle result = new Bundle();
+                result.putSerializable("inputData", null);
+                getActivity().getSupportFragmentManager().setFragmentResult("key", result);
+
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction().remove(InputTemplateFragment.this).commit();
                 fragmentManager.popBackStack();

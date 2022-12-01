@@ -21,7 +21,7 @@ import com.squid0928.project.utils.UserData;
 import java.util.Set;
 
 public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
-    private MapsActivity mapsActivity;
+    private static MapsActivity mapsActivity;
     private static GoogleMap map;
     private static boolean markerClicked = false;
     public MapMarkerManager(MapsActivity mapsActivity, GoogleMap map) {
@@ -59,6 +59,7 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
             }
             return true;
         }
+
         transaction.add(R.id.map, new InputTemplateFragment(), "fff");  //TODO change this code that imputtemplate can show old inputdata
         //InputTemplateFragment.instantiate(InputData old) -> 예전에 입력한 정보 보여주기
 
@@ -70,14 +71,26 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
     public static Marker addMarker(Place place) {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(place.getLatLng());
+        markerOptions.title(place.getName());
         Marker marker = map.addMarker(markerOptions);
         return marker;
     }
     public static Marker addMarker(String name, LatLng latLng) {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
+        markerOptions.title(name);
         Marker marker = map.addMarker(markerOptions);
         return marker;
+    }
+    public static void removeMarker(String name) {
+        Marker target = mapsActivity.markers.get(name);
+        mapsActivity.markers.remove(name);
+        target.remove();
+    }
+    public static void removeMarker(Place place) {
+        Marker target = mapsActivity.markers.get(place.getName());
+        mapsActivity.markers.remove(place.getName());
+        target.remove();
     }
     public static boolean isMarkerClicked() {return markerClicked;}
 }
