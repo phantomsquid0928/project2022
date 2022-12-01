@@ -113,12 +113,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             FragmentTransaction transaction = manager.beginTransaction();
             switch (id) {
                 case R.id.tab_map:
-                    if (status == 1) break;
-                    Fragment friendListFragment = manager.findFragmentByTag("friendList");
-                    if(friendListFragment == null) break;
-                    if(friendListFragment.isAdded()) transaction.remove(friendListFragment);
-                    transaction.commit();
-                    status = 1;
                     break;
                 case R.id.tab_friend:
                     if (status == 2) break;

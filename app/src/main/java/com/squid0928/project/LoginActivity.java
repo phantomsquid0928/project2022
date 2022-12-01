@@ -57,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task)
                     {
+                        System.out.println("login buttons");
                         // 로그인이 성공적이면
                         if(task.isSuccessful()) {
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);

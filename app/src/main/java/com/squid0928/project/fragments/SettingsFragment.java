@@ -2,6 +2,7 @@ package com.squid0928.project.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -9,11 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squid0928.project.R;
+import com.squid0928.project.utils.UserAccount;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +33,8 @@ public class SettingsFragment extends Fragment {
     TextView userEmail;
     TextView userName;
     String idToken;
+    String Name;
+    String email;
     private DatabaseReference mDatabase;
 
     public SettingsFragment() {
@@ -58,18 +67,34 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance().getReference("firebaselogintest");
+
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-        System.out.println(user.toString());
         View view;
         if(user != null) {
             view = inflater.inflate(R.layout.fragment_settings, null);
             userEmail = (TextView)view.findViewById(R.id.userEmail);
-            userEmail.setText(user.getEmail());
+            email = user.getEmail();
+            userEmail.setText(email);
 
-            // mDatabase.child("firebaselogintest").child("UserAccount").
+            idToken = user.getUid();
+            // mDatabaseRef.child("UserAccount").child(firebaseUser.getUid()).setValue(account);
+
             userName = (TextView)view.findViewById(R.id.userName);
+            userName.setText(idToken);
+
+            mDatabase.child("UserAccount").child(idToken).child("name").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String value = snapshot.getValue(String.class);
+                    userName.setText(value);
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
 
             return view;
         }
