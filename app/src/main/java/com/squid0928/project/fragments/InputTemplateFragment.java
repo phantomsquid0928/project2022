@@ -42,7 +42,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
-import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
 import com.squid0928.project.utils.InputData;
 
@@ -54,7 +53,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 
 public class InputTemplateFragment extends Fragment {
 
@@ -67,6 +65,7 @@ public class InputTemplateFragment extends Fragment {
     CheckBox view_check_stayed_time;
     TextView view_stayed_time;
     TextView view_promised_time;
+    EditText view_schedule_name;
     EditText view_memo;
     Button view_btn_setAlarm;
     LinearLayout view_check_memory;
@@ -163,6 +162,7 @@ public class InputTemplateFragment extends Fragment {
         view_check_stayed_time = view.findViewById(R.id.check_stayed_time);
         view_stayed_time = view.findViewById(R.id.stayed_time);
         view_promised_time = view.findViewById(R.id.promised_date_time);
+        view_schedule_name = view.findViewById(R.id.schedule_name);
         view_memo = view.findViewById(R.id.memo);
         view_check_memory = view.findViewById(R.id.checked_memory);
         view_check_promise = view.findViewById(R.id.checked_promise);
@@ -312,15 +312,27 @@ public class InputTemplateFragment extends Fragment {
             }
         });
 
+        //  스케쥴 이름 업데이트
+        view_schedule_name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                inputData.setSchedule_name(view_schedule_name.getText().toString());
+            }
+        });
+
         //  메모 업데이트
         view_memo.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -333,13 +345,24 @@ public class InputTemplateFragment extends Fragment {
             public void onClick(View view) {
                 //  저장
                 Bundle result = new Bundle();
-                result.putSerializable("inputData", inputData);
-                getActivity().getSupportFragmentManager().setFragmentResult("key", result);
+                if(inputData.getSchedule_name()!=null){
+                    result.putSerializable("inputData", inputData);
+                    getActivity().getSupportFragmentManager().setFragmentResult("key", result);
 
-                Toast.makeText(getActivity(), "저장되었습니다.", Toast.LENGTH_SHORT).show();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                fragmentManager.beginTransaction().remove(InputTemplateFragment.this).commit();
-                fragmentManager.popBackStack();
+                    Toast.makeText(getActivity(), "저장되었습니다.", Toast.LENGTH_LONG).show();
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction().remove(InputTemplateFragment.this).commit();
+                    fragmentManager.popBackStack();
+                }
+                else{
+                    result.putSerializable("inputData", null);
+                    getActivity().getSupportFragmentManager().setFragmentResult("key", result);
+
+                    Toast.makeText(getActivity(), "필수 항목을 입력해 주세요.", Toast.LENGTH_LONG).show();
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction().remove(InputTemplateFragment.this).commit();
+                    fragmentManager.popBackStack();
+                }
             }
         });
         view_cancel.setOnClickListener(new View.OnClickListener() {

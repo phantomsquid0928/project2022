@@ -77,7 +77,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/memo"
+            app:layout_constraintBottom_toTopOf="@id/schedule_name"
             app:layout_constraintLeft_toRightOf="@id/photo"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintHeight_percent="0.35">
@@ -135,13 +135,25 @@
 
         </FrameLayout>
 
+        <EditText
+            android:id="@+id/schedule_name"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.11"
+            android:hint=" 추억/약속의 이름 (필수)"
+            android:background="@drawable/border_top"
+            android:inputType="text"
+            app:layout_constraintTop_toBottomOf="@id/basedOnRadioBtn"
+            app:layout_constraintBottom_toTopOf="@id/memo"
+            app:layout_constraintLeft_toRightOf="@id/photo"
+            app:layout_constraintRight_toRightOf="parent"/>
         <!--메모-->
         <EditText
             android:id="@+id/memo"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.55"
-            android:hint=" 메모를 입력해 주세요."
+            app:layout_constraintHeight_percent="0.44"
+            android:hint=" 간단한 메모 입력"
             android:background="@drawable/border_topbot"
             android:inputType="text"
             android:maxLines="5"
@@ -149,7 +161,7 @@
             android:fadeScrollbars="false"
             app:layout_constraintLeft_toRightOf="@id/photo"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/basedOnRadioBtn"/>
+            app:layout_constraintTop_toBottomOf="@id/schedule_name"/>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
