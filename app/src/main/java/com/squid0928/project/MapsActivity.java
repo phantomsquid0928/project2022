@@ -360,14 +360,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Log.i("ff", "info ofuserdata: " + userData.getSavedLocations());
 
         if(userData == null) return;
-        Collection<Locations> userMarkerInputData = userData.getSavedLocations().values();
-        for(Locations target : userMarkerInputData) {
-            MarkerOptions temp = new MarkerOptions();
-            temp.position(new LatLng(target.getLatitude(), target.getLongtitude()));
-            Log.i("ff", "info ofuserdata: " + target);
+        Set<String> keySet = userData.getSavedLocations().keySet();
+        for(String target : keySet) {
+            Log.i("ff", "key: " + target);
+            InputData data = userData.getSavedInputMarkers().get(target);
+            Locations locdata = userData.getSavedLocations().get(target);
+            Log.i("ff", "info of inputdata: " + data);
             //temp.title(target.getName());
-            Marker marker = mMap.addMarker(temp);
-            markers.put(target.getName(), marker);
+            Marker marker = MapMarkerManager.addMarker(data.getSchedule_name(), new LatLng(locdata.getLatitude(), locdata.getLongtitude()), data.getType());
+            markers.put(target, marker);
         }
     }
     private Location getDeviceLocation() {
@@ -435,6 +436,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
     @Override
     public boolean onMyLocationButtonClick() {
+
+        FragmentManager manager = getSupportFragmentManager();
+        Fragment createdLast = manager.findFragmentByTag("fff");
+        FragmentTransaction transaction = manager.beginTransaction();
+        if (createdLast != null) {
+            transaction.remove(createdLast);
+            transaction.commit();
+            return false;
+        }
         return false;
     }
     @Override
@@ -450,8 +460,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         transaction.add(R.id.map, new InputTemplateFragment(), "fff");
         transaction.commit();
-        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("your location");//ui 에서 input
-        Marker marker = mMap.addMarker(markerOptions);
+        Marker marker = MapMarkerManager.addMarker("myloc", latLng, 1);
         markers.put("myloc", marker);
     }
     @Override
@@ -471,8 +480,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         };*/
         //placesClient.findCurrentPlace();
         LatLng latlng = pointOfInterest.latLng;
-        MarkerOptions markerOptions = new MarkerOptions().position(latlng).title(pointOfInterest.name);
-        Marker marker = mMap.addMarker(markerOptions);
-        markers.put("poi", marker);
+        if (markers.containsKey("poi - " + pointOfInterest.name)) return;
+        Marker marker = MapMarkerManager.addMarker("poi - " + pointOfInterest.name, latlng,1);
+        markers.put("poi - " + pointOfInterest.name, marker);
     }
 }

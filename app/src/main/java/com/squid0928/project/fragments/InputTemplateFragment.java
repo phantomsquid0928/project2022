@@ -42,6 +42,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
+import com.squid0928.project.MainActivity;
+import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
 import com.squid0928.project.utils.InputData;
 
@@ -53,6 +55,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 public class InputTemplateFragment extends Fragment {
 
@@ -341,11 +344,18 @@ public class InputTemplateFragment extends Fragment {
         });
 
         view_save.setOnClickListener(new View.OnClickListener() {
+            boolean modify = false;
             @Override
             public void onClick(View view) {
                 //  저장
                 Bundle result = new Bundle();
                 if(inputData.getSchedule_name()!=null){
+                    if (MapsActivity.user_data.get(MapsActivity.user).getSavedInputMarkers().containsKey(inputData.getSchedule_name()) && modify == false) {//이름 겹치는 약속
+                        modify = true;
+                        Toast.makeText(getActivity(), "저장을 한번 더 누르면 방금만든 약속으로 수정됩니다.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    modify = false;
                     result.putSerializable("inputData", inputData);
                     getActivity().getSupportFragmentManager().setFragmentResult("key", result);
 

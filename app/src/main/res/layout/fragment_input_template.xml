@@ -141,7 +141,7 @@
             android:layout_height="0dp"
             app:layout_constraintHeight_percent="0.11"
             android:hint=" 추억/약속의 이름 (필수)"
-            android:background="@drawable/border_top"
+            android:background="@drawable/border_topbot"
             android:inputType="text"
             app:layout_constraintTop_toBottomOf="@id/basedOnRadioBtn"
             app:layout_constraintBottom_toTopOf="@id/memo"

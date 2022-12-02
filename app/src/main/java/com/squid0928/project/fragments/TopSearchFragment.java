@@ -108,8 +108,8 @@ public class TopSearchFragment extends Fragment implements View.OnClickListener{
         }
         Place place = Autocomplete.getPlaceFromIntent(intent);
         if (place == null) return;
-        Marker marker = MapMarkerManager.addMarker(place);
-        mapsActivity.markers.put(place.getName(), marker);
+        Marker marker = MapMarkerManager.addMarker(place.getName(), place, 1);
+        mapsActivity.markers.put("search", marker);
         map.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
 
         /*

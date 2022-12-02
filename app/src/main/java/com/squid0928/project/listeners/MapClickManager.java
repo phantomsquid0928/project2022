@@ -42,16 +42,23 @@ public class MapClickManager implements GoogleMap.OnMapClickListener {
             if (MapMarkerManager.isMarkerClicked()) {
                 return;
             }
-            if (mapsActivity.markers.containsKey("poi")) {
-                mapsActivity.markers.get("poi").remove();
-            }
-            if (mapsActivity.markers.containsKey("click")) { //아무거도 입력 안할시 그냥 삭제로 바꾸기
-                mapsActivity.markers.get("click").remove();
+            String[] forbiden = {"search", "name?", "poi - "};
+            for (String key : mapsActivity.markers.keySet()) {
+                if (key.equals(forbiden[0])) {
+                    mapsActivity.markers.get(key).remove();
+                }
+                if (key.equals(forbiden[1])) {
+                    mapsActivity.markers.get(key).remove();
+                }
+                if (key.contains(forbiden[2]) && key.substring(0, 6).equals(forbiden[2])) {
+                    mapsActivity.markers.get(key).remove();
+                }
             }
             return;
         }
 
-        Marker temp = MapMarkerManager.addMarker("name?", latLng);
+        Marker temp = MapMarkerManager.addMarker("name?", latLng, 1);
+        mapsActivity.markers.put("name?", temp);
         InputTemplateFragment fragment = new InputTemplateFragment();
         transaction.add(R.id.map, fragment, "fff");
         transaction.commit();
@@ -64,10 +71,10 @@ public class MapClickManager implements GoogleMap.OnMapClickListener {
                 if (res == null) return;
                 UserData target = mapsActivity.user_data.get(mapsActivity.user); //TODO 바꿔라 개인정보
 
-                MapMarkerManager.addMarker(latLng.toString(), latLng); //TODO 바꿔라
-                target.getSavedInputMarkers().put(latLng.toString(), res);
+                MapMarkerManager.addMarker(res.getSchedule_name(), latLng, res.getType()); //TODO 바꿔라
+                target.getSavedInputMarkers().put(res.getSchedule_name(), res);
                 Locations loc = new Locations(null, latLng, null, res.getType());  //TODO 바꿔라
-                target.getSavedLocations().put(latLng.toString(),loc);
+                target.getSavedLocations().put(res.getSchedule_name(), loc);
                 mapsActivity.saveToDB();
                 //target.getSavedLocations().put();
                 if (!res.isEmpty()) { // TODO : no safe checker

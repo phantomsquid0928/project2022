@@ -37,15 +37,40 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
 
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) { //마커에 입력된 데이터 불러오기
-        markerClicked = true;
         FragmentManager manager = mapsActivity.getSupportFragmentManager();
+        Fragment createdLast = manager.findFragmentByTag("fff");
         FragmentTransaction transaction = manager.beginTransaction();
+        if (createdLast != null) {
+            transaction.remove(createdLast);
+            transaction.commit();
+            String[] forbiden = {"search", "name?", "poi - "};
+            for (String key : mapsActivity.markers.keySet()) {
+                if (key.equals(forbiden[0])) {
+                    mapsActivity.markers.get(key).remove();
+                }
+                if (key.equals(forbiden[1])) {
+                    mapsActivity.markers.get(key).remove();
+                }
+                if (key.contains(forbiden[2]) && key.substring(0, 6).equals(forbiden[2])) {
+                    mapsActivity.markers.get(key).remove();
+                    mapsActivity.markers.remove(key);
+                }
+            }
+            return false;
+        }
+
+        markerClicked = true;
+        //FragmentManager manager = mapsActivity.getSupportFragmentManager();
+        //FragmentTransaction transaction = manager.beginTransaction();
         marker.showInfoWindow();
 
-        Set<String> temp = mapsActivity.markers.keySet();
+
+        Set<String> temp = mapsActivity.user_data.get(mapsActivity.user).getSavedInputMarkers().keySet();
         String target = null;
         for (String key : temp) {
-            if (mapsActivity.markers.get(key).equals(marker.getTitle())) {
+
+            Log.i("ff", key + " :: " + marker.getTitle());
+            if (key.equals(marker.getTitle())) {
                 target = key;
             }
         }
@@ -54,17 +79,25 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
         InputData inputData = null;
         if (target != null) {
             inputData = mapsActivity.user_data.get(mapsActivity.user).getMarker(target);
+            Log.i("ff", "inputdata exitst" + inputData.getType());
         }
-
-        Log.i("ff", "inputdata exitst" + inputData.getType());
 
         Log.i("ff", "previous" + markerid + "\nnow " + marker.getId());
         if (markerid.equals(marker.getId())) {
             markerid = "";
-            InputTemplateFragment fragment = new InputTemplateFragment();
+            InputTemplateFragment fragment;
+            if (inputData != null) {
+                fragment = new InputTemplateFragment(); //TODO exist inputdata show
+            }
+            else {
+                fragment = new InputTemplateFragment();
+            }
             transaction.add(R.id.map, fragment, "fff");
             transaction.commit();
             LatLng latLng = marker.getPosition();
+            String placeName[] = new String[100];
+            placeName[0] = marker.getTitle();
+            Log.i("ff", "marker place" + placeName[0]);
 
             manager.setFragmentResultListener("key", mapsActivity, new FragmentResultListener() {
                 @Override
@@ -73,10 +106,11 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
                     if (res == null) return;
                     UserData target = mapsActivity.user_data.get(mapsActivity.user); //TODO 바꿔라
 
-                    MapMarkerManager.addMarker(latLng.toString(), latLng); //TODO 바꿔라
-                    target.getSavedInputMarkers().put(latLng.toString(), res);
-                    Locations loc = new Locations(null, latLng,null,res.getType());
-                    //target.getSavedLocations().put();
+                    MapMarkerManager.addMarker(res.getSchedule_name(), latLng, res.getType()); //TODO 바꿔라
+                    target.getSavedInputMarkers().put(res.getSchedule_name(), res);
+                    Locations loc = new Locations(res.getSchedule_name(), latLng, placeName, res.getType());
+                    target.getSavedLocations().put(res.getSchedule_name(), loc);
+                    //mapsActivity.saveToDB();
                     if (!res.isEmpty()) { // TODO : no safe checker
 
                     }
@@ -84,7 +118,7 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
             });
         } else {
             markerid = marker.getId();
-            Fragment createdLast = manager.findFragmentByTag("fff");
+            createdLast = manager.findFragmentByTag("fff");
 
             if (createdLast != null) {
                 transaction.remove(createdLast);
@@ -100,18 +134,21 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
         return false;
     }
 
-    public static Marker addMarker(Place place) {
+    public static Marker addMarker(String name, Place place, int type) {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(place.getLatLng());
-        markerOptions.title(place.getName());
+        markerOptions.title(name);
+        //markerOptions.icon();
         Marker marker = map.addMarker(markerOptions);
+        marker.setTag(type);
         return marker;
     }
-    public static Marker addMarker(String name, LatLng latLng) {
+    public static Marker addMarker(String name, LatLng latLng, int type) {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title(name);
         Marker marker = map.addMarker(markerOptions);
+        marker.setTag(type);
         return marker;
     }
     public static void removeMarker(String name) {

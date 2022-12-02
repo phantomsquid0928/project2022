@@ -27,7 +27,7 @@ public class MapMotionManager implements GoogleMap.OnCameraMoveStartedListener, 
             case REASON_API_ANIMATION:
             case REASON_GESTURE:
             {
-                if(MapMarkerManager.isMarkerClicked() == true) break;
+                if(MapMarkerManager.isMarkerClicked()) break;
                 FragmentManager manager = mapsActivity.getSupportFragmentManager();
                 Fragment createdsearch = manager.findFragmentByTag("topsearch");
                 FragmentTransaction transaction = manager.beginTransaction();
