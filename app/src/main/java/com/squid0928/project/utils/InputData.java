@@ -10,10 +10,10 @@ public class InputData implements Serializable {
     private Uri photo;
     private int type;
     private int category;
-    private LocalDate dateFrom;
-    private LocalDate dateTo;
-    private LocalTime timeStart;
-    private LocalTime timeEnd;
+    private String dateFrom;
+    private String dateTo;
+    private String timeStart;
+    private String timeEnd;
     private String scheduleName;
     private String memo;
     public static final int PROMISE = 1;
@@ -43,31 +43,31 @@ public class InputData implements Serializable {
         return category;
     }
 
-    public void setDateFrom(LocalDate date) {
+    public void setDateFrom(String date) {
         this.dateFrom = date;
     }
-    public LocalDate getDateFrom() {
+    public String getDateFrom() {
         return dateFrom;
     }
 
-    public void setDateTo(LocalDate dateTo) {
+    public void setDateTo(String dateTo) {
         this.dateTo = dateTo;
     }
-    public LocalDate getDateTo() {
+    public String getDateTo() {
         return dateTo;
     }
 
-    public void setTimeStart(LocalTime timeStart) {
+    public void setTimeStart(String timeStart) {
         this.timeStart = timeStart;
     }
-    public LocalTime getTimeStart() {
+    public String getTimeStart() {
         return timeStart;
     }
 
-    public void setTimeEnd(LocalTime timeEnd) {
+    public void setTimeEnd(String timeEnd) {
         this.timeEnd = timeEnd;
     }
-    public LocalTime getTimeEnd() {
+    public String getTimeEnd() {
         return timeEnd;
     }
 

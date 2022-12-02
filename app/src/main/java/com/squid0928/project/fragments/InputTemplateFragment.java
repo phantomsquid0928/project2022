@@ -213,11 +213,11 @@ public class InputTemplateFragment extends Fragment {
             if (inputData.getDateFrom() != null && inputData.getDateTo() != null
                     && inputData.getTimeStart() != null && inputData.getTimeEnd() != null) {
                 view_check_stayed_time.setChecked(true);    //  load Checkbox
-                view_stayed_time.setText(inputData.getDateFrom().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))  //  load TextView
-                        + " " + inputData.getTimeStart().format(DateTimeFormatter.ofPattern("HH:mm"))
+                view_stayed_time.setText(inputData.getDateFrom()  //  load TextView
+                        + " " + inputData.getTimeStart()
                         + " ~ " + "\n"
-                        + inputData.getDateTo().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-                        + " " + inputData.getTimeEnd().format(DateTimeFormatter.ofPattern("HH:mm")));
+                        + inputData.getDateTo()
+                        + " " + inputData.getTimeEnd());
             }
         }
         else if(inputData.getType()==InputData.PROMISE){
@@ -225,8 +225,8 @@ public class InputTemplateFragment extends Fragment {
             view_category.setAdapter(arrayAdapter_promise); //  load Spinner
             view_category.setSelection(inputData.getCategory());
             if(inputData.getDateFrom()!=null&&inputData.getTimeStart()!=null){
-                view_promised_time.setText(inputData.getDateFrom().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))    //  load TextView
-                        + " " + inputData.getTimeStart().format(DateTimeFormatter.ofPattern("hh:mm")));
+                view_promised_time.setText(inputData.getDateFrom()  //  load TextView
+                        + " " + inputData.getTimeStart());
             }
         }
         if(inputData.getScheduleName()!=null)view_schedule_name.setText(inputData.getScheduleName()); //  load EditText
@@ -345,8 +345,9 @@ public class InputTemplateFragment extends Fragment {
             public void onClick(View view) {
                 if (view_promised_time != null) {
                     Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM);
-                    intent.putExtra(AlarmClock.EXTRA_HOUR, inputData.getTimeStart().getHour());
-                    intent.putExtra(AlarmClock.EXTRA_MINUTES, inputData.getTimeStart().getMinute());
+                    LocalTime localTime = LocalTime.parse(inputData.getTimeStart(),DateTimeFormatter.ofPattern("hh:mm"));
+                    intent.putExtra(AlarmClock.EXTRA_HOUR, localTime.getHour());
+                    intent.putExtra(AlarmClock.EXTRA_MINUTES, localTime.getMinute());
                     startActivity(intent);
                 }
             }
@@ -486,10 +487,10 @@ public class InputTemplateFragment extends Fragment {
                         + " " + localTime_end.format(DateTimeFormatter.ofPattern("HH:mm"));
                 view_stayed_time.setText(concat);
                 //  DB에 저장
-                inputData.setDateFrom(localDate_from);
-                inputData.setTimeStart(localTime_start);
-                inputData.setDateTo(localDate_to);
-                inputData.setTimeEnd(localTime_end);    //
+                inputData.setDateFrom(localDate_from.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                inputData.setTimeStart(localTime_start.format(DateTimeFormatter.ofPattern("HH:mm")));
+                inputData.setDateTo(localDate_to.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                inputData.setTimeEnd(localTime_end.format(DateTimeFormatter.ofPattern("HH:mm")));    //
                 if (dialog_stayed_date_time.isShowing())
                     dialog_stayed_date_time.dismiss();
             }
@@ -528,8 +529,8 @@ public class InputTemplateFragment extends Fragment {
                         + " " + localTime.format(DateTimeFormatter.ofPattern("hh:mm"));
                 view_promised_time.setText(concat);
                 //  DB에 저장
-                inputData.setDateFrom(localDate);
-                inputData.setTimeStart(localTime);  //
+                inputData.setDateFrom(localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                inputData.setTimeStart(localTime.format(DateTimeFormatter.ofPattern("hh:mm")));  //
                 if (dialog_promised_date_time.isShowing())
                     dialog_promised_date_time.dismiss();
             }
