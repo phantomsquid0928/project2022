@@ -75,6 +75,7 @@ public class InputTemplateFragment extends Fragment {
     TextView view_cancel;
     InputData inputData = new InputData();
     Uri photoUri;
+    boolean mod;
 
     //String hashKey = UserID + Location?
 
@@ -88,6 +89,7 @@ public class InputTemplateFragment extends Fragment {
         inputData.setTimeEnd(null);
         inputData.setScheduleName(null);
         inputData.setMemo(null);
+        mod = false;
     }
     public InputTemplateFragment(InputData inputData) {
         this.inputData.setPhoto(inputData.getPhoto());
@@ -99,6 +101,7 @@ public class InputTemplateFragment extends Fragment {
         this.inputData.setTimeEnd(inputData.getTimeEnd());
         this.inputData.setScheduleName(inputData.getScheduleName());
         this.inputData.setMemo(inputData.getMemo());
+        mod = true;
     }
 
 
@@ -401,13 +404,14 @@ public class InputTemplateFragment extends Fragment {
                 //  저장
                 Bundle result = new Bundle();
                 if(inputData.getScheduleName()!=null){
-                    if (MapsActivity.user_data.get(MapsActivity.user).getSavedInputMarkers().containsKey(inputData.getScheduleName()) && modify == false) {//이름 겹치는 약속
+                    if (MapsActivity.user_data.get(MapsActivity.user).getSavedInputMarkers().containsKey(inputData.getScheduleName()) && !modify && !mod) {//이름 겹치는 약속
                         modify = true;
                         Toast.makeText(getActivity(), "저장을 한번 더 누르면 방금만든 약속으로 수정됩니다.", Toast.LENGTH_LONG).show();
                         return;
                     }
                     modify = false;
                     result.putSerializable("inputData", inputData);
+                    result.putBoolean("mod", mod);
                     getActivity().getSupportFragmentManager().setFragmentResult("key", result);
 
                     Toast.makeText(getActivity(), "저장되었습니다.", Toast.LENGTH_LONG).show();
@@ -417,6 +421,7 @@ public class InputTemplateFragment extends Fragment {
                 }
                 else{
                     result.putSerializable("inputData", null);
+                    result.putBoolean("mod", false);
                     getActivity().getSupportFragmentManager().setFragmentResult("key", result);
 
                     Toast.makeText(getActivity(), "필수 항목을 입력해 주세요.", Toast.LENGTH_LONG).show();

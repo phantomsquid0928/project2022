@@ -72,10 +72,10 @@ public class MapClickManager implements GoogleMap.OnMapClickListener {
                 if (res == null) return;
                 UserData target = mapsActivity.user_data.get(mapsActivity.user); //TODO 바꿔라 개인정보
 
-                MapMarkerManager.addMarker(res.getSchedule_name(), latLng, res.getType()); //TODO 바꿔라
-                target.getSavedInputMarkers().put(res.getSchedule_name(), res);
-                Locations loc = new Locations(res.getSchedule_name(), latLng, null, res.getType());  //TODO 바꿔라
-                target.getSavedLocations().put(res.getSchedule_name(), loc);
+                MapMarkerManager.addMarker(res.getScheduleName(), latLng, res.getType()); //TODO 바꿔라
+                target.getSavedInputMarkers().put(res.getScheduleName(), res);
+                Locations loc = new Locations(res.getScheduleName(), latLng, null, res.getType());  //TODO 바꿔라
+                target.getSavedLocations().put(res.getScheduleName(), loc);
                 mapsActivity.saveToDB();
                 //target.getSavedLocations().put();
                 if (!res.isEmpty()) { // TODO : no safe checker

@@ -343,7 +343,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Locations locdata = userData.getSavedLocations().get(target);
             Log.i("ff", "info of inputdata: " + data);
             //temp.title(target.getName());
-            Marker marker = MapMarkerManager.addMarker(data.getSchedule_name(), new LatLng(locdata.getLatitude(), locdata.getLongtitude()), data.getType());
+            Marker marker = MapMarkerManager.addMarker(data.getScheduleName(), new LatLng(locdata.getLatitude(), locdata.getLongtitude()), data.getType());
             markers.put(target, marker);
         }
     }

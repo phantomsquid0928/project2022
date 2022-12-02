@@ -94,7 +94,7 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
             markerid = "";
             InputTemplateFragment fragment;
             if (inputData != null) {
-                fragment = new InputTemplateFragment(); //TODO exist inputdata show
+                fragment = new InputTemplateFragment(inputData); //TODO exist inputdata show
             }
             else {
                 fragment = new InputTemplateFragment();
@@ -110,14 +110,18 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
                 @Override
                 public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                     InputData res = (InputData)result.getSerializable("inputData");
+                    boolean mod = result.getBoolean("mod");
 
                     if (res == null) return;
                     UserData target = mapsActivity.user_data.get(mapsActivity.user); //TODO 바꿔라
+                    if (mod) { //수정
+                        MapMarkerManager.removeMarker(res.getScheduleName());
+                    }
 
-                    MapMarkerManager.addMarker(res.getSchedule_name(), latLng, res.getType()); //TODO 바꿔라
-                    target.getSavedInputMarkers().put(res.getSchedule_name(), res);
-                    Locations loc = new Locations(res.getSchedule_name(), latLng, placeName, res.getType());
-                    target.getSavedLocations().put(res.getSchedule_name(), loc);
+                    MapMarkerManager.addMarker(res.getScheduleName(), latLng, res.getType()); //TODO 바꿔라
+                    target.getSavedInputMarkers().put(res.getScheduleName(), res);
+                    Locations loc = new Locations(res.getScheduleName(), latLng, placeName, res.getType());
+                    target.getSavedLocations().put(res.getScheduleName(), loc);
                     //mapsActivity.saveToDB();
                     if (!res.isEmpty()) { // TODO : no safe checker
 
