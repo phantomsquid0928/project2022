@@ -2,8 +2,6 @@ package com.squid0928.project.utils;
 
 import android.net.Uri;
 
-import androidx.annotation.Nullable;
-
 import org.threeten.bp.*;
 
 import java.io.Serializable;
@@ -16,6 +14,7 @@ public class InputData implements Serializable {
     private LocalDate dateTo;
     private LocalTime timeStart;
     private LocalTime timeEnd;
+    private String schedule_name;
     private String memo;
     public static final int PROMISE = 10000;
     public static final int MEMORY = 20000;
@@ -71,6 +70,9 @@ public class InputData implements Serializable {
     public LocalTime getTimeEnd() {
         return timeEnd;
     }
+
+    public void setSchedule_name(String schedule_name) { this.schedule_name = schedule_name; }
+    public String getSchedule_name() { return schedule_name; }
 
     public void setMemo(String memo) {
         this.memo = memo;
