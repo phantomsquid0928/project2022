@@ -56,6 +56,8 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
             inputData = mapsActivity.user_data.get(mapsActivity.user).getMarker(target);
         }
 
+        Log.i("ff", "inputdata exitst" + inputData.getType());
+
         Log.i("ff", "previous" + markerid + "\nnow " + marker.getId());
         if (markerid.equals(marker.getId())) {
             markerid = "";

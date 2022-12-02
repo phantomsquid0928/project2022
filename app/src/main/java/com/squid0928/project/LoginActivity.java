@@ -3,7 +3,9 @@ package com.squid0928.project;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_login);
 
         // 로그인 요청하는 버튼
@@ -39,6 +42,8 @@ public class LoginActivity extends AppCompatActivity {
         mEtEmail = findViewById(R.id.et_email);
         mEtPwd = findViewById(R.id.et_pwd);
 
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+
         // 로그인
         Button btn_login = findViewById(R.id.btn_login);
         btn_login.setOnClickListener(new View.OnClickListener() {
@@ -47,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
                 // 로그인 처리 시작
                 String strEmail = mEtEmail.getText().toString();
                 String strPwd = mEtPwd.getText().toString();
+
 
                 if(strEmail.length() == 0 || strPwd.length() == 0)
                 {
@@ -61,7 +67,11 @@ public class LoginActivity extends AppCompatActivity {
                         System.out.println("login buttons");
                         // 로그인이 성공적이면
                         if(task.isSuccessful()) {
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            SharedPreferences.Editor editor = pref.edit();
+                            editor.putString("id", strEmail);
+                            editor.putString("pass", strPwd);
+                            editor.commit();
+                            Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
                             Bundle bundle = new Bundle();
                             Log.i("ff", mFirebaseAuth.getCurrentUser().getUid());
                             bundle.putString("useruid", mFirebaseAuth.getCurrentUser().getEmail());

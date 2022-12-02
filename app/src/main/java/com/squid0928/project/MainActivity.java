@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -44,20 +45,24 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private DatabaseReference mDatabaseRef2;
     private FirebaseFirestore db;
-    //final SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
 
-    String strEmail = "phantomsquid0928@gmail.com";  //TODO get from preference
+    String strEmail = "phantomsquid0928@gmail.co";  //TODO get from preference
     String strPwd = "12345678";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Intent intent = getIntent();
-        if (intent.getBundleExtra("userInfo") != null) {
+        //setContentView(R.layout.activity_main);
+        //Intent intent = getIntent();
+        /*if (intent.getBundleExtra("userInfo") != null) {
             strEmail = intent.getBundleExtra("userInfo").getString("useruid");
             strPwd = intent.getBundleExtra("userInfo").getString("userpass");
-        }
+        }*/
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        String strEmail = pref.getString("id", "<><>");
+        String strPwd = pref.getString("pass", "<><>");
+
+
         db = FirebaseFirestore.getInstance();
         db.collection("userdata").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -88,15 +93,18 @@ public class MainActivity extends AppCompatActivity {
                     bundle.putString("useruid", mFirebaseAuth.getCurrentUser().getEmail());
                     intent.putExtra("userInfo", bundle);
                     startActivity(intent);
+                    finish();
+
                 } else // 로그인 실패
                 {
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         });
         //TODO id token exists true -> mapsActivity false -> loginActivity
-
+        /*
         Button button = findViewById(R.id.mapOpen);
         button.setOnClickListener(new View.OnClickListener() {
 
@@ -126,5 +134,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+         */
     }
 }

@@ -4,10 +4,12 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,9 +46,13 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squid0928.project.databinding.ActivityMapsBinding;
 import com.squid0928.project.fragments.FABFragment;
 import com.squid0928.project.fragments.FriendTabFragment;
@@ -90,19 +96,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     final String apiKey = BuildConfig.MAPS_API_KEY;
     private LocationManager manager = null;
 
-    SettingsFragment settingsFragment;
-    TimetableFragment timetableFragment;
-
     private int status = 0; // home
     public static String user;
 
     private DatabaseReference mDatabaseRef;
     public static FirebaseFirestore db;
+    public static FirebaseAuth mFirebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("firebaseInfos");
         db = FirebaseFirestore.getInstance();
+
+        //loginFromPref();
+        //if (loadDB()) {}
+
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         user = intent.getBundleExtra("userInfo").getString("useruid");
@@ -111,9 +120,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         /*binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());*/
         setContentView(R.layout.activity_maps);
-
-        settingsFragment = new SettingsFragment();
-        timetableFragment = new TimetableFragment();
 
         bottomNav = findViewById(R.id.bottomView);
         ly = findViewById(R.id.home_layout);
@@ -141,11 +147,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     transaction.commit();
                     break;
                 case R.id.tab_timetable:
-                    transaction.add(R.id.map, timetableFragment, "time");
+                    transaction.add(R.id.map, new TimetableFragment(), "time");
                     transaction.commit();
                     break;
                 case R.id.tab_settings:
-                    transaction.add(R.id.map, settingsFragment, "setting");
+                    transaction.add(R.id.map, new SettingsFragment(), "setting");
                     transaction.commit();
                     break;
             }
@@ -281,10 +287,61 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onSaveInstanceState(outState);
         db.collection("userdata").document(user).set(user_data.get(user));
     }*/
+    /*public boolean loginFromPref() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String id = preferences.getString("id", "<<>>");
+        String pass = preferences.getString("pass", "<<>>");
+        if (id.equals("<<>>") || pass.equals("<<>>")) {
+            return false;
+        }
+
+        mFirebaseAuth.signInWithEmailAndPassword(id, pass).addOnCompleteListener(MapsActivity.this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task)
+            {
+                System.out.println("login buttons");
+                // 로그인이 성공적이면
+                if(task.isSuccessful()) {
+                    return;
+                } else // 로그인 실패
+                {
+                    mFirebaseAuth.signOut();
+                    Intent intent = new Intent(MapsActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    return;
+                }
+            }
+        });
+        return
+    }*/
+    public static boolean loadDB() {
+        db = FirebaseFirestore.getInstance();
+        Task<QuerySnapshot> res = db.collection("userdata").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot snapshot : task.getResult()) {
+                        Log.i("ff", snapshot.getId() + "->" + snapshot.getData());
+
+                        UserData userData = snapshot.toObject(UserData.class);
+
+                        MapsActivity.user_data.put(snapshot.getId(), userData);
+                    }
+                } else {
+                    Log.e("ff", "db load failed");
+                }
+            }
+        });
+        if (res.isSuccessful() && res.isComplete()) {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     public void saveToDB() {
         db.collection("userdata").document(user).set(user_data.get(user));
     }
-
     //TODO change below code can access to server data
     private void restoreUserMarkers() {
         /*UserData tempInfo = new UserData("phantomsquid0928", null);

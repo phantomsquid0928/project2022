@@ -1,13 +1,18 @@
 package com.squid0928.project.fragments;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.Task;
@@ -19,6 +24,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squid0928.project.LoginActivity;
+import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
 import com.squid0928.project.utils.UserAccount;
 
@@ -27,7 +34,7 @@ import com.squid0928.project.utils.UserAccount;
  * Use the {@link SettingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment implements View.OnClickListener{
 
     FirebaseUser user;
     TextView userEmail;
@@ -69,12 +76,17 @@ public class SettingsFragment extends Fragment {
         // Inflate the layout for this fragment
         mDatabase = FirebaseDatabase.getInstance().getReference("firebaselogintest");
 
-
         user = FirebaseAuth.getInstance().getCurrentUser();
         View view;
         if(user != null) {
-            view = inflater.inflate(R.layout.fragment_settings, null);
+            view = inflater.inflate(R.layout.fragment_settings, container, false);
             userEmail = (TextView)view.findViewById(R.id.userEmail);
+            LinearLayout layout = view.findViewById(R.id.settings_all);
+           // LinearLayout layout2 = view.findViewById(R.id.settings_all);
+            LinearLayout layout3 = view.findViewById(R.id.logout);
+            layout.setOnClickListener(this);
+            layout3.setOnClickListener(this);
+
             email = user.getEmail();
             userEmail.setText(email);
 
@@ -100,5 +112,25 @@ public class SettingsFragment extends Fragment {
         }
 
         return inflater.inflate(R.layout.fragment_settings, container, false);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view instanceof LinearLayout) {
+            LinearLayout target = (LinearLayout) view;
+            TextView target2 = (TextView) target.getChildAt(1);
+            Log.i("ff", target2.toString());
+            if (target2.getText().toString().contains("아웃")) {
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                auth.signOut();
+                Intent intent = new Intent(this.getContext(), LoginActivity.class);
+                startActivity(intent);
+                this.getActivity().finishAffinity();
+                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+                SharedPreferences.Editor editor = pref.edit();
+                editor.clear();
+                editor.commit();
+            }
+        }
     }
 }
