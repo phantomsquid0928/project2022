@@ -16,8 +16,8 @@ public class InputData implements Serializable {
     private LocalTime timeEnd;
     private String schedule_name;
     private String memo;
-    public static final int PROMISE = 10000;
-    public static final int MEMORY = 20000;
+    public static final int PROMISE = 1;
+    public static final int MEMORY = 2;
 
     public InputData() {
     }

@@ -55,6 +55,7 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+
 import java.util.Date;
 import java.util.Map;
 
@@ -79,7 +80,11 @@ public class InputTemplateFragment extends Fragment {
     InputData inputData = new InputData();
     Uri photoUri;
     //String hashKey = UserID + Location?
-    public InputTemplateFragment() {}
+    public InputTemplateFragment() {
+        inputData.setCategory(0);
+        inputData.setType(InputData.PROMISE);
+
+    }
     public InputTemplateFragment(InputData inputData) {
 
     }

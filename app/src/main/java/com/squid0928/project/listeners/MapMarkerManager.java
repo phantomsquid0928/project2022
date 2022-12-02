@@ -1,9 +1,14 @@
 package com.squid0928.project.listeners;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -11,6 +16,8 @@ import androidx.fragment.app.FragmentResultListener;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -138,7 +145,12 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(place.getLatLng());
         markerOptions.title(name);
-        //markerOptions.icon();
+        if (type == 1) {
+            markerOptions.icon(BitmapFromVector(mapsActivity.getApplicationContext(), R.drawable.ic_baseline_circle_1_24));
+        }
+        if (type == 2) {
+            markerOptions.icon(BitmapFromVector(mapsActivity.getApplicationContext(), R.drawable.ic_baseline_circle_24));
+        }
         Marker marker = map.addMarker(markerOptions);
         marker.setTag(type);
         return marker;
@@ -147,6 +159,12 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title(name);
+        if (type == 1) {
+            markerOptions.icon(BitmapFromVector(mapsActivity.getApplicationContext(), R.drawable.ic_baseline_circle_1_24));
+        }
+        if (type == 2) {
+            markerOptions.icon(BitmapFromVector(mapsActivity.getApplicationContext(), R.drawable.ic_baseline_circle_24));
+        }
         Marker marker = map.addMarker(markerOptions);
         marker.setTag(type);
         return marker;
@@ -160,6 +178,18 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
         Marker target = mapsActivity.markers.get(place.getName());
         mapsActivity.markers.remove(place.getName());
         target.remove();
+    }
+    private static BitmapDescriptor BitmapFromVector(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
     public static boolean isMarkerClicked() {return markerClicked;}
 }

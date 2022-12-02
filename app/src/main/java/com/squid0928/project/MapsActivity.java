@@ -314,31 +314,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
         return
     }*/
-    public static boolean loadDB() {
-        db = FirebaseFirestore.getInstance();
-        Task<QuerySnapshot> res = db.collection("userdata").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot snapshot : task.getResult()) {
-                        Log.i("ff", snapshot.getId() + "->" + snapshot.getData());
-
-                        UserData userData = snapshot.toObject(UserData.class);
-
-                        MapsActivity.user_data.put(snapshot.getId(), userData);
-                    }
-                } else {
-                    Log.e("ff", "db load failed");
-                }
-            }
-        });
-        if (res.isSuccessful() && res.isComplete()) {
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
     public void saveToDB() {
         db.collection("userdata").document(user).set(user_data.get(user));
     }
@@ -361,6 +336,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         if(userData == null) return;
         Set<String> keySet = userData.getSavedLocations().keySet();
+        if (keySet.isEmpty()) return;
         for(String target : keySet) {
             Log.i("ff", "key: " + target);
             InputData data = userData.getSavedInputMarkers().get(target);

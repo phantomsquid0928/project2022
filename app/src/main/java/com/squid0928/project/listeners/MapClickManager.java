@@ -52,6 +52,7 @@ public class MapClickManager implements GoogleMap.OnMapClickListener {
                 }
                 if (key.contains(forbiden[2]) && key.substring(0, 6).equals(forbiden[2])) {
                     mapsActivity.markers.get(key).remove();
+                    mapsActivity.markers.remove(key);
                 }
             }
             return;
@@ -73,7 +74,7 @@ public class MapClickManager implements GoogleMap.OnMapClickListener {
 
                 MapMarkerManager.addMarker(res.getSchedule_name(), latLng, res.getType()); //TODO 바꿔라
                 target.getSavedInputMarkers().put(res.getSchedule_name(), res);
-                Locations loc = new Locations(null, latLng, null, res.getType());  //TODO 바꿔라
+                Locations loc = new Locations(res.getSchedule_name(), latLng, null, res.getType());  //TODO 바꿔라
                 target.getSavedLocations().put(res.getSchedule_name(), loc);
                 mapsActivity.saveToDB();
                 //target.getSavedLocations().put();
