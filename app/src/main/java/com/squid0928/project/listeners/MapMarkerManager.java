@@ -110,6 +110,7 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
                 @Override
                 public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                     InputData res = (InputData)result.getSerializable("inputData");
+
                     if (res == null) return;
                     UserData target = mapsActivity.user_data.get(mapsActivity.user); //TODO 바꿔라
 
