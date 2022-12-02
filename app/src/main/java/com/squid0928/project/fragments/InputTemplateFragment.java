@@ -332,7 +332,6 @@ public class InputTemplateFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //  저장
-
                 Bundle result = new Bundle();
                 result.putSerializable("inputData", inputData);
                 getActivity().getSupportFragmentManager().setFragmentResult("key", result);

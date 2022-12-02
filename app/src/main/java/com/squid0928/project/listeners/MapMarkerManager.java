@@ -1,6 +1,7 @@
 package com.squid0928.project.listeners;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -26,7 +27,9 @@ import java.util.Set;
 public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
     private static MapsActivity mapsActivity;
     private static GoogleMap map;
-    private static boolean markerClicked = false;
+
+    public String markerid = "";
+    public static boolean markerClicked = false;
     public MapMarkerManager(MapsActivity mapsActivity, GoogleMap map) {
         this.mapsActivity = mapsActivity;
         this.map = map;
@@ -34,57 +37,67 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
 
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) { //마커에 입력된 데이터 불러오기
+        markerClicked = true;
         FragmentManager manager = mapsActivity.getSupportFragmentManager();
-        if (markerClicked == true) {
+        FragmentTransaction transaction = manager.beginTransaction();
+        marker.showInfoWindow();
+
+        Set<String> temp = mapsActivity.markers.keySet();
+        String target = null;
+        for (String key : temp) {
+            if (mapsActivity.markers.get(key).equals(marker.getTitle())) {
+                target = key;
+            }
+        }
+        //TODO
+        // change below code can access to serverside
+        InputData inputData = null;
+        if (target != null) {
+            inputData = mapsActivity.user_data.get(mapsActivity.user).getMarker(target);
+        }
+
+        Log.i("ff", "previous" + markerid + "\nnow " + marker.getId());
+        if (markerid.equals(marker.getId())) {
+            markerid = "";
+            InputTemplateFragment fragment = new InputTemplateFragment();
+            transaction.add(R.id.map, fragment, "fff");
+            transaction.commit();
             LatLng latLng = marker.getPosition();
+
             manager.setFragmentResultListener("key", mapsActivity, new FragmentResultListener() {
                 @Override
                 public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                     InputData res = (InputData)result.getSerializable("inputData");
                     if (res == null) return;
-                    UserData target = mapsActivity.user_data.get("phantomsquid0928");
+                    UserData target = mapsActivity.user_data.get(mapsActivity.user); //TODO 바꿔라
 
                     MapMarkerManager.addMarker(latLng.toString(), latLng); //TODO 바꿔라
                     target.getSavedInputMarkers().put(latLng.toString(), res);
-                    Locations loc = new Locations(null, latLng, null, 0, 0, res.getType());
+                    Locations loc = new Locations(null, latLng,null,res.getType());
                     //target.getSavedLocations().put();
                     if (!res.isEmpty()) { // TODO : no safe checker
 
                     }
                 }
             });
-        }
-        markerClicked = true;
-        marker.showInfoWindow();
+        } else {
+            markerid = marker.getId();
+            Fragment createdLast = manager.findFragmentByTag("fff");
 
-        Set<String> temp = mapsActivity.markers.keySet();
-        String target = null;
-        for (String key : temp) {
-            if (mapsActivity.markers.get(key).equals(marker)) {
-                target = key;
+            if (createdLast != null) {
+                transaction.remove(createdLast);
+                transaction.commit();
+                return true;
             }
-        }
-        //TODO
-        // change below code can access to serverside
-        InputData inputData = mapsActivity.user_data.get("phantomsquid0928").getMarker(target); //서버에서 이미 받은 유저 정보 존재해야 함
-
-        Fragment createdLast = manager.findFragmentByTag("fff");
-        FragmentTransaction transaction = manager.beginTransaction();
-        if (createdLast != null) {
-            transaction.remove(createdLast);
             transaction.commit();
-            return true;
         }
 
        // transaction.add(R.id.map, new InputTemplateFragment(), "fff");  //TODO change this code that imputtemplate can show old inputdata
         //InputTemplateFragment.instantiate(InputData old) -> 예전에 입력한 정보 보여주기
-
-
-        transaction.commit();
-
         markerClicked = false;
         return false;
     }
+
     public static Marker addMarker(Place place) {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(place.getLatLng());

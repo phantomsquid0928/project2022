@@ -6,59 +6,69 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Locations implements Comparable<Locations>{
+public class Locations /*implements Comparable<Locations>*/{
     private String name;      //약속이름잇겟지머
-    private LatLng latLng;
+    private double latitude;
+    private double longtitude;
     private String[] locName; //위치이름
-    private double timeStart, timeEnd;//시작시간 끝시간     //todo FFFF
+   // private double timeStart, timeEnd;//시작시간 끝시간     //todo FFFF
     private int type;         //추억? 약속?
-    private String[] args;    //메모                       //todo ffff
-    private List<UserData> targetFriends = new ArrayList<>(); //todo ffff
-    private UUID locUUID;     //같은 약속, 추억 -> 같은 uuid    //todo ffff
+    //private String[] args;    //메모                       //todo ffff
+    //private List<UserData> targetFriends = new ArrayList<>(); //todo ffff
+    //private UUID locUUID;     //같은 약속, 추억 -> 같은 uuid    //todo ffff
 
-    public Locations(String name, double locx, double locy, String[] locName, double timeStart, double timeEnd, int type, String[] args) {
+    public Locations() {  //need for db
+
+    }
+    public Locations(String name, double locx, double locy, String[] locName, int type) {
+        this.name = name;
+        this.latitude = locx;
+        this.longtitude = locy;
+        this.locName = locName;
+        //this.timeStart = timeStart;
+        //this.timeEnd = timeEnd;
+        this.type = type;
+        //this.args = args;
+        //this.locUUID = UUID.randomUUID();
+    }
+    /*public Locations(String name, double locx, double locy, String[] locName, int type) {   //메모 없이 걍 추가
         this.name = name;
         this.latLng = new LatLng(locx, locy);
         this.locName = locName;
-        this.timeStart = timeStart;
-        this.timeEnd = timeEnd;
+        //this.timeStart = timeStart;
+        //this.timeEnd = timeEnd;
         this.type = type;
-        this.args = args;
-        this.locUUID = UUID.randomUUID();
-    }
-    public Locations(String name, double locx, double locy, String[] locName, double timeStart, double timeEnd, int type) {   //메모 없이 걍 추가
+        //this.locUUID = UUID.randomUUID();
+    }*/
+    public Locations(String name, LatLng latLng, String[] locName, int type) {   //메모 없이 걍 추가
         this.name = name;
-        this.latLng = new LatLng(locx, locy);
+        this.latitude = latLng.latitude;
+        this.longtitude = latLng.longitude;
         this.locName = locName;
-        this.timeStart = timeStart;
-        this.timeEnd = timeEnd;
+        //this.timeStart = timeStart;
+        //this.timeEnd = timeEnd;
         this.type = type;
-        this.locUUID = UUID.randomUUID();
-    }
-    public Locations(String name, LatLng latLng, String[] locName, double timeStart, double timeEnd, int type) {   //메모 없이 걍 추가
-        this.name = name;
-        this.latLng = latLng;
-        this.locName = locName;
-        this.timeStart = timeStart;
-        this.timeEnd = timeEnd;
-        this.type = type;
-        this.locUUID = UUID.randomUUID();
+        //this.locUUID = UUID.randomUUID();
     }
     public Locations(Locations locations, UUID locUUID) { //친구와 약속 공유시
         this.name = locations.getName();
-        this.latLng = locations.getLatLng();
+        this.longtitude = locations.longtitude;
         this.locName = locations.getLocName();
-        this.timeStart = locations.getTimeStart();
-        this.timeEnd = locations.getTimeEnd();
+        //this.timeStart = locations.getTimeStart();
+        //this.timeEnd = locations.getTimeEnd();
         this.type = locations.getType();
-        this.targetFriends = locations.getTargetFriends();
-        this.locUUID = locUUID;
-        locations.setLocUUID(locUUID);
+        //this.targetFriends = locations.getTargetFriends();
+        //this.locUUID = locUUID;
+       // locations.setLocUUID(locUUID);
     }
     public void setName(String name) {   //약속, 추억 이름 바꾸기
         this.name = name;
     }
-    public void setArgs(String[] args) {   //메모 추가시 이거로
+    public void setLatLng(double latitude, double longtitude) {
+        this.latitude = latitude;
+        this.longtitude = longtitude;
+    }
+    /*public void setArgs(String[] args) {   //메모 추가시 이거로
         this.args = args;
     }
     public void setLocUUID(UUID locUUID) {
@@ -91,7 +101,7 @@ public class Locations implements Comparable<Locations>{
     @Override
     public int compareTo(Locations locations) {
         return locUUID.compareTo(locations.locUUID);
-    }
+    }*/
     /*public boolean isEqual(Locations locations) {          //둘이 같은 약속임? 아님 추억임? 아 uuid 만 비교하고 싶다가 목표
         if (locations.getLocUUID() == this.locUUID) return true;
         int cnt = 0;
@@ -118,12 +128,14 @@ public class Locations implements Comparable<Locations>{
     //이 클래스의 get애들
 
     public String getName() {return name;}
-    public LatLng getLatLng() {return latLng;}
-    public double getTimeStart() {return timeStart;}
-    public double getTimeEnd() {return timeEnd;}
+    //public LatLng getLatLng() {return new LatLng(latitude, longtitude);}
+    public double getLatitude() {return latitude;}
+    public double getLongtitude() {return longtitude;}
+    //public double getTimeStart() {return timeStart;}
+    //public double getTimeEnd() {return timeEnd;}
     public String[] getLocName() {return locName;}
     public int getType() {return type;}
-    public String[] getArgs() {return args;}
-    public List<UserData> getTargetFriends() {return targetFriends;}
-    public UUID getLocUUID() {return locUUID;}
+    //public String[] getArgs() {return args;}
+    //public List<UserData> getTargetFriends() {return targetFriends;}
+    //public UUID getLocUUID() {return locUUID;}
 }

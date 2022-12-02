@@ -52,11 +52,11 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Bitmap bitmap = mValues.get(position).userImage;
+        /*Bitmap bitmap = mValues.get(position).userImage;
         if (bitmap == null) {
             //add Default bitmap or change bitmap to other class
-        }
-        holder.mPhotoView.setImageBitmap(bitmap);
+        }*/
+        //holder.mPhotoView.setImageBitmap(bitmap);
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).id);
         holder.mContentView.setText(mValues.get(position).content);
@@ -69,7 +69,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public final ImageView mPhotoView;
+        //public final ImageView mPhotoView;
         public final TextView mIdView;
         public final TextView mContentView;
         public PlaceholderItem mItem;
@@ -77,7 +77,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public ViewHolder(FragmentFriendTabBinding binding) {
             super(binding.getRoot());
             binding.getRoot().getRootView().setOnClickListener(this);
-            mPhotoView = binding.itemPhoto;
+            //mPhotoView = binding.itemPhoto;
             mIdView = binding.itemNumber;
             mContentView = binding.content;
             //binding.getRoot().setOnClickListener(this);

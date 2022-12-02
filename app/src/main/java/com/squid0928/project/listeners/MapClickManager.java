@@ -62,11 +62,13 @@ public class MapClickManager implements GoogleMap.OnMapClickListener {
                 InputData res = (InputData)result.getSerializable("inputData");
                 temp.remove();
                 if (res == null) return;
-                UserData target = mapsActivity.user_data.get("phantomsquid0928");
+                UserData target = mapsActivity.user_data.get(mapsActivity.user); //TODO 바꿔라 개인정보
 
                 MapMarkerManager.addMarker(latLng.toString(), latLng); //TODO 바꿔라
                 target.getSavedInputMarkers().put(latLng.toString(), res);
-                Locations loc = new Locations(null, latLng, null, 0, 0, res.getType());
+                Locations loc = new Locations(null, latLng, null, res.getType());  //TODO 바꿔라
+                target.getSavedLocations().put(latLng.toString(),loc);
+                mapsActivity.saveToDB();
                 //target.getSavedLocations().put();
                 if (!res.isEmpty()) { // TODO : no safe checker
 

@@ -2,6 +2,7 @@ package com.squid0928.project.placeholder;
 
 import android.graphics.Bitmap;
 import android.media.Image;
+import android.util.Log;
 
 import com.squid0928.project.MapsActivity;
 import com.squid0928.project.utils.UserData;
@@ -31,25 +32,32 @@ public class PlaceholderContent {
 
     private static int COUNT = 0;
 
-    static {
+    public static PlaceholderContent createInstance(MapsActivity mapsActivity){
+        clearItem();
+        PlaceholderContent content = new PlaceholderContent();
         // Add some sample items.
-        UserData data = MapsActivity.user_data.get("phantomsquid0928"); //TODO server must give this info
+        UserData data = mapsActivity.user_data.get(mapsActivity.user); //TODO server must give this info
         List<UserData> friends = data.getFriends();
+        Log.i("ff", "friends count: " + COUNT);
         COUNT = friends.size();
         for (int i = 0; i < COUNT; i++) {
             UserData friend = friends.get(i);
-            Bitmap image = friend.getAccountPhoto();
+           // Bitmap image = friend.getAccountPhoto();
             String friendName = friend.getName();
-            addItem(createPlaceholderItem(i, image, friendName));
+            content.addItem(createPlaceholderItem(i, friendName));
         }
+        return content;
     }
 
     private static void addItem(PlaceholderItem item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
     }
-
-    private static PlaceholderItem createPlaceholderItem(int position, Bitmap image, String friendName) {
+    private static void clearItem() {
+        ITEMS.clear();
+        ITEM_MAP.clear();
+    }
+    private static PlaceholderItem createPlaceholderItem(int position, String friendName) {
         return new PlaceholderItem(/*image, */String.valueOf(position), friendName, makeDetails(position));
     }
 

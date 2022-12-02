@@ -44,6 +44,9 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squid0928.project.databinding.ActivityMapsBinding;
 import com.squid0928.project.fragments.FABFragment;
 import com.squid0928.project.fragments.FriendTabFragment;
@@ -91,10 +94,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     TimetableFragment timetableFragment;
 
     private int status = 0; // home
+    public static String user;
+
+    private DatabaseReference mDatabaseRef;
+    public static FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("firebaseInfos");
+        db = FirebaseFirestore.getInstance();
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        user = intent.getBundleExtra("userInfo").getString("useruid");
+
 
         /*binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());*/
@@ -125,7 +137,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     transaction.commit();
                     break;
                 case R.id.tab_friend:
-                    transaction.add(R.id.map, new FriendTabFragment(), "friendList");
+                    transaction.add(R.id.map, new FriendTabFragment(this, mMap), "friendList");
                     transaction.commit();
                     break;
                 case R.id.tab_timetable:
@@ -263,9 +275,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnCameraIdleListener(new MapMotionManager(this, mMap));
         restoreUserMarkers();
     }
+
+    /*@Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        db.collection("userdata").document(user).set(user_data.get(user));
+    }*/
+    public void saveToDB() {
+        db.collection("userdata").document(user).set(user_data.get(user));
+    }
+
     //TODO change below code can access to server data
     private void restoreUserMarkers() {
-        UserData tempInfo = new UserData("phantomsquid0928", null);
+        /*UserData tempInfo = new UserData("phantomsquid0928", null);
         UserData tempInfo2 = new UserData("ffff", null);
         UserData tempInfo3 = new UserData("ssss", null);
         tempInfo.addFriends(tempInfo2);
@@ -274,14 +296,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Locations tempLoc = new Locations("ff", tempLng, null, 0, 0, 1);
         tempInfo.getSavedLocations().put("ff", tempLoc);
 
-        user_data.put("phantomsquid0928", tempInfo);
-        UserData userData = user_data.get("phantomsquid0928"); //서버에서 받아야함
+        user_data.put("phantomsquid0928", tempInfo);*/
+        Log.i("ff", "username: " + user);
+        Log.i("ff", "hashmap: " + user_data.keySet().toString() + "values" + user_data.values().toString());
+        UserData userData = user_data.get(user); //서버에서 받아야함
+        Log.i("ff", "info ofuserdata: " + userData.getSavedLocations());
 
+        if(userData == null) return;
         Collection<Locations> userMarkerInputData = userData.getSavedLocations().values();
         for(Locations target : userMarkerInputData) {
             MarkerOptions temp = new MarkerOptions();
-            temp.position(target.getLatLng());
-            temp.title(target.getName());
+            temp.position(new LatLng(target.getLatitude(), target.getLongtitude()));
+            Log.i("ff", "info ofuserdata: " + target);
+            //temp.title(target.getName());
             Marker marker = mMap.addMarker(temp);
             markers.put(target.getName(), marker);
         }

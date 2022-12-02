@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.content.Intent;
@@ -61,6 +62,11 @@ public class LoginActivity extends AppCompatActivity {
                         // 로그인이 성공적이면
                         if(task.isSuccessful()) {
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            Bundle bundle = new Bundle();
+                            Log.i("ff", mFirebaseAuth.getCurrentUser().getUid());
+                            bundle.putString("useruid", mFirebaseAuth.getCurrentUser().getEmail());
+                            bundle.putString("userpass", strPwd);
+                            intent.putExtra("userInfo", bundle);
                             startActivity(intent);
                             finish(); // 현재 액티비티 파괴
                         } else // 로그인 실패

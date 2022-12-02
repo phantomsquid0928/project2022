@@ -12,21 +12,27 @@ public class UserData {
     private HashMap<String, Locations> savedLocations = new HashMap<>();
     private String name;              //니이름
     private List<UserData> friends = new ArrayList<>();     //칭구
-    private List<UserData> blacklist = new ArrayList<>();  //차단한 유저?
+    //private List<UserData> blacklist = new ArrayList<>();  //차단한 유저?
     private UserAccount account;
-    private Bitmap accountPhoto;
+    //private Bitmap accountPhoto;
     private HashMap<String, InputData> savedInputMarkers = new HashMap<>();
+
+    public UserData() {
+
+    }
 
     public UserData (String name, UserAccount account) {
         this.name = name;
         this.account = account;
-        this.accountPhoto = null;
+        //this.accountPhoto = null;
+        savedInputMarkers = new HashMap<String, InputData>();
+        savedLocations = new HashMap<String, Locations>();
         //this.accountPhoto = account.getPhoto(); //TODO accounts have their own profile photo
     }
     public HashMap<String, Locations> getSavedLocations() {
         return savedLocations;
     }
-    public List<Locations> getMatchHistories(UserData friend) {  //추억 약속 겹치는거 전부 겟, 열라오래걸릴거같은데... uuid 비교로는 해결가능
+    /*public List<Locations> getMatchHistories(UserData friend) {  //추억 약속 겹치는거 전부 겟, 열라오래걸릴거같은데... uuid 비교로는 해결가능
         HashMap<String, Locations> temp = friend.getSavedLocations();
 
         List<Locations> ret = new ArrayList<>();
@@ -42,7 +48,7 @@ public class UserData {
         }
         if (ret.isEmpty()) return null;
         return ret;
-    }
+    }*/
     public List<UserData> getFriends() {
         return friends;
     }
@@ -57,5 +63,6 @@ public class UserData {
         return savedInputMarkers;
     }
     public String getName() {return name;}
-    public Bitmap getAccountPhoto() { return accountPhoto;}
+    public UserAccount getAccount() {return account;}
+   // public Bitmap getAccountPhoto() { return accountPhoto;}
 }

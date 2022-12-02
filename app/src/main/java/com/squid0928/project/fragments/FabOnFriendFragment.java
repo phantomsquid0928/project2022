@@ -33,7 +33,7 @@ public class FabOnFriendFragment extends Fragment implements View.OnClickListene
         if (v instanceof FloatingActionButton) {
             FragmentManager manager = mapsActivity.getSupportFragmentManager();
             if (status) {
-                Fragment created = manager.findFragmentByTag("FABMenu");
+                Fragment created = manager.findFragmentByTag("FabFriendMenu");
                 FragmentTransaction transaction = manager.beginTransaction();
                 transaction.remove(created);
                 transaction.commit();
@@ -41,7 +41,7 @@ public class FabOnFriendFragment extends Fragment implements View.OnClickListene
             }
             else {
                 FragmentTransaction transaction = manager.beginTransaction();
-                transaction.add(R.id.map, new FriendTabTrayFragment(mapsActivity, map), "FABMenu");
+                transaction.add(R.id.map, new FriendTabTrayFragment(mapsActivity, map), "FabFriendMenu");
                 transaction.commit();
                 status = true;
             }
