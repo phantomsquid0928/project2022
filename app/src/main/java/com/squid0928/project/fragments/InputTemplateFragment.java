@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.AlarmClock;
 import android.provider.MediaStore;
+import android.renderscript.ScriptGroup;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.transition.TransitionInflater;
@@ -78,6 +79,10 @@ public class InputTemplateFragment extends Fragment {
     InputData inputData = new InputData();
     Uri photoUri;
     //String hashKey = UserID + Location?
+    public InputTemplateFragment() {}
+    public InputTemplateFragment(InputData inputData) {
+
+    }
 
 
     private File createImageFile() throws IOException {
