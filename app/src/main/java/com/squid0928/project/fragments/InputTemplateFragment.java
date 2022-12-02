@@ -55,7 +55,6 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-
 import java.util.Date;
 import java.util.Map;
 
@@ -79,14 +78,44 @@ public class InputTemplateFragment extends Fragment {
     TextView view_cancel;
     InputData inputData = new InputData();
     Uri photoUri;
+    ArrayAdapter<String> arrayAdapter_memory = new ArrayAdapter<>(getActivity(),
+            android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.array_memory));
+    ArrayAdapter<String> arrayAdapter_promise = new ArrayAdapter<>(getActivity(),
+            android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.array_promise));
     //String hashKey = UserID + Location?
+
     public InputTemplateFragment() {
         inputData.setCategory(0);
         inputData.setType(InputData.PROMISE);
 
     }
     public InputTemplateFragment(InputData inputData) {
-
+        if(inputData.getPhoto()!=null)view_photo.setImageURI(inputData.getPhoto()); // load ImageView
+        if(inputData.getType()==InputData.MEMORY) {
+            view_memory.setChecked(true);   //  load RadioButton
+            view_category.setAdapter(arrayAdapter_memory);  //  load Spinner
+            view_category.setSelection(inputData.getCategory());
+            if (inputData.getDateFrom() != null && inputData.getDateTo() != null
+                    && inputData.getTimeStart() != null && inputData.getTimeEnd() != null) {
+                view_check_stayed_time.setChecked(true);    //  load Checkbox
+                view_stayed_time.setText(inputData.getDateFrom().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))  //  load TextView
+                        + " " + inputData.getTimeStart().format(DateTimeFormatter.ofPattern("HH:mm"))
+                        + " ~ " + "\n"
+                        + inputData.getDateTo().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                        + " " + inputData.getTimeEnd().format(DateTimeFormatter.ofPattern("HH:mm")));
+            }
+        }
+        else if(inputData.getType()==InputData.PROMISE){
+            view_promise.setChecked(true);  //  load RadioButton
+            view_category.setAdapter(arrayAdapter_promise); //  load Spinner
+            view_category.setSelection(inputData.getCategory());
+            if(inputData.getDateFrom()!=null&&inputData.getTimeStart()!=null){
+                view_promised_time.setText(inputData.getDateFrom().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))    //  load TextView
+                        + " " + inputData.getTimeStart().format(DateTimeFormatter.ofPattern("hh:mm")));
+            }
+        }
+        if(inputData.getSchedule_name()!=null)view_schedule_name.setText(inputData.getSchedule_name()); //  load EditText
+        if(inputData.getMemo()!=null)view_memo.setText(inputData.getMemo());    //  load EditText
     }
 
 
@@ -182,10 +211,6 @@ public class InputTemplateFragment extends Fragment {
         view_btn_setAlarm = view.findViewById(R.id.btn_setAlarm);
         view_save = view.findViewById(R.id.textview_save);
         view_cancel = view.findViewById(R.id.textview_cancel);
-        ArrayAdapter<String> arrayAdapter_memory = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.array_memory));
-        ArrayAdapter<String> arrayAdapter_promise = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.array_promise));
         view_category.setAdapter(arrayAdapter_memory);  //  기본은 추억 범주
 
 
