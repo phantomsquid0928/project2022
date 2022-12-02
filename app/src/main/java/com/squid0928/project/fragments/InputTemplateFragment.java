@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.AlarmClock;
 import android.provider.MediaStore;
-import android.renderscript.ScriptGroup;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.transition.TransitionInflater;
@@ -43,7 +42,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
-import com.squid0928.project.MainActivity;
 import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
 import com.squid0928.project.utils.InputData;
@@ -56,7 +54,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
 
 public class InputTemplateFragment extends Fragment {
 
@@ -82,18 +79,26 @@ public class InputTemplateFragment extends Fragment {
     //String hashKey = UserID + Location?
 
     public InputTemplateFragment() {
-        inputData.setCategory(0);
-        inputData.setMemo(null);
         inputData.setPhoto(null);
-
-        inputData.setType(InputData.PROMISE);
-
+        inputData.setType(InputData.MEMORY);
+        inputData.setCategory(0);
+        inputData.setDateFrom(null);
+        inputData.setDateTo(null);
+        inputData.setTimeStart(null);
+        inputData.setTimeEnd(null);
+        inputData.setScheduleName(null);
+        inputData.setMemo(null);
     }
-    public InputTemplateFragment(InputData oldData) {
-        inputData.setCategory(oldData.getCategory());
-        inputData.setPhoto(oldData.getPhoto());
-        inputData.setMemo(oldData.getMemo());
-
+    public InputTemplateFragment(InputData inputData) {
+        this.inputData.setPhoto(inputData.getPhoto());
+        this.inputData.setType(inputData.getType());
+        this.inputData.setCategory(inputData.getCategory());
+        this.inputData.setDateFrom(inputData.getDateFrom());
+        this.inputData.setDateTo(inputData.getDateTo());
+        this.inputData.setTimeStart(inputData.getTimeStart());
+        this.inputData.setTimeEnd(inputData.getTimeEnd());
+        this.inputData.setScheduleName(inputData.getScheduleName());
+        this.inputData.setMemo(inputData.getMemo());
     }
 
 
@@ -190,11 +195,13 @@ public class InputTemplateFragment extends Fragment {
         view_save = view.findViewById(R.id.textview_save);
         view_cancel = view.findViewById(R.id.textview_cancel);
         //view_category.setAdapter(arrayAdapter_memory);  //  기본은 추억 범주
+
         ArrayAdapter<String> arrayAdapter_memory = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.array_memory));
         ArrayAdapter<String> arrayAdapter_promise = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.array_promise));
 
+        //  LOAD InputData
         if(inputData.getPhoto()!=null)view_photo.setImageURI(inputData.getPhoto()); // load ImageView
         if(inputData.getType()==InputData.MEMORY) {
             view_memory.setChecked(true);   //  load RadioButton
@@ -212,16 +219,16 @@ public class InputTemplateFragment extends Fragment {
         }
         else if(inputData.getType()==InputData.PROMISE){
             view_promise.setChecked(true);  //  load RadioButton
-            //view_category.setAdapter(arrayAdapter_promise); //  load Spinner
+            view_category.setAdapter(arrayAdapter_promise); //  load Spinner
             view_category.setSelection(inputData.getCategory());
             if(inputData.getDateFrom()!=null&&inputData.getTimeStart()!=null){
                 view_promised_time.setText(inputData.getDateFrom().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))    //  load TextView
                         + " " + inputData.getTimeStart().format(DateTimeFormatter.ofPattern("hh:mm")));
             }
         }
-        if(inputData.getSchedule_name()!=null)view_schedule_name.setText(inputData.getSchedule_name()); //  load EditText
+        if(inputData.getScheduleName()!=null)view_schedule_name.setText(inputData.getScheduleName()); //  load EditText
         if(inputData.getMemo()!=null)view_memo.setText(inputData.getMemo());    //  load EditText
-
+        //
 
         //  이미지뷰를 클릭했을 때
         view_photo.setOnClickListener(new ImageView.OnClickListener() {
@@ -369,7 +376,7 @@ public class InputTemplateFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                inputData.setSchedule_name(view_schedule_name.getText().toString());
+                inputData.setScheduleName(view_schedule_name.getText().toString());
             }
         });
 
@@ -393,8 +400,8 @@ public class InputTemplateFragment extends Fragment {
             public void onClick(View view) {
                 //  저장
                 Bundle result = new Bundle();
-                if(inputData.getSchedule_name()!=null){
-                    if (MapsActivity.user_data.get(MapsActivity.user).getSavedInputMarkers().containsKey(inputData.getSchedule_name()) && modify == false) {//이름 겹치는 약속
+                if(inputData.getScheduleName()!=null){
+                    if (MapsActivity.user_data.get(MapsActivity.user).getSavedInputMarkers().containsKey(inputData.getScheduleName()) && modify == false) {//이름 겹치는 약속
                         modify = true;
                         Toast.makeText(getActivity(), "저장을 한번 더 누르면 방금만든 약속으로 수정됩니다.", Toast.LENGTH_LONG).show();
                         return;

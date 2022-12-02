@@ -14,7 +14,7 @@ public class InputData implements Serializable {
     private LocalDate dateTo;
     private LocalTime timeStart;
     private LocalTime timeEnd;
-    private String schedule_name;
+    private String scheduleName;
     private String memo;
     public static final int PROMISE = 1;
     public static final int MEMORY = 2;
@@ -71,8 +71,8 @@ public class InputData implements Serializable {
         return timeEnd;
     }
 
-    public void setSchedule_name(String schedule_name) { this.schedule_name = schedule_name; }
-    public String getSchedule_name() { return schedule_name; }
+    public void setScheduleName(String scheduleName) { this.scheduleName = scheduleName; }
+    public String getScheduleName() { return scheduleName; }
 
     public void setMemo(String memo) {
         this.memo = memo;
