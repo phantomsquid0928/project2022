@@ -7,7 +7,7 @@ import org.threeten.bp.*;
 import java.io.Serializable;
 
 public class InputData implements Serializable {
-    private Uri photo;
+    private Uri photo; //TODO save type : string, usage type on inputtemplate -> Uri
     private int type;
     private int category;
     private String dateFrom;

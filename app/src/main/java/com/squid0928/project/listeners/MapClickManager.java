@@ -45,27 +45,27 @@ public class MapClickManager implements GoogleMap.OnMapClickListener {
             if (MapMarkerManager.isMarkerClicked()) {
                 return;
             }
-            String[] forbiden = {"search", "poi - ", "myloc"};
-
-            ArrayList<String> removed = new ArrayList<>();
-            for (String key : mapsActivity.markers.keySet()) {
-                if (key.equals(forbiden[0])) {
-                    mapsActivity.markers.get(key).remove();
-                    removed.add(key);
-                }
-                if (key.equals(forbiden[2])) {
-                    mapsActivity.markers.get(key).remove();
-                    removed.add(key);
-                }
-                if (key.contains(forbiden[1]) && key.substring(0, 6).equals(forbiden[1])) {
-                    mapsActivity.markers.get(key).remove();
-                    removed.add(key);
-                }
-            }
-            for (String key : removed) {
-                mapsActivity.markers.remove(key);
-            }
             return;
+        }
+        String[] forbiden = {"search", "poi - ", "myloc"};
+
+        ArrayList<String> removed = new ArrayList<>();
+        for (String key : mapsActivity.markers.keySet()) {
+            if (key.equals(forbiden[0])) {
+                mapsActivity.markers.get(key).remove();
+                removed.add(key);
+            }
+            if (key.equals(forbiden[2])) {
+                mapsActivity.markers.get(key).remove();
+                removed.add(key);
+            }
+            if (key.contains(forbiden[1]) && key.substring(0, 6).equals(forbiden[1])) {
+                mapsActivity.markers.get(key).remove();
+                removed.add(key);
+            }
+        }
+        for (String key : removed) {
+            mapsActivity.markers.remove(key);
         }
 
         Marker temp1 = MapMarkerManager.addMarker("name?", latLng, 1);
