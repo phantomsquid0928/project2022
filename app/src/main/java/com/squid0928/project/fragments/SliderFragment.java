@@ -192,13 +192,24 @@ public class SliderFragment extends Fragment implements RangeSlider.OnChangeList
     }
 
     public void onStartTrackingTouch(@NonNull RangeSlider slider) {
+
+    }
+
+    public void onStopTrackingTouch(@NonNull RangeSlider slider) {
+
+    }
+
+    @Override
+    public void onValueChange(@NonNull RangeSlider slider, float value, boolean fromUser) {
+        //Log.i("ff", "thumb" + slider.getActiveThumbIndex() + ": : : " + value);
+
         int x = slider.getValues().get(0).intValue();
         int y = slider.getValues().get(1).intValue();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         Collection<InputData> data = mapsActivity.user_data.get(mapsActivity.user).getSavedInputMarkers().values();
         try {
-           // Log.i("ff", "rangex: " + x + "rangey:" + y);
+            // Log.i("ff", "rangex: " + x + "rangey:" + y);
             Date rangex = sdf.parse(targetoldest.plusDays(x).toString());
             Date rangey = sdf.parse(targetoldest.plusDays(y).toString());
             //Log.i("ff", "rangex: " + rangex.toString() + "rangey:" + rangey.toString());
@@ -220,7 +231,7 @@ public class SliderFragment extends Fragment implements RangeSlider.OnChangeList
                     Date dateStart = sdf.parse(target.getDateFrom());
                     Date dateEnd = sdf.parse(target.getDateTo());
 
-                    if (dateStart.after(rangex) && dateEnd.before(rangey)) {
+                    if ((dateStart.after(rangex) || dateStart.equals(rangex)) && (dateEnd.before(rangey) || dateEnd.equals(rangey))) {
                         MapMarkerManager.updateTarget(marker, true);
                     }
                     else {
@@ -230,15 +241,5 @@ public class SliderFragment extends Fragment implements RangeSlider.OnChangeList
 
             }
         } catch (Exception e) {}
-    }
-
-    public void onStopTrackingTouch(@NonNull RangeSlider slider) {
-
-    }
-
-    @Override
-    public void onValueChange(@NonNull RangeSlider slider, float value, boolean fromUser) {
-        Log.i("ff", "thumb" + slider.getActiveThumbIndex() + ": : : " + value);
-
     }
 }
