@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
         //Intent intent = getIntent();
         /*if (intent.getBundleExtra("userInfo") != null) {
             strEmail = intent.getBundleExtra("userInfo").getString("useruid");
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         db = FirebaseFirestore.getInstance();
-        db.collection("userdata").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        /*db.collection("userdata").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -77,10 +77,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-        });
+        });*/
         mFirebaseAuth = FirebaseAuth.getInstance();
 
-        mFirebaseAuth.signInWithEmailAndPassword(strEmail, strPwd).addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
+        /*mFirebaseAuth.signInWithEmailAndPassword(strEmail, strPwd).addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task)
             {
@@ -102,9 +102,9 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                 }
             }
-        });
+        });*/
         //TODO id token exists true -> mapsActivity false -> loginActivity
-        /*
+
         Button button = findViewById(R.id.mapOpen);
         button.setOnClickListener(new View.OnClickListener() {
 
@@ -134,6 +134,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-         */
+
     }
 }
