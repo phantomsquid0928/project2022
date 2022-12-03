@@ -1,11 +1,9 @@
 package com.squid0928.project.fragments;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -39,25 +37,20 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
-import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
 import com.squid0928.project.utils.InputData;
 
-import org.checkerframework.checker.units.qual.A;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.Permission;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -130,7 +123,7 @@ public class InputTemplateFragment extends Fragment {
                     Intent intent = result.getData();
                     photoUri = intent.getData();
                     Glide.with(this).load(photoUri).into(view_photo);
-                    inputData.setPhoto(photoUri);
+                    inputData.setPhoto(photoUri.toString());
                 }
             }
     );
@@ -141,7 +134,7 @@ public class InputTemplateFragment extends Fragment {
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     view_photo.setImageURI(photoUri);
-                    inputData.setPhoto(photoUri);
+                    inputData.setPhoto(photoUri.toString());
                 }
             });
 
@@ -213,7 +206,7 @@ public class InputTemplateFragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.array_promise));
 
         //  LOAD InputData
-        if(inputData.getPhoto()!=null)view_photo.setImageURI(inputData.getPhoto()); // load ImageView
+        if(inputData.getPhoto()!=null)view_photo.setImageURI(Uri.parse(inputData.getPhoto())); // load ImageView
         if(inputData.getType()==InputData.MEMORY) { //  Type == Memory
             view_memory.setChecked(true);   //  load RadioButton
             view_category.setAdapter(arrayAdapter_memory);  //  load Spinner

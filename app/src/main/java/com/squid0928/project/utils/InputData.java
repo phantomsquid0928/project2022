@@ -7,7 +7,7 @@ import org.threeten.bp.*;
 import java.io.Serializable;
 
 public class InputData implements Serializable {
-    private Uri photo;
+    private String photo;
     private int type;
     private int category;
     private String dateFrom;
@@ -22,10 +22,10 @@ public class InputData implements Serializable {
     public InputData() {
     }
 
-    public void setPhoto(Uri photo) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
-    public Uri getPhoto() {
+    public String getPhoto() {
         return photo;
     }
 
