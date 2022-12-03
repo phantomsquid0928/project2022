@@ -92,6 +92,7 @@ public class InputTemplateFragment extends Fragment {
         inputData.setScheduleName(null);
         inputData.setMemo(null);
     }
+
     public InputTemplateFragment(InputData inputData) {
         this.inputData.setPhoto(inputData.getPhoto());
         this.inputData.setType(inputData.getType());
@@ -200,32 +201,36 @@ public class InputTemplateFragment extends Fragment {
         view_category.setAdapter(arrayAdapter_memory);  //  기본은 추억 범주
 
         //  LOAD InputData
-        if(inputData.getPhoto()!=null)view_photo.setImageURI(inputData.getPhoto()); // load ImageView
-        if(inputData.getType()==InputData.MEMORY) {
+        if (inputData.getPhoto() != null)
+            view_photo.setImageURI(inputData.getPhoto()); // load ImageView
+        if (inputData.getType() == InputData.MEMORY) {
             view_memory.setChecked(true);   //  load RadioButton
             view_category.setAdapter(arrayAdapter_memory);  //  load Spinner
             view_category.setSelection(inputData.getCategory());
+            view_check_memory.setVisibility(View.VISIBLE);  //  load Layout
             if (inputData.getDateFrom() != null && inputData.getDateTo() != null
                     && inputData.getTimeStart() != null && inputData.getTimeEnd() != null) {
                 view_check_stayed_time.setChecked(true);    //  load Checkbox
-                view_stayed_time.setText(inputData.getDateFrom()  //  load TextView
+                view_stayed_time.setText(inputData.getDateFrom()
                         + " " + inputData.getTimeStart()
                         + " ~ " + "\n"
                         + inputData.getDateTo()
                         + " " + inputData.getTimeEnd());
             }
-        }
-        else if(inputData.getType()==InputData.PROMISE){
+        } else if (inputData.getType() == InputData.PROMISE) {
             view_promise.setChecked(true);  //  load RadioButton
             view_category.setAdapter(arrayAdapter_promise); //  load Spinner
             view_category.setSelection(inputData.getCategory());
-            if(inputData.getDateFrom()!=null&&inputData.getTimeStart()!=null){
-                view_promised_time.setText(inputData.getDateFrom()  //  load TextView
+            view_check_memory.setVisibility(View.VISIBLE);  //  load Layout
+            if (inputData.getDateFrom() != null && inputData.getTimeStart() != null) {
+                view_promised_time.setText(inputData.getDateFrom()
                         + " " + inputData.getTimeStart());
             }
         }
-        if(inputData.getScheduleName()!=null)view_schedule_name.setText(inputData.getScheduleName()); //  load EditText
-        if(inputData.getMemo()!=null)view_memo.setText(inputData.getMemo());    //  load EditText
+        if (inputData.getScheduleName() != null)
+            view_schedule_name.setText(inputData.getScheduleName()); //  load EditText
+        if (inputData.getMemo() != null)
+            view_memo.setText(inputData.getMemo());    //  load EditText
         //
 
         //  이미지뷰를 클릭했을 때
@@ -340,7 +345,7 @@ public class InputTemplateFragment extends Fragment {
             public void onClick(View view) {
                 if (view_promised_time != null) {
                     Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM);
-                    LocalTime localTime = LocalTime.parse(inputData.getTimeStart(),DateTimeFormatter.ofPattern("hh:mm"));
+                    LocalTime localTime = LocalTime.parse(inputData.getTimeStart(), DateTimeFormatter.ofPattern("hh:mm"));
                     intent.putExtra(AlarmClock.EXTRA_HOUR, localTime.getHour());
                     intent.putExtra(AlarmClock.EXTRA_MINUTES, localTime.getMinute());
                     startActivity(intent);
@@ -368,10 +373,12 @@ public class InputTemplateFragment extends Fragment {
         //  스케쥴 이름 업데이트
         view_schedule_name.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -382,10 +389,12 @@ public class InputTemplateFragment extends Fragment {
         //  메모 업데이트
         view_memo.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -395,14 +404,15 @@ public class InputTemplateFragment extends Fragment {
 
         view_save.setOnClickListener(new View.OnClickListener() {
             boolean modify = false;
+
             @Override
             public void onClick(View view) {
                 //  저장
                 Bundle result = new Bundle();
-                if(inputData.getScheduleName()!=null){
+                if (inputData.getScheduleName() != null) {
                     if (MapsActivity.user_data.get(MapsActivity.user).getSavedInputMarkers().containsKey(inputData.getScheduleName()) && modify == false) {//이름 겹치는 약속
                         modify = true;
-                        Toast.makeText(getActivity(), "저장을 한번 더 누르면 방금만든 약속으로 수정됩니다.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "저장을 한 번 더 누르면 방금 만든 약속으로 수정됩니다.", Toast.LENGTH_LONG).show();
                         return;
                     }
                     modify = false;
@@ -413,8 +423,7 @@ public class InputTemplateFragment extends Fragment {
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     fragmentManager.beginTransaction().remove(InputTemplateFragment.this).commit();
                     fragmentManager.popBackStack();
-                }
-                else{
+                } else {
                     result.putSerializable("inputData", null);
                     getActivity().getSupportFragmentManager().setFragmentResult("key", result);
 
