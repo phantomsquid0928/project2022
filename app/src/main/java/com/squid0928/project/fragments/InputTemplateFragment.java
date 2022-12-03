@@ -46,8 +46,10 @@ import com.squid0928.project.R;
 import com.squid0928.project.utils.InputData;
 
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.format.ResolverStyle;
 
 import java.io.File;
 import java.io.IOException;
@@ -232,6 +234,8 @@ public class InputTemplateFragment extends Fragment {
             if (inputData.getDateFrom() != null && inputData.getTimeStart() != null) {
                 view_promised_time.setText(inputData.getDateFrom()
                         + " " + inputData.getTimeStart());
+                if(checkIf24hoursBefore())
+                    view_btn_setAlarm.setEnabled(true);
             }
         }
         if(inputData.getScheduleName()!=null)view_schedule_name.setText(inputData.getScheduleName()); //  load EditText
@@ -422,7 +426,7 @@ public class InputTemplateFragment extends Fragment {
                     result.putBoolean("res", true);
                     getActivity().getSupportFragmentManager().setFragmentResult("key", result);
 
-                    Toast.makeText(getActivity(), "저장되었습니다.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "저장되었습니다.", Toast.LENGTH_SHORT).show();
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     fragmentManager.beginTransaction().remove(InputTemplateFragment.this).commit();
                     fragmentManager.popBackStack();
@@ -433,7 +437,7 @@ public class InputTemplateFragment extends Fragment {
                     result.putBoolean("res", false);
                     getActivity().getSupportFragmentManager().setFragmentResult("key", result);
 
-                    Toast.makeText(getActivity(), "필수 항목을 입력해 주세요.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "필수 항목을 입력해 주세요.", Toast.LENGTH_SHORT).show();
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     fragmentManager.beginTransaction().remove(InputTemplateFragment.this).commit();
                     fragmentManager.popBackStack();
@@ -483,23 +487,23 @@ public class InputTemplateFragment extends Fragment {
         dialog_acceptBtn_stayedTime.setOnClickListener(new Button.OnClickListener() {   // 확인 버튼
             @Override
             public void onClick(View view) {
-                LocalDate localDate_from = LocalDate.of(dialog_stayed_date_from.getYear(), dialog_stayed_date_from.getMonth(),
+                LocalDate localDate_from = LocalDate.of(dialog_stayed_date_from.getYear(), dialog_stayed_date_from.getMonth()+1,
                         dialog_stayed_date_from.getDayOfMonth());
                 LocalTime localTime_start = LocalTime.of(dialog_stayed_time_from.getHour(), dialog_stayed_time_from.getMinute());
-                LocalDate localDate_to = LocalDate.of(dialog_stayed_date_to.getYear(), dialog_stayed_date_to.getMonth(),
+                LocalDate localDate_to = LocalDate.of(dialog_stayed_date_to.getYear(), dialog_stayed_date_to.getMonth()+1,
                         dialog_stayed_date_to.getDayOfMonth());
                 LocalTime localTime_end = LocalTime.of(dialog_stayed_time_to.getHour(), dialog_stayed_time_to.getMinute());
                 //  날짜, 시간 TextView에 띄우기
-                String concat = localDate_from.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                String concat = localDate_from.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT))
                         + " " + localTime_start.format(DateTimeFormatter.ofPattern("HH:mm"))
                         + " ~ " + "\n"
-                        + localDate_to.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                        + localDate_to.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT))
                         + " " + localTime_end.format(DateTimeFormatter.ofPattern("HH:mm"));
                 view_stayed_time.setText(concat);
                 //  DB에 저장
-                inputData.setDateFrom(localDate_from.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                inputData.setDateFrom(localDate_from.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT)));
                 inputData.setTimeStart(localTime_start.format(DateTimeFormatter.ofPattern("HH:mm")));
-                inputData.setDateTo(localDate_to.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                inputData.setDateTo(localDate_to.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT)));
                 inputData.setTimeEnd(localTime_end.format(DateTimeFormatter.ofPattern("HH:mm")));    //
                 if (dialog_stayed_date_time.isShowing())
                     dialog_stayed_date_time.dismiss();
@@ -531,16 +535,18 @@ public class InputTemplateFragment extends Fragment {
         dialog_acceptBtn_promisedTime.setOnClickListener(new Button.OnClickListener() { //  확인 버튼
             @Override
             public void onClick(View view) {
-                LocalDate localDate = LocalDate.of(dialog_promised_date.getYear(), dialog_promised_date.getMonth(),
+                LocalDate localDate = LocalDate.of(dialog_promised_date.getYear(), dialog_promised_date.getMonth()+1,
                         dialog_promised_date.getDayOfMonth());
                 LocalTime localTime = LocalTime.of(dialog_promised_time.getHour(), dialog_promised_time.getMinute());
                 //  날짜, 시간 TextView에 띄우기
-                String concat = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                String concat = localDate.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT))
                         + " " + localTime.format(DateTimeFormatter.ofPattern("HH:mm"));
                 view_promised_time.setText(concat);
                 //  DB에 저장
-                inputData.setDateFrom(localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-                inputData.setTimeStart(localTime.format(DateTimeFormatter.ofPattern("HH:mm")));  //
+                inputData.setDateFrom(localDate.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT)));
+                inputData.setTimeStart(localTime.format(DateTimeFormatter.ofPattern("HH:mm"))); //
+                if(checkIf24hoursBefore())
+                    view_btn_setAlarm.setEnabled(true);
                 if (dialog_promised_date_time.isShowing())
                     dialog_promised_date_time.dismiss();
             }
@@ -552,5 +558,13 @@ public class InputTemplateFragment extends Fragment {
                     dialog_promised_date_time.cancel();
             }
         });
+    }
+    private boolean checkIf24hoursBefore(){
+        LocalDate localDate = LocalDate.parse(inputData.getDateFrom(),DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT));
+        LocalTime localTime = LocalTime.parse(inputData.getTimeStart(),DateTimeFormatter.ofPattern("HH:mm"));
+        LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime before24hours = localDateTime.minusHours(24);
+        return now.isAfter(before24hours);
     }
 }
