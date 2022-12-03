@@ -4,20 +4,16 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -35,18 +31,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
-import com.google.android.gms.tasks.CancellationToken;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -67,9 +57,7 @@ import com.squid0928.project.utils.InputData;
 import com.squid0928.project.utils.Locations;
 import com.squid0928.project.utils.UserData;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
@@ -367,7 +355,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Locations locdata = userData.getSavedLocations().get(target);
             Log.i("ff", "info of inputdata: " + data);
             //temp.title(target.getName());
-            Marker marker = MapMarkerManager.addMarker(data.getSchedule_name(), new LatLng(locdata.getLatitude(), locdata.getLongtitude()), data.getType());
+            Marker marker = MapMarkerManager.addMarker(data.getScheduleName(), new LatLng(locdata.getLatitude(), locdata.getLongtitude()), data.getType());
             markers.put(target, marker);
         }
     }

@@ -5,7 +5,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.fragment.app.FragmentTransaction;
@@ -106,10 +105,10 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
                     if (res == null) return;
                     UserData target = mapsActivity.user_data.get(mapsActivity.user); //TODO 바꿔라
 
-                    MapMarkerManager.addMarker(res.getSchedule_name(), latLng, res.getType()); //TODO 바꿔라
-                    target.getSavedInputMarkers().put(res.getSchedule_name(), res);
-                    Locations loc = new Locations(res.getSchedule_name(), latLng, placeName, res.getType());
-                    target.getSavedLocations().put(res.getSchedule_name(), loc);
+                    MapMarkerManager.addMarker(res.getScheduleName(), latLng, res.getType()); //TODO 바꿔라
+                    target.getSavedInputMarkers().put(res.getScheduleName(), res);
+                    Locations loc = new Locations(res.getScheduleName(), latLng, placeName, res.getType());
+                    target.getSavedLocations().put(res.getScheduleName(), loc);
                     //mapsActivity.saveToDB();
                     if (!res.isEmpty()) { // TODO : no safe checker
 

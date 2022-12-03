@@ -1,7 +1,6 @@
 package com.squid0928.project.listeners;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -13,7 +12,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.squid0928.project.fragments.InputTemplateFragment;
 import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
@@ -71,10 +69,10 @@ public class MapClickManager implements GoogleMap.OnMapClickListener {
                 if (res == null) return;
                 UserData target = mapsActivity.user_data.get(mapsActivity.user); //TODO 바꿔라 개인정보
 
-                MapMarkerManager.addMarker(res.getSchedule_name(), latLng, res.getType()); //TODO 바꿔라
-                target.getSavedInputMarkers().put(res.getSchedule_name(), res);
+                MapMarkerManager.addMarker(res.getScheduleName(), latLng, res.getType()); //TODO 바꿔라
+                target.getSavedInputMarkers().put(res.getScheduleName(), res);
                 Locations loc = new Locations(null, latLng, null, res.getType());  //TODO 바꿔라
-                target.getSavedLocations().put(res.getSchedule_name(), loc);
+                target.getSavedLocations().put(res.getScheduleName(), loc);
                 mapsActivity.saveToDB();
                 //target.getSavedLocations().put();
                 if (!res.isEmpty()) { // TODO : no safe checker
