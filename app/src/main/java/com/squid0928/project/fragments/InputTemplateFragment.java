@@ -351,7 +351,7 @@ public class InputTemplateFragment extends Fragment {
 
         /*
         약속으로 설정한 시간을 바탕으로 알람을 설정.
-        다만 날짜까지는 설정할 수가 없어 바로 전날에만 활성화되도록 하던지 하는 방식으로 생각 중입니다.
+        24시간 전부터 버튼이 활성화 됨.
         */
         view_btn_setAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -368,8 +368,8 @@ public class InputTemplateFragment extends Fragment {
 
 
         /*
-        머문 시간을 기록할 것인지 체크박스를 통해 묻고
-        기록한다 하면 다이얼로그를 띄워 저장.
+        머문 시간을 기록할 것인지 체크박스를 통해 묻고,
+        만약 기록한다 하면 다이얼로그를 띄워 저장.
         */
         view_check_stayed_time.setOnClickListener(new CheckBox.OnClickListener() {
             @Override
@@ -496,30 +496,62 @@ public class InputTemplateFragment extends Fragment {
         window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         //  추억: 현재보다 이후 날짜 선택 불가
         long date_now = System.currentTimeMillis();
-        dialog_stayed_date_from.setMaxDate(date_now);   //
+        dialog_stayed_date_from.setMaxDate(date_now);
         dialog_acceptBtn_stayedTime.setOnClickListener(new Button.OnClickListener() {   // 확인 버튼
             @Override
             public void onClick(View view) {
-                LocalDate localDate_from = LocalDate.of(dialog_stayed_date_from.getYear(), dialog_stayed_date_from.getMonth()+1,
+                boolean dateError=false;
+                boolean timeError=false;
+
+                LocalDate localDate_from=LocalDate.of(dialog_stayed_date_from.getYear(), dialog_stayed_date_from.getMonth()+1,
                         dialog_stayed_date_from.getDayOfMonth());
-                LocalTime localTime_start = LocalTime.of(dialog_stayed_time_from.getHour(), dialog_stayed_time_from.getMinute());
+                LocalTime localTime_start= LocalTime.of(dialog_stayed_time_from.getHour(), dialog_stayed_time_from.getMinute());
                 LocalDate localDate_to = LocalDate.of(dialog_stayed_date_to.getYear(), dialog_stayed_date_to.getMonth()+1,
                         dialog_stayed_date_to.getDayOfMonth());
                 LocalTime localTime_end = LocalTime.of(dialog_stayed_time_to.getHour(), dialog_stayed_time_to.getMinute());
-                //  날짜, 시간 TextView에 띄우기
-                String concat = localDate_from.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT))
-                        + " " + localTime_start.format(DateTimeFormatter.ofPattern("HH:mm"))
-                        + " ~ " + "\n"
-                        + localDate_to.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT))
-                        + " " + localTime_end.format(DateTimeFormatter.ofPattern("HH:mm"));
-                view_stayed_time.setText(concat);
-                //  DB에 저장
-                inputData.setDateFrom(localDate_from.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT)));
-                inputData.setTimeStart(localTime_start.format(DateTimeFormatter.ofPattern("HH:mm")));
-                inputData.setDateTo(localDate_to.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT)));
-                inputData.setTimeEnd(localTime_end.format(DateTimeFormatter.ofPattern("HH:mm")));    //
-                if (dialog_stayed_date_time.isShowing())
-                    dialog_stayed_date_time.dismiss();
+
+                if(localDate_from.isAfter(localDate_to))    //  시작 날짜 > 끝 날짜
+                    dateError=true;
+                if(localDate_from.isEqual(localDate_to))    //  같은 날짜
+                    if(localTime_start.isAfter(localTime_end))  //  시작 시간 > 끝 시간
+                        timeError=true;
+
+                if(dateError){
+                    Toast.makeText(getActivity(), "정확한 날짜를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    view_check_stayed_time.setChecked(false);
+                    dialog_stayed_date_time.cancel();
+                    view_stayed_time.setText("");
+                    view_stayed_time.setVisibility(View.GONE);
+                }
+                else if(timeError) {
+                    Toast.makeText(getActivity(), "정확한 시간을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    view_check_stayed_time.setChecked(false);
+                    dialog_stayed_date_time.cancel();
+                    view_stayed_time.setText("");
+                    view_stayed_time.setVisibility(View.GONE);
+                }
+                else {
+                        //  날짜, 시간 TextView에 띄우기
+                        String concat = localDate_from.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").
+                                withResolverStyle(ResolverStyle.STRICT))
+                                + " " + localTime_start.format(DateTimeFormatter.ofPattern("HH:mm"))
+                                + " ~ " + "\n"
+                                + localDate_to.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").
+                                withResolverStyle(ResolverStyle.STRICT))
+                                + " " + localTime_end.format(DateTimeFormatter.ofPattern("HH:mm"));
+                        view_stayed_time.setText(concat);
+
+                        //  DB에 저장
+                        inputData.setDateFrom(localDate_from.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").
+                                withResolverStyle(ResolverStyle.STRICT)));
+                        inputData.setTimeStart(localTime_start.format(DateTimeFormatter.ofPattern("HH:mm")));
+                        inputData.setDateTo(localDate_to.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").
+                                withResolverStyle(ResolverStyle.STRICT)));
+                        inputData.setTimeEnd(localTime_end.format(DateTimeFormatter.ofPattern("HH:mm")));
+
+                        if (dialog_stayed_date_time.isShowing())
+                            dialog_stayed_date_time.dismiss();
+                    }
             }
         });
     }
@@ -552,12 +584,16 @@ public class InputTemplateFragment extends Fragment {
                         dialog_promised_date.getDayOfMonth());
                 LocalTime localTime = LocalTime.of(dialog_promised_time.getHour(), dialog_promised_time.getMinute());
                 //  날짜, 시간 TextView에 띄우기
-                String concat = localDate.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT))
+                String concat = localDate.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").
+                        withResolverStyle(ResolverStyle.STRICT))
                         + " " + localTime.format(DateTimeFormatter.ofPattern("HH:mm"));
                 view_promised_time.setText(concat);
+
                 //  DB에 저장
-                inputData.setDateFrom(localDate.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT)));
-                inputData.setTimeStart(localTime.format(DateTimeFormatter.ofPattern("HH:mm"))); //
+                inputData.setDateFrom(localDate.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").
+                        withResolverStyle(ResolverStyle.STRICT)));
+                inputData.setTimeStart(localTime.format(DateTimeFormatter.ofPattern("HH:mm")));
+
                 if(checkIf24hoursBefore())
                     view_btn_setAlarm.setEnabled(true);
                 if (dialog_promised_date_time.isShowing())
@@ -573,7 +609,8 @@ public class InputTemplateFragment extends Fragment {
         });
     }
     private boolean checkIf24hoursBefore(){
-        LocalDate localDate = LocalDate.parse(inputData.getDateFrom(),DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT));
+        LocalDate localDate = LocalDate.parse(inputData.getDateFrom(),DateTimeFormatter.ofPattern("uuuu-MM-dd").
+                withResolverStyle(ResolverStyle.STRICT));
         LocalTime localTime = LocalTime.parse(inputData.getTimeStart(),DateTimeFormatter.ofPattern("HH:mm"));
         LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
         LocalDateTime now = LocalDateTime.now();
