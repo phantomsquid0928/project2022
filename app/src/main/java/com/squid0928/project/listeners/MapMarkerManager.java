@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.common.collect.Maps;
 import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
 import com.squid0928.project.fragments.InputTemplateFragment;
@@ -142,7 +143,7 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
                     MapsActivity.markers.put(res.getScheduleName(), marker);
                     mapsActivity.saveToDB();
 
-                    MapsActivity.slider.adjustRange();
+                    MapsActivity.slider.adjustRange(0);
                     if (!res.isEmpty()) { // TODO : no safe checker
 
                     }
@@ -201,6 +202,17 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
         MapsActivity.markers.remove(name);
         target.remove();
     }
+    public static void updateMarker(int tag, boolean visible) {
+        for (Marker target : MapsActivity.markers.values()) {
+            if (tag == (int)target.getTag()) {
+                target.setVisible(visible);
+            }
+        }
+    }
+    public static void updateTarget(Marker marker, boolean visible) {
+        marker.setVisible(visible);
+    }
+
 
     private static BitmapDescriptor BitmapFromVector(Context context, int vectorResId) {
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
