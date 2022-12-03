@@ -79,7 +79,7 @@ public class AddFriendFragment extends Fragment implements View.OnClickListener 
                                     text.setText("");
                                     break;
                                 }
-                                mapsActivity.user_data.get(mapsActivity.user).addFriends(target);
+                                mapsActivity.user_data.get(mapsActivity.user).addFriends(snapshot.getId());
                                 mapsActivity.db.collection("userdata").document(mapsActivity.user).update("friends", mapsActivity.user_data.get(mapsActivity.user).getFriends());
                             }
                         }

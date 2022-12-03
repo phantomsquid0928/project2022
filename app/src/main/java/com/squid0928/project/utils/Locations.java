@@ -10,7 +10,7 @@ public class Locations /*implements Comparable<Locations>*/{
     private String name;      //약속이름잇겟지머
     private double latitude;
     private double longtitude;
-    private String[] locName; //위치이름
+    private String locName; //위치이름
    // private double timeStart, timeEnd;//시작시간 끝시간     //todo FFFF
     private int type;         //추억? 약속?
     //private String[] args;    //메모                       //todo ffff
@@ -20,7 +20,7 @@ public class Locations /*implements Comparable<Locations>*/{
     public Locations() {  //need for db
 
     }
-    public Locations(String name, double locx, double locy, String[] locName, int type) {
+    public Locations(String name, double locx, double locy, String locName, int type) {
         this.name = name;
         this.latitude = locx;
         this.longtitude = locy;
@@ -40,7 +40,7 @@ public class Locations /*implements Comparable<Locations>*/{
         this.type = type;
         //this.locUUID = UUID.randomUUID();
     }*/
-    public Locations(String name, LatLng latLng, String[] locName, int type) {   //메모 없이 걍 추가
+    public Locations(String name, LatLng latLng, String locName, int type) {   //메모 없이 걍 추가
         this.name = name;
         this.latitude = latLng.latitude;
         this.longtitude = latLng.longitude;
@@ -133,7 +133,7 @@ public class Locations /*implements Comparable<Locations>*/{
     public double getLongtitude() {return longtitude;}
     //public double getTimeStart() {return timeStart;}
     //public double getTimeEnd() {return timeEnd;}
-    public String[] getLocName() {return locName;}
+    public String getLocName() {return locName;}
     public int getType() {return type;}
     //public String[] getArgs() {return args;}
     //public List<UserData> getTargetFriends() {return targetFriends;}

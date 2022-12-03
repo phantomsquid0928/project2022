@@ -169,6 +169,8 @@ public class InputTemplateFragment extends Fragment {
         Log.i("ff", "destroy");
         Bundle result = new Bundle();
         result.putSerializable("inputData", null); //맵 밖 클릭시 저장되게 할지 아님 버튼눌러서 하게할지
+        result.putBoolean("mod", false);
+        result.putBoolean("res", false);
         getActivity().getSupportFragmentManager().setFragmentResult("key", result);
     }
 
@@ -413,6 +415,7 @@ public class InputTemplateFragment extends Fragment {
                     modify = false;
                     result.putSerializable("inputData", inputData);
                     result.putBoolean("mod", mod);
+                    result.putBoolean("res", true);
                     getActivity().getSupportFragmentManager().setFragmentResult("key", result);
 
                     Toast.makeText(getActivity(), "저장되었습니다.", Toast.LENGTH_LONG).show();
@@ -423,6 +426,7 @@ public class InputTemplateFragment extends Fragment {
                 else{
                     result.putSerializable("inputData", null);
                     result.putBoolean("mod", false);
+                    result.putBoolean("res", false);
                     getActivity().getSupportFragmentManager().setFragmentResult("key", result);
 
                     Toast.makeText(getActivity(), "필수 항목을 입력해 주세요.", Toast.LENGTH_LONG).show();
@@ -438,6 +442,8 @@ public class InputTemplateFragment extends Fragment {
                 //  취소
                 Bundle result = new Bundle();
                 result.putSerializable("inputData", null);
+                result.putBoolean("mod", false);
+                result.putBoolean("res", false);
                 getActivity().getSupportFragmentManager().setFragmentResult("key", result);
 
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();

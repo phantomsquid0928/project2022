@@ -9,16 +9,17 @@ import java.util.List;
 import java.util.Set;
 
 public class UserData {
-    private HashMap<String, Locations> savedLocations = new HashMap<>();
+    private HashMap<String, Locations> savedLocations;
     private String name;              //니이름
-    private List<UserData> friends = new ArrayList<>();     //칭구
+    private List<String> friends = new ArrayList<>();     //칭구
     //private List<UserData> blacklist = new ArrayList<>();  //차단한 유저?
     private UserAccount account;
     //private Bitmap accountPhoto;
-    private HashMap<String, InputData> savedInputMarkers = new HashMap<>();
+    private HashMap<String, InputData> savedInputMarkers;
 
     public UserData() {
-
+        savedLocations = new HashMap<String, Locations>();
+         savedInputMarkers = new HashMap<String, InputData>();
     }
 
     public UserData (String name, UserAccount account) {
@@ -49,10 +50,10 @@ public class UserData {
         if (ret.isEmpty()) return null;
         return ret;
     }*/
-    public List<UserData> getFriends() {
+    public List<String> getFriends() {
         return friends;
     }
-    public boolean addFriends(UserData friend) {
+    public boolean addFriends(String friend) {
         friends.add(friend);
         return false;
     }

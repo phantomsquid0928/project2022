@@ -104,9 +104,9 @@ public class FriendTabFragment extends Fragment implements MyItemRecyclerViewAda
 
     @Override
     public void onItemClick(View v, int position) {
-        UserData data = MapsActivity.user_data.get(mapsActivity.user); //TODO 수정
-        List<UserData> friends = data.getFriends();
-        UserData clickedFriend = friends.get(position);
+        UserData data = mapsActivity.user_data.get(mapsActivity.user); //TODO 수정
+        List<String> friends = data.getFriends();
+        UserData clickedFriend = mapsActivity.user_data.get(friends.get(position));
         Toast.makeText(v.getContext(), "fsf", Toast.LENGTH_SHORT);
         Log.i("ff", "itemclick " + position + " on view :" + v.toString());
 

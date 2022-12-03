@@ -21,6 +21,8 @@ import com.squid0928.project.utils.InputData;
 import com.squid0928.project.utils.Locations;
 import com.squid0928.project.utils.UserData;
 
+import java.util.ArrayList;
+
 public class MapClickManager implements GoogleMap.OnMapClickListener {
     private MapsActivity mapsActivity;
     private GoogleMap map;
@@ -42,18 +44,25 @@ public class MapClickManager implements GoogleMap.OnMapClickListener {
             if (MapMarkerManager.isMarkerClicked()) {
                 return;
             }
-            String[] forbiden = {"search", "name?", "poi - "};
+            String[] forbiden = {"search", "name?", "poi - ", "myloc"};
+
+            ArrayList<String> removed = new ArrayList<>();
             for (String key : mapsActivity.markers.keySet()) {
-                if (key.equals(forbiden[0])) {
+                if (key.equals(forbiden[0]) || key.equals(forbiden[1])) {
                     mapsActivity.markers.get(key).remove();
+                    removed.add(key);
                 }
-                if (key.equals(forbiden[1])) {
+                if (key.equals(forbiden[3])) {
                     mapsActivity.markers.get(key).remove();
+                    removed.add(key);
                 }
                 if (key.contains(forbiden[2]) && key.substring(0, 6).equals(forbiden[2])) {
                     mapsActivity.markers.get(key).remove();
-                    mapsActivity.markers.remove(key);
+                    removed.add(key);
                 }
+            }
+            for (String key : removed) {
+                mapsActivity.markers.remove(key);
             }
             return;
         }
@@ -68,8 +77,12 @@ public class MapClickManager implements GoogleMap.OnMapClickListener {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 InputData res = (InputData)result.getSerializable("inputData");
+                boolean transitionRes = result.getBoolean("res");
                 temp.remove();
-                if (res == null) return;
+                if (!transitionRes) {
+                    //mapsActivity.markers.remove("myloc");
+                    return;
+                }
                 UserData target = mapsActivity.user_data.get(mapsActivity.user); //TODO 바꿔라 개인정보
 
                 MapMarkerManager.addMarker(res.getScheduleName(), latLng, res.getType()); //TODO 바꿔라

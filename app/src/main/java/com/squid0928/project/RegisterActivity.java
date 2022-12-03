@@ -83,6 +83,7 @@ public class RegisterActivity extends AppCompatActivity {
                             db.collection("userdata").document(firebaseUser.getEmail()).set(userdata);
 
                             Toast.makeText(RegisterActivity.this, "회원가입에 성공하였습니다.", Toast.LENGTH_LONG).show();
+                            finish();
                         } else { // 실패
                             Toast.makeText(RegisterActivity.this, "회원가입에 실패하였습니다.", Toast.LENGTH_LONG).show();
                         }

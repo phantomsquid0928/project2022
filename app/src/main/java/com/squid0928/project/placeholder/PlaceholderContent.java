@@ -37,11 +37,11 @@ public class PlaceholderContent {
         PlaceholderContent content = new PlaceholderContent();
         // Add some sample items.
         UserData data = mapsActivity.user_data.get(mapsActivity.user); //TODO server must give this info
-        List<UserData> friends = data.getFriends();
+        List<String> friends = data.getFriends();
         Log.i("ff", "friends count: " + COUNT);
         COUNT = friends.size();
         for (int i = 0; i < COUNT; i++) {
-            UserData friend = friends.get(i);
+            UserData friend = mapsActivity.user_data.get(friends.get(i));
            // Bitmap image = friend.getAccountPhoto();
             String friendName = friend.getName();
             content.addItem(createPlaceholderItem(i, friendName));

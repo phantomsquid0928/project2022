@@ -29,6 +29,8 @@ import com.squid0928.project.utils.InputData;
 import com.squid0928.project.utils.Locations;
 import com.squid0928.project.utils.UserData;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Set;
 
 public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
@@ -50,18 +52,25 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
         if (createdLast != null) {
             transaction.remove(createdLast);
             transaction.commit();
-            String[] forbiden = {"search", "name?", "poi - "};
+            String[] forbiden = {"search", "name?", "poi - ", "myloc"};
+
+            ArrayList<String> removed = new ArrayList<>();
             for (String key : mapsActivity.markers.keySet()) {
-                if (key.equals(forbiden[0])) {
+                if (key.equals(forbiden[0]) || key.equals(forbiden[1])) {
                     mapsActivity.markers.get(key).remove();
+                    removed.add(key);
                 }
-                if (key.equals(forbiden[1])) {
+                if (key.equals(forbiden[3])) {
                     mapsActivity.markers.get(key).remove();
+                    removed.add(key);
                 }
                 if (key.contains(forbiden[2]) && key.substring(0, 6).equals(forbiden[2])) {
                     mapsActivity.markers.get(key).remove();
-                    mapsActivity.markers.remove(key);
+                    removed.add(key);
                 }
+            }
+            for (String key : removed) {
+                mapsActivity.markers.remove(key);
             }
             return false;
         }
@@ -102,27 +111,31 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
             transaction.add(R.id.map, fragment, "fff");
             transaction.commit();
             LatLng latLng = marker.getPosition();
-            String placeName[] = new String[100];
-            placeName[0] = marker.getTitle();
-            Log.i("ff", "marker place" + placeName[0]);
+
+            String placeName = marker.getTitle();
+            Log.i("ff", "marker place" + placeName);
 
             manager.setFragmentResultListener("key", mapsActivity, new FragmentResultListener() {
                 @Override
                 public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                     InputData res = (InputData)result.getSerializable("inputData");
                     boolean mod = result.getBoolean("mod");
+                    boolean transitionRes = result.getBoolean("res");
 
-                    if (res == null) return;
+                    if (!transitionRes) {
+                        //mapsActivity.markers.remove("myloc");
+                        return;
+                    }
                     UserData target = mapsActivity.user_data.get(mapsActivity.user); //TODO 바꿔라
                     if (mod) { //수정
-                        MapMarkerManager.removeMarker(res.getScheduleName());
+                        //MapMarkerManager.removeMarker(res.getScheduleName());
                     }
 
                     MapMarkerManager.addMarker(res.getScheduleName(), latLng, res.getType()); //TODO 바꿔라
                     target.getSavedInputMarkers().put(res.getScheduleName(), res);
                     Locations loc = new Locations(res.getScheduleName(), latLng, placeName, res.getType());
                     target.getSavedLocations().put(res.getScheduleName(), loc);
-                    //mapsActivity.saveToDB();
+                    mapsActivity.saveToDB();
                     if (!res.isEmpty()) { // TODO : no safe checker
 
                     }

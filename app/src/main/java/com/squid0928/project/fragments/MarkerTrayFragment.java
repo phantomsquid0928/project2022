@@ -46,4 +46,5 @@ public class MarkerTrayFragment extends Fragment implements RadioGroup.OnChecked
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
 
     }
+
 }

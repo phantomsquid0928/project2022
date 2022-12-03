@@ -332,7 +332,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Log.i("ff", "username: " + user);
         Log.i("ff", "hashmap: " + user_data.keySet().toString() + "values" + user_data.values().toString());
         UserData userData = user_data.get(user); //서버에서 받아야함
-        Log.i("ff", "info ofuserdata: " + userData.getSavedLocations());
+        //Log.i("ff", "info ofuserdata: " + userData.getSavedLocations());
 
         if(userData == null) return;
         Set<String> keySet = userData.getSavedLocations().keySet();
@@ -365,6 +365,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             return;
                         }
                         Log.i("ff", "" + currentLocation.getLatitude());
+
                         LatLng latLocation = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLocation));
                     }
@@ -425,7 +426,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
     @Override
     public void onMyLocationClick(@NonNull Location location) {
+        if (markers.containsKey("myloc")) return;
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
         FragmentManager manager = getSupportFragmentManager();
         Fragment createdLast = manager.findFragmentByTag("fff");
         FragmentTransaction transaction = manager.beginTransaction();
@@ -434,8 +437,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             transaction.commit();
             return;
         }
-        transaction.add(R.id.map, new InputTemplateFragment(), "fff");
-        transaction.commit();
+        /*transaction.add(R.id.map, new InputTemplateFragment(), "fff");
+        transaction.commit();*/
         Marker marker = MapMarkerManager.addMarker("myloc", latLng, 1);
         markers.put("myloc", marker);
     }
