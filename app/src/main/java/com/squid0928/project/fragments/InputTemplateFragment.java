@@ -212,9 +212,6 @@ public class InputTemplateFragment extends Fragment {
         ArrayAdapter<String> arrayAdapter_promise = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.array_promise));
 
-        if(ContextCompat.checkSelfPermission(getContext(),Manifest.permission.SET_ALARM)==PackageManager.PERMISSION_GRANTED)
-            Toast.makeText(getActivity(), "알람 설정 권한 On", Toast.LENGTH_SHORT).show();
-
         //  LOAD InputData
         if(inputData.getPhoto()!=null)view_photo.setImageURI(inputData.getPhoto()); // load ImageView
         if(inputData.getType()==InputData.MEMORY) { //  Type == Memory
