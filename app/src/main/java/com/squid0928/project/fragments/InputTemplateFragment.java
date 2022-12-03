@@ -212,10 +212,11 @@ public class InputTemplateFragment extends Fragment {
             view_memory.setChecked(true);   //  load RadioButton
             view_category.setAdapter(arrayAdapter_memory);  //  load Spinner
             view_category.setSelection(inputData.getCategory());
+            view_check_memory.setVisibility(View.VISIBLE);  //  load Layout
             if (inputData.getDateFrom() != null && inputData.getDateTo() != null
                     && inputData.getTimeStart() != null && inputData.getTimeEnd() != null) {
                 view_check_stayed_time.setChecked(true);    //  load Checkbox
-                view_stayed_time.setText(inputData.getDateFrom()  //  load TextView
+                view_stayed_time.setText(inputData.getDateFrom()
                         + " " + inputData.getTimeStart()
                         + " ~ " + "\n"
                         + inputData.getDateTo()
@@ -226,8 +227,9 @@ public class InputTemplateFragment extends Fragment {
             view_promise.setChecked(true);  //  load RadioButton
             view_category.setAdapter(arrayAdapter_promise); //  load Spinner
             view_category.setSelection(inputData.getCategory());
-            if(inputData.getDateFrom()!=null&&inputData.getTimeStart()!=null){
-                view_promised_time.setText(inputData.getDateFrom()  //  load TextView
+            view_check_memory.setVisibility(View.VISIBLE);  //  load Layout
+            if (inputData.getDateFrom() != null && inputData.getTimeStart() != null) {
+                view_promised_time.setText(inputData.getDateFrom()
                         + " " + inputData.getTimeStart());
             }
         }
@@ -347,7 +349,7 @@ public class InputTemplateFragment extends Fragment {
             public void onClick(View view) {
                 if (view_promised_time != null) {
                     Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM);
-                    LocalTime localTime = LocalTime.parse(inputData.getTimeStart(),DateTimeFormatter.ofPattern("hh:mm"));
+                    LocalTime localTime = LocalTime.parse(inputData.getTimeStart(), DateTimeFormatter.ofPattern("hh:mm"));
                     intent.putExtra(AlarmClock.EXTRA_HOUR, localTime.getHour());
                     intent.putExtra(AlarmClock.EXTRA_MINUTES, localTime.getMinute());
                     startActivity(intent);
