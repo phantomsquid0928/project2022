@@ -89,7 +89,7 @@ public class MapClickManager implements GoogleMap.OnMapClickListener {
                 target.getSavedInputMarkers().put(res.getScheduleName(), res);
                 Locations loc = new Locations(res.getScheduleName(), latLng, null, res.getType());  //TODO 바꿔라
                 target.getSavedLocations().put(res.getScheduleName(), loc);
-                //mapsActivity.saveToDB();
+                ㄷmapsActivity.saveToDB();
                 //target.getSavedLocations().put();
                 if (!res.isEmpty()) { // TODO : no safe checker
 

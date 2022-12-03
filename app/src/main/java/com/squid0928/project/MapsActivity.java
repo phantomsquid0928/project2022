@@ -321,7 +321,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
     //TODO change below code can access to server data
     private void restoreUserMarkers() {
-        UserData tempInfo = new UserData("phantomsquid0928", null);
+        //UserData tempInfo = new UserData("phantomsquid0928", null);
         //UserData tempInfo2 = new UserData("ffff", null);
         //UserData tempInfo3 = new UserData("ssss", null);
         //tempInfo.addFriends(tempInfo2);
@@ -330,10 +330,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //Locations tempLoc = new Locations("ff", tempLng, null, 0, 0, 1);
         //tempInfo.getSavedLocations().put("ff", tempLoc);
 
-        user_data.put("phantomsquid0928", tempInfo);
+        //user_data.put("phantomsquid0928", tempInfo);
         Log.i("ff", "username: " + user);
         Log.i("ff", "hashmap: " + user_data.keySet().toString() + "values" + user_data.values().toString());
-        user = "phantomsquid0928";
+        //user = "phantomsquid0928";
         UserData userData = user_data.get(user); //서버에서 받아야함
         //Log.i("ff", "info ofuserdata: " + userData.getSavedLocations());
 
