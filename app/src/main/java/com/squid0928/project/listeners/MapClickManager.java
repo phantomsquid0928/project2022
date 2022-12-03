@@ -22,6 +22,7 @@ import com.squid0928.project.utils.Locations;
 import com.squid0928.project.utils.UserData;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 public class MapClickManager implements GoogleMap.OnMapClickListener {
     private MapsActivity mapsActivity;
@@ -44,19 +45,19 @@ public class MapClickManager implements GoogleMap.OnMapClickListener {
             if (MapMarkerManager.isMarkerClicked()) {
                 return;
             }
-            String[] forbiden = {"search", "name?", "poi - ", "myloc"};
+            String[] forbiden = {"search", "poi - ", "myloc"};
 
             ArrayList<String> removed = new ArrayList<>();
             for (String key : mapsActivity.markers.keySet()) {
-                if (key.equals(forbiden[0]) || key.equals(forbiden[1])) {
+                if (key.equals(forbiden[0])) {
                     mapsActivity.markers.get(key).remove();
                     removed.add(key);
                 }
-                if (key.equals(forbiden[3])) {
+                if (key.equals(forbiden[2])) {
                     mapsActivity.markers.get(key).remove();
                     removed.add(key);
                 }
-                if (key.contains(forbiden[2]) && key.substring(0, 6).equals(forbiden[2])) {
+                if (key.contains(forbiden[1]) && key.substring(0, 6).equals(forbiden[1])) {
                     mapsActivity.markers.get(key).remove();
                     removed.add(key);
                 }
@@ -67,8 +68,8 @@ public class MapClickManager implements GoogleMap.OnMapClickListener {
             return;
         }
 
-        Marker temp = MapMarkerManager.addMarker("name?", latLng, 1);
-        mapsActivity.markers.put("name?", temp);
+        Marker temp1 = MapMarkerManager.addMarker("name?", latLng, 1);
+        //MapsActivity.markers.put("name?", temp1);
         InputTemplateFragment fragment = new InputTemplateFragment();
         transaction.add(R.id.map, fragment, "fff");
         transaction.commit();
@@ -78,18 +79,21 @@ public class MapClickManager implements GoogleMap.OnMapClickListener {
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 InputData res = (InputData)result.getSerializable("inputData");
                 boolean transitionRes = result.getBoolean("res");
-                temp.remove();
+                //boolean mod = result.getBoolean("mod");
+                temp1.remove();
                 if (!transitionRes) {
                     //mapsActivity.markers.remove("myloc");
                     return;
                 }
-                UserData target = mapsActivity.user_data.get(mapsActivity.user); //TODO 바꿔라 개인정보
 
-                MapMarkerManager.addMarker(res.getScheduleName(), latLng, res.getType()); //TODO 바꿔라
+                UserData target = MapsActivity.user_data.get(MapsActivity.user); //TODO 바꿔라 개인정보
+
+                Marker marker = MapMarkerManager.addMarker(res.getScheduleName(), latLng, res.getType()); //TODO 바꿔라
                 target.getSavedInputMarkers().put(res.getScheduleName(), res);
                 Locations loc = new Locations(res.getScheduleName(), latLng, null, res.getType());  //TODO 바꿔라
                 target.getSavedLocations().put(res.getScheduleName(), loc);
-                ㄷmapsActivity.saveToDB();
+                MapsActivity.markers.put(res.getScheduleName(), marker);
+                mapsActivity.saveToDB();
                 //target.getSavedLocations().put();
                 if (!res.isEmpty()) { // TODO : no safe checker
 

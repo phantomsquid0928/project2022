@@ -42,9 +42,9 @@ public class FriendTabTrayFragment extends Fragment implements View.OnClickListe
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_friend_add, container, false);
         Button button = view.findViewById(R.id.button3);
-        Button button1 = view.findViewById(R.id.button4);
+        //Button button1 = view.findViewById(R.id.button4);
         button.setOnClickListener(this);
-        button1.setOnClickListener(this);
+        //button1.setOnClickListener(this);
         return view;
     }
 

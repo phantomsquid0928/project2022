@@ -81,13 +81,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1010;
 
     public static HashMap<String, UserData> user_data = new HashMap<>(); //서버에서 받아야함, 위험한 정보
-    public HashMap<String, Marker> markers = new HashMap<>();
+    public static HashMap<String, Marker> markers = new HashMap<>();
 
     public BottomNavigationView bottomNav;
     private LinearLayout ly;
     private ActivityMapsBinding binding;
 
-    private GoogleMap mMap;
+    public GoogleMap mMap;
     private UiSettings mUiSettings;
     private boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient locationProviderClient;
@@ -241,6 +241,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 layoutParamss.setMargins(modDownMargins[target][0], modDownMargins[target][1], modDownMargins[target][2], modDownMargins[target][3]);
                 break;
 
+        }
+    }
+    public static void updateMarker(int i, boolean b) {
+        for (Marker target : markers.values()) {
+            if (i == (int)target.getTag()) {
+                target.setVisible(b);
+            }
         }
     }
 

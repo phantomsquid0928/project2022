@@ -63,6 +63,7 @@ public class FriendTabFragment extends Fragment implements MyItemRecyclerViewAda
         Fragment target = manager.findFragmentByTag("FabFriend");
         Fragment target2 = manager.findFragmentByTag("FabFriendMenu");
         Fragment target3 = manager.findFragmentByTag("addFriend");
+        Fragment target4 = manager.findFragmentByTag("friendManagePopup");
 
         if (target != null) {
             transaction.remove(target);
@@ -72,6 +73,9 @@ public class FriendTabFragment extends Fragment implements MyItemRecyclerViewAda
         }
         if (target3 != null) {
             transaction.remove(target3);
+        }
+        if (target4 != null) {
+            transaction.remove(target4);
         }
         transaction.commit();
     }
@@ -102,13 +106,27 @@ public class FriendTabFragment extends Fragment implements MyItemRecyclerViewAda
         return view;
     }
 
+    boolean clicked = false;
     @Override
     public void onItemClick(View v, int position) {
+        FragmentManager manager = mapsActivity.getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        if (clicked == true) {
+            Fragment target = manager.findFragmentByTag("friendManagePopup");
+            clicked = false;
+            if (target != null)
+                transaction.remove(target);
+            return;
+        }
+        clicked = true;
+
         UserData data = mapsActivity.user_data.get(mapsActivity.user); //TODO 수정
         List<String> friends = data.getFriends();
         UserData clickedFriend = mapsActivity.user_data.get(friends.get(position));
-        Toast.makeText(v.getContext(), "fsf", Toast.LENGTH_SHORT);
-        Log.i("ff", "itemclick " + position + " on view :" + v.toString());
+        Log.i("ff", "itemclick " + position + "name: " + clickedFriend.getAccount().getName());
+
+        transaction.add(R.id.map, new FriendManageFragment(mapsActivity, map), "friendManagePopup");
+        transaction.commit();
 
     }
 }
