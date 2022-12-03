@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseRef2;
     private FirebaseFirestore db;
 
-    String strEmail = "phantomsquid0928@gmail.co";  //TODO get from preference
+    String strEmail = "phantomsquid0928@gmail.com";  //TODO get from preference
     String strPwd = "12345678";
 
     @Override
@@ -59,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
             strPwd = intent.getBundleExtra("userInfo").getString("userpass");
         }*/
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        String strEmail = pref.getString("id", "<><>");
-        String strPwd = pref.getString("pass", "<><>");
+        //String strEmail = pref.getString("id", "<><>");
+        //String strPwd = pref.getString("pass", "<><>");
 
 
         db = FirebaseFirestore.getInstance();
