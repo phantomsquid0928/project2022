@@ -66,7 +66,7 @@ public class TopSearchFragment extends Fragment implements View.OnClickListener{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TransitionInflater inflater = TransitionInflater.from(requireContext());
-        //setExitTransition(inflater.inflateTransition(R.transition.top_slide_up));
+        setExitTransition(inflater.inflateTransition(R.transition.top_slide_up));
         setEnterTransition(inflater.inflateTransition(R.transition.top_slide_down));
         launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> handleActivityResult(result));

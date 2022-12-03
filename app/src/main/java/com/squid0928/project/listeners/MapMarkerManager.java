@@ -141,6 +141,8 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
                     target.getSavedLocations().put(res.getScheduleName(), loc);
                     MapsActivity.markers.put(res.getScheduleName(), marker);
                     mapsActivity.saveToDB();
+
+                    MapsActivity.slider.adjustRange();
                     if (!res.isEmpty()) { // TODO : no safe checker
 
                     }
