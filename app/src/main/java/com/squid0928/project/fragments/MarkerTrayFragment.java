@@ -19,6 +19,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.common.collect.Maps;
 import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
+import com.squid0928.project.listeners.MapMarkerManager;
 
 public class MarkerTrayFragment extends Fragment implements View.OnClickListener{
     private MapsActivity mapsActivity;
@@ -59,18 +60,18 @@ public class MarkerTrayFragment extends Fragment implements View.OnClickListener
         switch(view.getId()) {
             case R.id.checkBox: //추억
                 if (checked) {
-                    MapsActivity.updateMarker(2, true);
+                    MapMarkerManager.updateMarker(2, true);
                 }
                 else {
-                    MapsActivity.updateMarker(2, false);
+                    MapMarkerManager.updateMarker(2, false);
                 }
                 break;
             case R.id.checkBox2: //약속
                 if (checked) {
-                    MapsActivity.updateMarker(1, true);
+                    MapMarkerManager.updateMarker(1, true);
                 }
                 else {
-                    MapsActivity.updateMarker(1, false);
+                    MapMarkerManager.updateMarker(1, false);
                 }
                 break;
             // TODO: Veggie sandwich

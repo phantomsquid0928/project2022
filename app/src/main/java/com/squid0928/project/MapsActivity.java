@@ -255,13 +255,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
     }
-    public static void updateMarker(int i, boolean b) {
-        for (Marker target : markers.values()) {
-            if (i == (int)target.getTag()) {
-                target.setVisible(b);
-            }
-        }
-    }
+
 
     /**
      * Manipulates the map once available.
@@ -300,7 +294,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnPoiClickListener(this);
         mMap.setOnCameraMoveStartedListener(new MapMotionManager(this, mMap));
         mMap.setOnCameraIdleListener(new MapMotionManager(this, mMap));
-        restoreUserMarkers();
+        if (!restoreUserMarkers()) {
+            Log.i("ff", "weird");
+        }
     }
 
     /*@Override
@@ -339,7 +335,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         db.collection("userdata").document(user).set(user_data.get(user));
     }
     //TODO change below code can access to server data
-    private void restoreUserMarkers() {
+    private boolean restoreUserMarkers() {
         //UserData tempInfo = new UserData("phantomsquid0928", null);
         //UserData tempInfo2 = new UserData("ffff", null);
         //UserData tempInfo3 = new UserData("ssss", null);
@@ -356,9 +352,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         UserData userData = user_data.get(user); //서버에서 받아야함
         //Log.i("ff", "info ofuserdata: " + userData.getSavedLocations());
 
-        if(userData == null) return;
+        if(userData == null) return false;
         Set<String> keySet = userData.getSavedLocations().keySet();
-        if (keySet.isEmpty()) return;
+        if (keySet.isEmpty()) return false;
         for(String target : keySet) {
             Log.i("ff", "key: " + target);
             InputData data = userData.getSavedInputMarkers().get(target);
@@ -368,6 +364,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Marker marker = MapMarkerManager.addMarker(data.getScheduleName(), new LatLng(locdata.getLatitude(), locdata.getLongtitude()), data.getType());
             markers.put(target, marker);
         }
+        return true;
     }
     private Location getDeviceLocation() {
         Log.d("ff", "getting location of user");
