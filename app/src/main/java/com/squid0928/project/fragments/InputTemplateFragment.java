@@ -409,11 +409,11 @@ public class InputTemplateFragment extends Fragment {
                 //  저장
                 Bundle result = new Bundle();
                 if(inputData.getScheduleName()!=null){
-                    if (MapsActivity.user_data.get(MapsActivity.user).getSavedInputMarkers().containsKey(inputData.getScheduleName()) && !modify && !mod) {//이름 겹치는 약속
+                    /*if (MapsActivity.user_data.get(MapsActivity.user).getSavedInputMarkers().containsKey(inputData.getScheduleName()) && !modify && !mod) {//이름 겹치는 약속
                         modify = true;
                         Toast.makeText(getActivity(), "저장을 한번 더 누르면 방금만든 약속으로 수정됩니다.", Toast.LENGTH_LONG).show();
                         return;
-                    }
+                    }*/
                     modify = false;
                     result.putSerializable("inputData", inputData);
                     result.putBoolean("mod", mod);
