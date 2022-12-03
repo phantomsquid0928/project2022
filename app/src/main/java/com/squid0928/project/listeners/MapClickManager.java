@@ -94,6 +94,8 @@ public class MapClickManager implements GoogleMap.OnMapClickListener {
                 target.getSavedLocations().put(res.getScheduleName(), loc);
                 MapsActivity.markers.put(res.getScheduleName(), marker);
                 mapsActivity.saveToDB();
+
+                MapsActivity.slider.adjustRange();
                 //target.getSavedLocations().put();
                 if (!res.isEmpty()) { // TODO : no safe checker
 

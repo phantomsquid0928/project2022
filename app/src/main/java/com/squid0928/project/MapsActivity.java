@@ -47,6 +47,7 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.slider.Slider;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -59,6 +60,7 @@ import com.squid0928.project.fragments.FABFragment;
 import com.squid0928.project.fragments.FriendTabFragment;
 import com.squid0928.project.fragments.InputTemplateFragment;
 import com.squid0928.project.fragments.SettingsFragment;
+import com.squid0928.project.fragments.SliderFragment;
 import com.squid0928.project.fragments.TimetableFragment;
 import com.squid0928.project.fragments.TopSearchFragment;
 import com.squid0928.project.listeners.MapClickManager;
@@ -88,6 +90,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ActivityMapsBinding binding;
 
     public GoogleMap mMap;
+
     private UiSettings mUiSettings;
     private boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient locationProviderClient;
@@ -99,6 +102,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private int status = 0; // home
     public static String user;
+    public static SliderFragment slider;
 
     private DatabaseReference mDatabaseRef;
     public static FirebaseFirestore db;
@@ -196,9 +200,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         transaction.add(R.id.map, new FABFragment(this, mMap), "FAB");
         transaction.commit();
     }
+    public void createSlider() {
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        slider = SliderFragment.newInstance(this, mMap, placesClient);
+        transaction.add(R.id.map, slider, "slider");
+        transaction.commit();
+    }
     private void initMap() {
         createTopSearch();
         createFab();
+        createSlider();
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
             buildAlertMessageNoGps();
