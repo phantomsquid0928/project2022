@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -163,6 +164,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         bottomNav.setSelectedItemId(R.id.tab_map);
 
         getLocationPermission(); //permission 후 자동 맵 호출
+        getAlarmPermission();
     }
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -390,6 +392,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mLocationPermissionsGranted = true;
             initMap();
         }
+    }
+    private void getAlarmPermission(){
+        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),Manifest.permission.SET_ALARM)!=PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SET_ALARM}, 356);
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

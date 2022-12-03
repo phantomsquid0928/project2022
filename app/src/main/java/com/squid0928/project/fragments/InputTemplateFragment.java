@@ -1,9 +1,11 @@
 package com.squid0928.project.fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -37,6 +39,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -46,12 +50,14 @@ import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
 import com.squid0928.project.utils.InputData;
 
+import org.checkerframework.checker.units.qual.A;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.Permission;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -206,9 +212,12 @@ public class InputTemplateFragment extends Fragment {
         ArrayAdapter<String> arrayAdapter_promise = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.array_promise));
 
+        if(ContextCompat.checkSelfPermission(getContext(),Manifest.permission.SET_ALARM)==PackageManager.PERMISSION_GRANTED)
+            Toast.makeText(getActivity(), "알람 설정 권한 On", Toast.LENGTH_SHORT).show();
+
         //  LOAD InputData
         if(inputData.getPhoto()!=null)view_photo.setImageURI(inputData.getPhoto()); // load ImageView
-        if(inputData.getType()==InputData.MEMORY) {
+        if(inputData.getType()==InputData.MEMORY) { //  Type == Memory
             view_memory.setChecked(true);   //  load RadioButton
             view_category.setAdapter(arrayAdapter_memory);  //  load Spinner
             view_category.setSelection(inputData.getCategory());
@@ -216,6 +225,7 @@ public class InputTemplateFragment extends Fragment {
             if (inputData.getDateFrom() != null && inputData.getDateTo() != null
                     && inputData.getTimeStart() != null && inputData.getTimeEnd() != null) {
                 view_check_stayed_time.setChecked(true);    //  load Checkbox
+                view_stayed_time.setVisibility(View.VISIBLE);
                 view_stayed_time.setText(inputData.getDateFrom()
                         + " " + inputData.getTimeStart()
                         + " ~ " + "\n"
@@ -223,11 +233,12 @@ public class InputTemplateFragment extends Fragment {
                         + " " + inputData.getTimeEnd());
             }
         }
-        else if(inputData.getType()==InputData.PROMISE){
+        else if(inputData.getType()==InputData.PROMISE){    //  Type == Promise
             view_promise.setChecked(true);  //  load RadioButton
             view_category.setAdapter(arrayAdapter_promise); //  load Spinner
             view_category.setSelection(inputData.getCategory());
-            view_check_memory.setVisibility(View.VISIBLE);  //  load Layout
+            view_check_memory.setVisibility(View.GONE);
+            view_check_promise.setVisibility(View.VISIBLE);  //  load Layout
             if (inputData.getDateFrom() != null && inputData.getTimeStart() != null) {
                 view_promised_time.setText(inputData.getDateFrom()
                         + " " + inputData.getTimeStart());
@@ -349,13 +360,14 @@ public class InputTemplateFragment extends Fragment {
             public void onClick(View view) {
                 if (view_promised_time != null) {
                     Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM);
-                    LocalTime localTime = LocalTime.parse(inputData.getTimeStart(), DateTimeFormatter.ofPattern("hh:mm"));
+                    LocalTime localTime = LocalTime.parse(inputData.getTimeStart(), DateTimeFormatter.ofPattern("HH:mm"));
                     intent.putExtra(AlarmClock.EXTRA_HOUR, localTime.getHour());
                     intent.putExtra(AlarmClock.EXTRA_MINUTES, localTime.getMinute());
                     startActivity(intent);
                 }
             }
         });
+
 
         /*
         머문 시간을 기록할 것인지 체크박스를 통해 묻고
@@ -534,11 +546,11 @@ public class InputTemplateFragment extends Fragment {
                 LocalTime localTime = LocalTime.of(dialog_promised_time.getHour(), dialog_promised_time.getMinute());
                 //  날짜, 시간 TextView에 띄우기
                 String concat = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-                        + " " + localTime.format(DateTimeFormatter.ofPattern("hh:mm"));
+                        + " " + localTime.format(DateTimeFormatter.ofPattern("HH:mm"));
                 view_promised_time.setText(concat);
                 //  DB에 저장
                 inputData.setDateFrom(localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-                inputData.setTimeStart(localTime.format(DateTimeFormatter.ofPattern("hh:mm")));  //
+                inputData.setTimeStart(localTime.format(DateTimeFormatter.ofPattern("HH:mm")));  //
                 if (dialog_promised_date_time.isShowing())
                     dialog_promised_date_time.dismiss();
             }

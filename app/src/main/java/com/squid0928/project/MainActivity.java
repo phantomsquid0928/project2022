@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, MapsActivity.class); // debug
                 Bundle bundle = new Bundle();
-                bundle.putString("useruid", mFirebaseAuth.getCurrentUser().getEmail());
+//                bundle.putString("useruid", mFirebaseAuth.getCurrentUser().getEmail());
                 intent.putExtra("userInfo", bundle);
                 startActivity(intent);
             }
