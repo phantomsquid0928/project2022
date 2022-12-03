@@ -75,7 +75,12 @@ public class AddFriendFragment extends Fragment implements View.OnClickListener 
                                 success = true;
                                 UserData target = snapshot.toObject(UserData.class);
                                 if (snapshot.getId().equals(mapsActivity.user)) {
-                                    text.setHint("there is no user using that email");
+                                    text.setHint("you cant be your friend yourself :P");
+                                    text.setText("");
+                                    break;
+                                }
+                                if (mapsActivity.user_data.get(mapsActivity.user).getFriends().contains(snapshot.getId())) {
+                                    text.setHint("already existing friend :P");
                                     text.setText("");
                                     break;
                                 }
@@ -84,7 +89,7 @@ public class AddFriendFragment extends Fragment implements View.OnClickListener 
                             }
                         }
                         if (!success) {
-                            Toast.makeText(parent.getContext(), "", Toast.LENGTH_SHORT);
+                            Toast.makeText(parent.getContext(), "no user found", Toast.LENGTH_SHORT).show();
                             text.setHint("there is no user using that email");
                             text.setText("");
                         }

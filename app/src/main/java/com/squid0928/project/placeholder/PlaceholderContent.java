@@ -43,7 +43,7 @@ public class PlaceholderContent {
         for (int i = 0; i < COUNT; i++) {
             UserData friend = mapsActivity.user_data.get(friends.get(i));
            // Bitmap image = friend.getAccountPhoto();
-            String friendName = friend.getName();
+            String friendName = friend.getAccount().getName();
             content.addItem(createPlaceholderItem(i, friendName));
         }
         return content;

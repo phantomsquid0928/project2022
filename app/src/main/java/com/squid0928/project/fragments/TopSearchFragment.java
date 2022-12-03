@@ -4,6 +4,7 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
+import android.graphics.Camera;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.util.Log;
@@ -24,8 +25,10 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
@@ -63,7 +66,7 @@ public class TopSearchFragment extends Fragment implements View.OnClickListener{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TransitionInflater inflater = TransitionInflater.from(requireContext());
-        setExitTransition(inflater.inflateTransition(R.transition.top_slide_up));
+        //setExitTransition(inflater.inflateTransition(R.transition.top_slide_up));
         setEnterTransition(inflater.inflateTransition(R.transition.top_slide_down));
         launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> handleActivityResult(result));
@@ -95,7 +98,7 @@ public class TopSearchFragment extends Fragment implements View.OnClickListener{
         }*/
         if (view instanceof EditText) {
             Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY,
-                    Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG)).build(this.getContext());
+                    Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG)).build(getContext());
             launcher.launch(intent);
         }
     }
@@ -107,10 +110,12 @@ public class TopSearchFragment extends Fragment implements View.OnClickListener{
             Log.i("ff", status.getStatusMessage());
         }
         Place place = Autocomplete.getPlaceFromIntent(intent);
+
         if (place == null) return;
         Marker marker = MapMarkerManager.addMarker(place.getName(), place, 1);
+        Log.i("ff", "result ok" + place.getName() + place.getLatLng().toString());
         mapsActivity.markers.put("search", marker);
-        map.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
+        mapsActivity.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 10));
 
         /*
         final String placeId = place.getId();

@@ -42,6 +42,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
+import com.google.common.collect.Maps;
 import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
 import com.squid0928.project.utils.InputData;
@@ -76,6 +77,7 @@ public class InputTemplateFragment extends Fragment {
     InputData inputData = new InputData();
     Uri photoUri;
     boolean mod;
+    String oldname;
 
     //String hashKey = UserID + Location?
 
@@ -102,6 +104,7 @@ public class InputTemplateFragment extends Fragment {
         this.inputData.setScheduleName(inputData.getScheduleName());
         this.inputData.setMemo(inputData.getMemo());
         mod = true;
+        oldname = inputData.getScheduleName();
     }
 
 
@@ -409,15 +412,24 @@ public class InputTemplateFragment extends Fragment {
                 //  저장
                 Bundle result = new Bundle();
                 if(inputData.getScheduleName()!=null){
-                    if (MapsActivity.user_data.get(MapsActivity.user).getSavedInputMarkers().containsKey(inputData.getScheduleName()) && !modify && !mod) {//이름 겹치는 약속
+                    if (MapsActivity.user_data.get(MapsActivity.user).getSavedInputMarkers().containsKey(inputData.getScheduleName()) && oldname != inputData.getScheduleName()) {
+                        Toast.makeText(getActivity(), "이미 있는 이름입니다.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (mod && !modify) {//이미 있는 마커 클릭, 정보 인풋됨
                         modify = true;
                         Toast.makeText(getActivity(), "저장을 한번 더 누르면 방금만든 약속으로 수정됩니다.", Toast.LENGTH_LONG).show();
                         return;
                     }
-                    modify = false;
                     result.putSerializable("inputData", inputData);
-                    result.putBoolean("mod", mod);
                     result.putBoolean("res", true);
+                    if (mod) {
+                        result.putBoolean("mod", true);
+                        result.putString("old", oldname);
+                    } else {
+                        result.putBoolean("mod", false);
+                    }
+                    modify = false;
                     getActivity().getSupportFragmentManager().setFragmentResult("key", result);
 
                     Toast.makeText(getActivity(), "저장되었습니다.", Toast.LENGTH_LONG).show();

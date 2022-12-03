@@ -13,11 +13,6 @@
         android:layout_height="0dp"
         android:orientation="vertical"
         android:layout_weight="9">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ssss">
-        </TextView>
         <fragment
             android:layout_width="match_parent"
             xmlns:map="http://schemas.android.com/apk/res-auto"

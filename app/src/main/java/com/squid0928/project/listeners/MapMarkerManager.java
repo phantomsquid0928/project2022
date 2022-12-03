@@ -52,19 +52,19 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
         if (createdLast != null) {
             transaction.remove(createdLast);
             transaction.commit();
-            String[] forbiden = {"search", "name?", "poi - ", "myloc"};
+            String[] forbiden = {"search", "poi - ", "myloc"};
 
             ArrayList<String> removed = new ArrayList<>();
             for (String key : mapsActivity.markers.keySet()) {
-                if (key.equals(forbiden[0]) || key.equals(forbiden[1])) {
+                if (key.equals(forbiden[0])) {
                     mapsActivity.markers.get(key).remove();
                     removed.add(key);
                 }
-                if (key.equals(forbiden[3])) {
+                if (key.equals(forbiden[2])) {
                     mapsActivity.markers.get(key).remove();
                     removed.add(key);
                 }
-                if (key.contains(forbiden[2]) && key.substring(0, 6).equals(forbiden[2])) {
+                if (key.contains(forbiden[1]) && key.substring(0, 6).equals(forbiden[1])) {
                     mapsActivity.markers.get(key).remove();
                     removed.add(key);
                 }
@@ -127,14 +127,19 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
                         return;
                     }
                     UserData target = mapsActivity.user_data.get(mapsActivity.user); //TODO 바꿔라
-                    if (mod) { //수정
-                        //MapMarkerManager.removeMarker(res.getScheduleName());
+                    if (mod) { //이미 잇는 마커 수정
+                        Log.i("ff", "we r in mod" + res.getScheduleName());
+                        String oldname = result.getString("old");
+                        MapMarkerManager.removeMarker(oldname);
+                        target.getSavedInputMarkers().remove(oldname);
+                        target.getSavedLocations().remove(oldname);
                     }
 
-                    MapMarkerManager.addMarker(res.getScheduleName(), latLng, res.getType()); //TODO 바꿔라
+                    Marker marker = MapMarkerManager.addMarker(res.getScheduleName(), latLng, res.getType()); //TODO 바꿔라
                     target.getSavedInputMarkers().put(res.getScheduleName(), res);
                     Locations loc = new Locations(res.getScheduleName(), latLng, placeName, res.getType());
                     target.getSavedLocations().put(res.getScheduleName(), loc);
+                    MapsActivity.markers.put(res.getScheduleName(), marker);
                     mapsActivity.saveToDB();
                     if (!res.isEmpty()) { // TODO : no safe checker
 
@@ -188,15 +193,13 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
         return marker;
     }
     public static void removeMarker(String name) {
-        Marker target = mapsActivity.markers.get(name);
-        mapsActivity.markers.remove(name);
+        Marker target = MapsActivity.markers.get(name);
+        Log.i("ff", target.getTitle());
+        target.remove();
+        MapsActivity.markers.remove(name);
         target.remove();
     }
-    public static void removeMarker(Place place) {
-        Marker target = mapsActivity.markers.get(place.getName());
-        mapsActivity.markers.remove(place.getName());
-        target.remove();
-    }
+
     private static BitmapDescriptor BitmapFromVector(Context context, int vectorResId) {
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
 
