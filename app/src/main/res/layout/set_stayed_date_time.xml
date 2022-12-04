@@ -1,57 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:columnCount="2">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal">
 
-    <DatePicker
-        android:id="@+id/stayed_date_time_date_from"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_columnWeight="0.45"
-        android:layout_rowWeight="1"
-        android:datePickerMode="calendar"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/date_time_from_set"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <DatePicker
+            android:id="@+id/stayed_date_time_date_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/stayed_date_time_from"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:datePickerMode="spinner"
+            android:calendarViewShown="false"/>
 
-    <TimePicker
-        android:id="@+id/stayed_date_time_from"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_columnWeight="0.55"
-        android:layout_rowWeight="1"
-        android:timePickerMode="spinner"/>
+        <TimePicker
+            android:id="@+id/stayed_date_time_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/stayed_date_time_date_from"
+            app:layout_constraintBottom_toTopOf="@id/nextBtn_stayedTime"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:timePickerMode="spinner"/>
 
-    <TextView
-        android:id="@+id/stayed_date_time_tilde"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="~"
-        android:layout_columnSpan="2"
-        android:textSize="30sp"/>
+        <Button
+            android:id="@+id/nextBtn_stayedTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/stayed_date_time_from"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:text="다음"/>
 
-    <DatePicker
-        android:id="@+id/stayed_date_time_date_to"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_columnWeight="0.45"
-        android:layout_rowWeight="1"
-        android:datePickerMode="calendar"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TimePicker
-        android:id="@+id/stayed_date_time_to"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_columnWeight="0.55"
-        android:layout_rowWeight="1"
-        android:timePickerMode="spinner"/>
 
-    <Button
-        android:id="@+id/acceptBtn_stayedTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_columnSpan="2"
-        android:text="확인"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/date_time_to_set"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+        <DatePicker
+            android:id="@+id/stayed_date_time_date_to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/stayed_date_time_to"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:datePickerMode="spinner"
+            android:calendarViewShown="false" />
 
-</GridLayout>
+        <TimePicker
+            android:id="@+id/stayed_date_time_to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/stayed_date_time_date_to"
+            app:layout_constraintBottom_toTopOf="@id/acceptBtn_stayedTime"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:timePickerMode="spinner" />
+        <Button
+            android:id="@+id/acceptBtn_stayedTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/stayed_date_time_to"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:text="확인" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

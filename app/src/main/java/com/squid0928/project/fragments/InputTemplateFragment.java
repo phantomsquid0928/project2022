@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -37,6 +38,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -463,14 +465,20 @@ public class InputTemplateFragment extends Fragment {
 
     //  추억_날짜, 머문 시간 입력
     private void setMemory() {
+        Button dialog_nextBtn_stayedTime;
         Button dialog_acceptBtn_stayedTime;
+        ConstraintLayout dialog_date_time_from_set;
+        ConstraintLayout dialog_date_time_to_set;
         DatePicker dialog_stayed_date_from;
         TimePicker dialog_stayed_time_from;
         DatePicker dialog_stayed_date_to;
         TimePicker dialog_stayed_time_to;
         dialog_stayed_date_time = new Dialog(getActivity());
         dialog_stayed_date_time.setContentView(R.layout.set_stayed_date_time);
+        dialog_nextBtn_stayedTime = dialog_stayed_date_time.findViewById(R.id.nextBtn_stayedTime);
         dialog_acceptBtn_stayedTime = dialog_stayed_date_time.findViewById(R.id.acceptBtn_stayedTime);
+        dialog_date_time_from_set = dialog_stayed_date_time.findViewById(R.id.date_time_from_set);
+        dialog_date_time_to_set = dialog_stayed_date_time.findViewById(R.id.date_time_to_set);
         dialog_stayed_date_from = dialog_stayed_date_time.findViewById(R.id.stayed_date_time_date_from);
         dialog_stayed_time_from = dialog_stayed_date_time.findViewById(R.id.stayed_date_time_from);
         dialog_stayed_date_to = dialog_stayed_date_time.findViewById(R.id.stayed_date_time_date_to);
@@ -483,6 +491,13 @@ public class InputTemplateFragment extends Fragment {
         //  추억: 현재보다 이후 날짜 선택 불가
         long date_now = System.currentTimeMillis();
         dialog_stayed_date_from.setMaxDate(date_now);
+        dialog_nextBtn_stayedTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog_date_time_from_set.setVisibility(View.INVISIBLE);
+                dialog_date_time_to_set.setVisibility(View.VISIBLE);
+            }
+        });
         dialog_acceptBtn_stayedTime.setOnClickListener(new Button.OnClickListener() {   // 확인 버튼
             @Override
             public void onClick(View view) {
