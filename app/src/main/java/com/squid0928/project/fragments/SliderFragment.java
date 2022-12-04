@@ -62,6 +62,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class SliderFragment extends Fragment implements RangeSlider.OnChangeListener{
@@ -106,7 +107,7 @@ public class SliderFragment extends Fragment implements RangeSlider.OnChangeList
         return view;
     }
     public void adjustRange(int mod) {
-        Collection<InputData> temp = mapsActivity.user_data.get(mapsActivity.user).getSavedInputMarkers().values();
+        Collection<InputData> temp = mapsActivity.userdata.getSavedInputMarkers().values();
         for (InputData target : temp) {
             Log.i("ff", "dates st : " + target.getDateFrom());
             Log.i("ff", "dates ed : " + target.getDateTo());
@@ -147,7 +148,7 @@ public class SliderFragment extends Fragment implements RangeSlider.OnChangeList
         }
         String old = oldest.toString();
         String lat = latest.toString();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         try {
             Date date1 = sdf.parse(old);
             Date date2 = sdf.parse(lat);
@@ -188,7 +189,7 @@ public class SliderFragment extends Fragment implements RangeSlider.OnChangeList
                     return targetdate.plusDays((int)(value)).toString();
                 }
             });
-        } catch (Exception e) {e.printStackTrace();}
+        } catch (Exception e) {Log.i("ff", e.toString());}
     }
 
     public void onStartTrackingTouch(@NonNull RangeSlider slider) {
@@ -207,7 +208,7 @@ public class SliderFragment extends Fragment implements RangeSlider.OnChangeList
         int y = slider.getValues().get(1).intValue();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        Collection<InputData> data = mapsActivity.user_data.get(mapsActivity.user).getSavedInputMarkers().values();
+        Collection<InputData> data = mapsActivity.userdata.getSavedInputMarkers().values();
         try {
             // Log.i("ff", "rangex: " + x + "rangey:" + y);
             Date rangex = sdf.parse(targetoldest.plusDays(x).toString());

@@ -62,22 +62,6 @@ public class MainActivity extends AppCompatActivity {
         String strEmail = pref.getString("id", "<><>");
         String strPwd = pref.getString("pass", "<><>");
 
-
-        db = FirebaseFirestore.getInstance();
-        db.collection("userdata").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot snapshot : task.getResult()) {
-                        Log.i("ff", snapshot.getId() + "->" + snapshot.getData());
-
-                        UserData userData = snapshot.toObject(UserData.class);
-
-                        MapsActivity.user_data.put(snapshot.getId(), userData);
-                    }
-                }
-            }
-        });
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         mFirebaseAuth.signInWithEmailAndPassword(strEmail, strPwd).addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
@@ -103,6 +87,52 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+        /*
+        db = FirebaseFirestore.getInstance();
+        db.collection("userdata").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot snapshot : task.getResult()) {
+                        Log.i("ff", snapshot.getId() + "->" + snapshot.getData());
+
+                        UserData userData = snapshot.toObject(UserData.class);
+
+                        MapsActivity.user_data.put(snapshot.getId(), userData);
+                    }
+
+                    mFirebaseAuth = FirebaseAuth.getInstance();
+
+                    mFirebaseAuth.signInWithEmailAndPassword(strEmail, strPwd).addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task)
+                        {
+                            System.out.println("login buttons");
+                            // 로그인이 성공적이면
+                            if(task.isSuccessful()) {
+                                Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                                Bundle bundle = new Bundle();
+                                Log.i("ff", mFirebaseAuth.getCurrentUser().getUid());
+                                bundle.putString("useruid", mFirebaseAuth.getCurrentUser().getEmail());
+                                intent.putExtra("userInfo", bundle);
+                                startActivity(intent);
+                                finish();
+
+                            } else // 로그인 실패
+                            {
+                                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }
+                    });
+
+                }
+            }
+        });*/
+
         //TODO id token exists true -> mapsActivity false -> loginActivity
         /*
         Button button = findViewById(R.id.mapOpen);

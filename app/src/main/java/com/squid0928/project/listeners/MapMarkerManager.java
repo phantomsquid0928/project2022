@@ -82,7 +82,7 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
         marker.showInfoWindow();
 
 
-        Set<String> temp = mapsActivity.user_data.get(mapsActivity.user).getSavedInputMarkers().keySet();
+        Set<String> temp = mapsActivity.userdata.getSavedInputMarkers().keySet();
         String target = null;
         for (String key : temp) {
 
@@ -95,7 +95,7 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
         // change below code can access to serverside
         InputData inputData = null;
         if (target != null) {
-            inputData = mapsActivity.user_data.get(mapsActivity.user).getMarker(target);
+            inputData = mapsActivity.userdata.getMarker(target);
             Log.i("ff", "inputdata exitst" + inputData.getType());
         }
 
@@ -127,7 +127,7 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
                         //mapsActivity.markers.remove("myloc");
                         return;
                     }
-                    UserData target = mapsActivity.user_data.get(mapsActivity.user); //TODO 바꿔라
+                    UserData target = mapsActivity.userdata; //TODO 바꿔라
                     if (mod) { //이미 잇는 마커 수정
                         Log.i("ff", "we r in mod" + res.getScheduleName());
                         String oldname = result.getString("old");
@@ -143,7 +143,7 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
                     MapsActivity.markers.put(res.getScheduleName(), marker);
                     mapsActivity.saveToDB();
 
-                    MapsActivity.slider.adjustRange(0);
+                    mapsActivity.slider.adjustRange(0);
                     if (!res.isEmpty()) { // TODO : no safe checker
 
                     }

@@ -120,10 +120,12 @@ public class FriendTabFragment extends Fragment implements MyItemRecyclerViewAda
         }
         clicked = true;
 
-        UserData data = mapsActivity.user_data.get(mapsActivity.user); //TODO 수정
+        UserData data = mapsActivity.userdata; //TODO 수정
         List<String> friends = data.getFriends();
-        UserData clickedFriend = mapsActivity.user_data.get(friends.get(position));
-        Log.i("ff", "itemclick " + position + "name: " + clickedFriend.getAccount().getName());
+        //mapsActivity.db.collection("userdata").get()
+        //UserData clickedFriend = mapsActivity.userdata.getFriends().get(position);
+        String clickedFriend = mapsActivity.userdata.getFriends().get(position);
+        Log.i("ff", "itemclick " + position + "name: " + clickedFriend/*.getAccount().getName()*/);
 
         transaction.add(R.id.map, new FriendManageFragment(mapsActivity, map), "friendManagePopup");
         transaction.commit();

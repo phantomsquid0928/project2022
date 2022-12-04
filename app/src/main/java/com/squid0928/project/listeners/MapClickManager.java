@@ -86,7 +86,7 @@ public class MapClickManager implements GoogleMap.OnMapClickListener {
                     return;
                 }
 
-                UserData target = MapsActivity.user_data.get(MapsActivity.user); //TODO 바꿔라 개인정보
+                UserData target = MapsActivity.userdata; //TODO 바꿔라 개인정보
 
                 Marker marker = MapMarkerManager.addMarker(res.getScheduleName(), latLng, res.getType()); //TODO 바꿔라
                 target.getSavedInputMarkers().put(res.getScheduleName(), res);
@@ -95,7 +95,7 @@ public class MapClickManager implements GoogleMap.OnMapClickListener {
                 MapsActivity.markers.put(res.getScheduleName(), marker);
                 mapsActivity.saveToDB();
 
-                MapsActivity.slider.adjustRange(0);
+                mapsActivity.slider.adjustRange(0);
                 //target.getSavedLocations().put();
                 if (!res.isEmpty()) { // TODO : no safe checker
 

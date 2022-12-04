@@ -79,13 +79,13 @@ public class AddFriendFragment extends Fragment implements View.OnClickListener 
                                     text.setText("");
                                     break;
                                 }
-                                if (mapsActivity.user_data.get(mapsActivity.user).getFriends().contains(snapshot.getId())) {
+                                if (mapsActivity.userdata.getFriends().contains(snapshot.getId())) {
                                     text.setHint("already existing friend :P");
                                     text.setText("");
                                     break;
                                 }
-                                mapsActivity.user_data.get(mapsActivity.user).addFriends(snapshot.getId());
-                                mapsActivity.db.collection("userdata").document(mapsActivity.user).update("friends", mapsActivity.user_data.get(mapsActivity.user).getFriends());
+                                mapsActivity.userdata.addFriends(snapshot.getId());
+                                mapsActivity.db.collection("userdata").document(mapsActivity.user).update("friends", mapsActivity.userdata.getFriends());
                             }
                         }
                         if (!success) {
