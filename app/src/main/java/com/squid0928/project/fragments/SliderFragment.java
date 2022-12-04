@@ -192,14 +192,6 @@ public class SliderFragment extends Fragment implements RangeSlider.OnChangeList
         } catch (Exception e) {Log.i("ff", e.toString());}
     }
 
-    public void onStartTrackingTouch(@NonNull RangeSlider slider) {
-
-    }
-
-    public void onStopTrackingTouch(@NonNull RangeSlider slider) {
-
-    }
-
     @Override
     public void onValueChange(@NonNull RangeSlider slider, float value, boolean fromUser) {
         //Log.i("ff", "thumb" + slider.getActiveThumbIndex() + ": : : " + value);

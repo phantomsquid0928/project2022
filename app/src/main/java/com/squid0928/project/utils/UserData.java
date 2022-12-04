@@ -53,9 +53,11 @@ public class UserData {
     public List<String> getFriends() {
         return friends;
     }
-    public boolean addFriends(String friend) {
+    public void addFriends(String friend) {
         friends.add(friend);
-        return false;
+    }
+    public void delFriends(String friend) {
+        friends.remove(friend);
     }
     public InputData getMarker(String key) {
         return savedInputMarkers.get(key);

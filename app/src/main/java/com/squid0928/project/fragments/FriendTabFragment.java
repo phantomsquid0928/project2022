@@ -63,7 +63,7 @@ public class FriendTabFragment extends Fragment implements MyItemRecyclerViewAda
         Fragment target = manager.findFragmentByTag("FabFriend");
         Fragment target2 = manager.findFragmentByTag("FabFriendMenu");
         Fragment target3 = manager.findFragmentByTag("addFriend");
-        Fragment target4 = manager.findFragmentByTag("friendManagePopup");
+        Fragment target4 = manager.findFragmentByTag("delFriend");
 
         if (target != null) {
             transaction.remove(target);

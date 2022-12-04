@@ -42,9 +42,9 @@ public class FriendTabTrayFragment extends Fragment implements View.OnClickListe
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_friend_add, container, false);
         Button button = view.findViewById(R.id.button3);
-        //Button button1 = view.findViewById(R.id.button4);
+        Button button1 = view.findViewById(R.id.button4);
         button.setOnClickListener(this);
-        //button1.setOnClickListener(this);
+        button1.setOnClickListener(this);
         return view;
     }
 
@@ -54,11 +54,32 @@ public class FriendTabTrayFragment extends Fragment implements View.OnClickListe
             Button button1 = (Button)view;
             Log.i("ff", button1.getText().toString());
 
-            if (button1.getText().toString().contains("ID")){
+            if (button1.getText().toString().contains("추가")){
                 //mapsActivity.user_data.values();
                 FragmentManager manager = mapsActivity.getSupportFragmentManager();
+                Fragment fragment = manager.findFragmentByTag("addFriend");
+                Fragment fragment2 = manager.findFragmentByTag("delFriend");
                 FragmentTransaction transaction = manager.beginTransaction();
-                transaction.add(R.id.map, new AddFriendFragment(mapsActivity, map), "addFriend");
+
+                if (fragment != null) return;
+                if (fragment2 != null) {
+                    transaction.remove(fragment2);
+                }
+                transaction.add(R.id.map, new AddFriendFragment(mapsActivity, map, 0), "addFriend");
+                transaction.commit();
+            }
+            if (button1.getText().toString().contains("삭제")){
+                //mapsActivity.user_data.values();
+                FragmentManager manager = mapsActivity.getSupportFragmentManager();
+                Fragment fragment = manager.findFragmentByTag("delFriend");
+                Fragment fragment1 = manager.findFragmentByTag("addFriend");
+                FragmentTransaction transaction = manager.beginTransaction();
+
+                if (fragment != null) return;
+                if (fragment1 != null) {
+                    transaction.remove(fragment1);
+                }
+                transaction.add(R.id.map, new AddFriendFragment(mapsActivity, map, 1), "delFriend");
                 transaction.commit();
             }
 

@@ -131,6 +131,7 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
                     if (mod) { //이미 잇는 마커 수정
                         Log.i("ff", "we r in mod" + res.getScheduleName());
                         String oldname = result.getString("old");
+                        String oldimg = result.getString("oldimg"); //oldimg 잇으면 fire storage삭제
                         MapMarkerManager.removeMarker(oldname);
                         target.getSavedInputMarkers().remove(oldname);
                         target.getSavedLocations().remove(oldname);
@@ -141,6 +142,7 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
                     Locations loc = new Locations(res.getScheduleName(), latLng, placeName, res.getType());
                     target.getSavedLocations().put(res.getScheduleName(), loc);
                     MapsActivity.markers.put(res.getScheduleName(), marker);
+
                     mapsActivity.saveToDB();
 
                     mapsActivity.slider.adjustRange(0);
