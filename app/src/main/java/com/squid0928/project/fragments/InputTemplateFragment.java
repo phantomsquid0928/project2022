@@ -52,11 +52,13 @@ import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.ResolverStyle;
+import org.threeten.bp.format.TextStyle;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class InputTemplateFragment extends Fragment {
 
@@ -217,13 +219,19 @@ public class InputTemplateFragment extends Fragment {
             view_check_memory.setVisibility(View.VISIBLE);  //  load Layout
             if (inputData.getDateFrom() != null && inputData.getDateTo() != null
                     && inputData.getTimeStart() != null && inputData.getTimeEnd() != null) {
+                LocalDate localDate_from = LocalDate.parse(inputData.getDateFrom());
+                LocalTime localTime_start = LocalTime.parse(inputData.getTimeStart());
+                LocalDate localDate_to = LocalDate.parse(inputData.getDateTo());
+                LocalTime localTime_end = LocalTime.parse(inputData.getTimeEnd());
                 view_check_stayed_time.setChecked(true);    //  load Checkbox
                 view_stayed_time.setVisibility(View.VISIBLE);
-                view_stayed_time.setText(inputData.getDateFrom()
-                        + " " + inputData.getTimeStart()
+                view_stayed_time.setText(localDate_from //  load TextView
+                        + " (" + localDate_from.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.KOREA)
+                        + ") " + localTime_start
                         + " ~ " + "\n"
-                        + inputData.getDateTo()
-                        + " " + inputData.getTimeEnd());
+                        + localDate_to + " ("
+                        + localDate_to.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.KOREA)
+                        + ") " + localTime_end);
             }
         }
         else if(inputData.getType()==InputData.PROMISE){    //  Type == Promise
@@ -233,9 +241,12 @@ public class InputTemplateFragment extends Fragment {
             view_check_memory.setVisibility(View.GONE);
             view_check_promise.setVisibility(View.VISIBLE);  //  load Layout
             if (inputData.getDateFrom() != null && inputData.getTimeStart() != null) {
-                view_promised_time.setText(inputData.getDateFrom()
-                        + " " + inputData.getTimeStart());
-                if(checkIf24hoursBefore())
+                LocalDate localDate = LocalDate.parse(inputData.getDateFrom());
+                LocalTime localTime = LocalTime.parse(inputData.getTimeStart());
+                view_promised_time.setText(localDate    //  load TextView
+                        + " (" + localDate.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.KOREA)
+                        + ") " + localTime);
+                if(checkIf24hoursBefore())  //  load Button
                     view_btn_setAlarm.setEnabled(true);
             }
         }
@@ -535,10 +546,12 @@ public class InputTemplateFragment extends Fragment {
                         //  날짜, 시간 TextView에 띄우기
                         String concat = localDate_from.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").
                                 withResolverStyle(ResolverStyle.STRICT))
+                                + " (" + localDate_from.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.KOREA) + ") "
                                 + " " + localTime_start.format(DateTimeFormatter.ofPattern("HH:mm"))
                                 + " ~ " + "\n"
                                 + localDate_to.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").
                                 withResolverStyle(ResolverStyle.STRICT))
+                                + " (" + localDate_to.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.KOREA) + ") "
                                 + " " + localTime_end.format(DateTimeFormatter.ofPattern("HH:mm"));
                         view_stayed_time.setText(concat);
 
@@ -584,21 +597,30 @@ public class InputTemplateFragment extends Fragment {
                 LocalDate localDate = LocalDate.of(dialog_promised_date.getYear(), dialog_promised_date.getMonth()+1,
                         dialog_promised_date.getDayOfMonth());
                 LocalTime localTime = LocalTime.of(dialog_promised_time.getHour(), dialog_promised_time.getMinute());
+                if(LocalTime.now().isAfter(localTime))
+                {
+                    Toast.makeText(getActivity(), "정확한 시간을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    dialog_promised_date_time.cancel();
+                    view_memory.setChecked(true);
+                }
                 //  날짜, 시간 TextView에 띄우기
-                String concat = localDate.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").
-                        withResolverStyle(ResolverStyle.STRICT))
-                        + " " + localTime.format(DateTimeFormatter.ofPattern("HH:mm"));
-                view_promised_time.setText(concat);
+                else {
+                    String concat = localDate.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").
+                            withResolverStyle(ResolverStyle.STRICT))
+                            + " (" + localDate.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.KOREA) + ") "
+                            + " " + localTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+                    view_promised_time.setText(concat);
 
-                //  DB에 저장
-                inputData.setDateFrom(localDate.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").
-                        withResolverStyle(ResolverStyle.STRICT)));
-                inputData.setTimeStart(localTime.format(DateTimeFormatter.ofPattern("HH:mm")));
+                    //  DB에 저장
+                    inputData.setDateFrom(localDate.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").
+                            withResolverStyle(ResolverStyle.STRICT)));
+                    inputData.setTimeStart(localTime.format(DateTimeFormatter.ofPattern("HH:mm")));
 
-                if(checkIf24hoursBefore())
-                    view_btn_setAlarm.setEnabled(true);
-                if (dialog_promised_date_time.isShowing())
-                    dialog_promised_date_time.dismiss();
+                    if (checkIf24hoursBefore())
+                        view_btn_setAlarm.setEnabled(true);
+                    if (dialog_promised_date_time.isShowing())
+                        dialog_promised_date_time.dismiss();
+                }
             }
         });
         dialog_rejectBtn_promisedTime.setOnClickListener(new Button.OnClickListener() { //  취소 버튼
