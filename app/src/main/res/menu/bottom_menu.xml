@@ -3,18 +3,22 @@
     <item
         android:id="@+id/tab_map"
         android:enabled="true"
-        android:title="home" />  <!--@string/~~~로 변환 필요-->  <!--여기 -->
+        android:title="home"
+        android:icon = "@drawable/ic_baseline_map_24"/>  <!--@string/~~~로 변환 필요-->  <!--여기 -->
     <item
         android:id="@+id/tab_friend"
         android:enabled="true"
-        android:title="friend" />
+        android:title="friend"
+        android:icon = "@drawable/ic_baseline_people_outline_24"/>
     <item
         android:id="@+id/tab_timetable"
         android:enabled="true"
-        android:title="time table" />
+        android:title="time table"
+        android:icon = "@drawable/ic_baseline_people_outline_24"/>
     <item
         android:id="@+id/tab_settings"
         android:enabled="true"
-        android:title="settings" />     <!--android:icon = "@drawable:file-name" 추가-->
+        android:title="settings"
+        android:icon = "@drawable/ic_baseline_settings_24"/>     <!--android:icon = "@drawable:file-name" 추가-->
 
 </menu>
