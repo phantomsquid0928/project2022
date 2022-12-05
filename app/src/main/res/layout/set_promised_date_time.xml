@@ -18,7 +18,6 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="0.6"
-        android:calendarViewShown="false"
         android:datePickerMode="calendar"
         android:layout_gravity="center">
     </DatePicker>

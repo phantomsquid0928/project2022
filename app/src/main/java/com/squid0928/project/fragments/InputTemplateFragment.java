@@ -23,7 +23,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -60,7 +59,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class InputTemplateFragment extends Fragment {
+public class InputTemplateFragment extends Fragment{
 
     Dialog dialog_stayed_date_time;
     ImageView view_photo;
@@ -456,6 +455,7 @@ public class InputTemplateFragment extends Fragment {
                 }
             }
         });
+
         view_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -477,38 +477,65 @@ public class InputTemplateFragment extends Fragment {
     //  추억_날짜, 머문 시간 입력
     private void setMemory() {
         Button dialog_nextBtn_stayedTime;
+        Button dialog_cancelBtn_stayedTime;
         Button dialog_acceptBtn_stayedTime;
-        ConstraintLayout dialog_date_time_from_set;
-        ConstraintLayout dialog_date_time_to_set;
+        Button dialog_prevBtn_stayedTime;
+        LinearLayout dialog_date_time_from_set;
+        LinearLayout dialog_date_time_to_set;
         DatePicker dialog_stayed_date_from;
         TimePicker dialog_stayed_time_from;
         DatePicker dialog_stayed_date_to;
         TimePicker dialog_stayed_time_to;
+        TextView dialog_stayed_time_from_text;
         dialog_stayed_date_time = new Dialog(getActivity());
         dialog_stayed_date_time.setContentView(R.layout.set_stayed_date_time);
-        dialog_nextBtn_stayedTime = dialog_stayed_date_time.findViewById(R.id.nextBtn_stayedTime);
-        dialog_acceptBtn_stayedTime = dialog_stayed_date_time.findViewById(R.id.acceptBtn_stayedTime);
+
+        dialog_nextBtn_stayedTime = dialog_stayed_date_time.findViewById(R.id.stayed_date_time_nextBtn);
+        dialog_cancelBtn_stayedTime = dialog_stayed_date_time.findViewById(R.id.stayed_date_time_cancelBtn);
+        dialog_acceptBtn_stayedTime = dialog_stayed_date_time.findViewById(R.id.stayed_date_time_acceptBtn);
+        dialog_prevBtn_stayedTime = dialog_stayed_date_time.findViewById(R.id.stayed_date_time_prevBtn);
         dialog_date_time_from_set = dialog_stayed_date_time.findViewById(R.id.date_time_from_set);
         dialog_date_time_to_set = dialog_stayed_date_time.findViewById(R.id.date_time_to_set);
         dialog_stayed_date_from = dialog_stayed_date_time.findViewById(R.id.stayed_date_time_date_from);
         dialog_stayed_time_from = dialog_stayed_date_time.findViewById(R.id.stayed_date_time_from);
         dialog_stayed_date_to = dialog_stayed_date_time.findViewById(R.id.stayed_date_time_date_to);
         dialog_stayed_time_to = dialog_stayed_date_time.findViewById(R.id.stayed_date_time_to);
+        dialog_stayed_time_from_text=dialog_stayed_date_time.findViewById(R.id.stayed_date_time_text);
 
         if (!dialog_stayed_date_time.isShowing())
             dialog_stayed_date_time.show();
         Window window = dialog_stayed_date_time.getWindow();
         window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+
         //  추억: 현재보다 이후 날짜 선택 불가
         long date_now = System.currentTimeMillis();
         dialog_stayed_date_from.setMaxDate(date_now);
-        dialog_nextBtn_stayedTime.setOnClickListener(new View.OnClickListener() {
+
+        dialog_nextBtn_stayedTime.setOnClickListener(new View.OnClickListener() {   //  다음 버튼
             @Override
             public void onClick(View view) {
+                LocalDate localDate_from=LocalDate.of(dialog_stayed_date_from.getYear(), dialog_stayed_date_from.getMonth()+1,
+                        dialog_stayed_date_from.getDayOfMonth());
+                LocalTime localTime_start= LocalTime.of(dialog_stayed_time_from.getHour(), dialog_stayed_time_from.getMinute());
                 dialog_date_time_from_set.setVisibility(View.INVISIBLE);
                 dialog_date_time_to_set.setVisibility(View.VISIBLE);
+                dialog_stayed_time_from_text.setText(localDate_from.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").
+                        withResolverStyle(ResolverStyle.STRICT))
+                        + " (" + localDate_from.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.KOREA) + ") "
+                        + " " + localTime_start.format(DateTimeFormatter.ofPattern("HH:mm"))
+                        + " ~ ");
             }
         });
+
+        dialog_cancelBtn_stayedTime.setOnClickListener(new View.OnClickListener() { //  취소 버튼
+            @Override
+            public void onClick(View view) {
+                dialog_stayed_date_time.cancel();
+                view_check_stayed_time.setChecked(false);
+                view_stayed_time.setVisibility(View.GONE);
+            }
+        });
+
         dialog_acceptBtn_stayedTime.setOnClickListener(new Button.OnClickListener() {   // 확인 버튼
             @Override
             public void onClick(View view) {
@@ -568,6 +595,15 @@ public class InputTemplateFragment extends Fragment {
                     }
             }
         });
+
+        dialog_prevBtn_stayedTime.setOnClickListener(new View.OnClickListener() {   //  이전 버튼
+            @Override
+            public void onClick(View view) {
+                dialog_date_time_to_set.setVisibility(View.INVISIBLE);
+                dialog_date_time_from_set.setVisibility(View.VISIBLE);
+            }
+        });
+
     }
 
     //  약속_날짜, 시간 입력
@@ -588,9 +624,11 @@ public class InputTemplateFragment extends Fragment {
             dialog_promised_date_time.show();
         Window window = dialog_promised_date_time.getWindow();
         window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+
         //  약속: 현재보다 이전 날짜 선택 불가
         long date_now = System.currentTimeMillis();
-        dialog_promised_date.setMinDate(date_now);  //
+        dialog_promised_date.setMinDate(date_now);
+
         dialog_acceptBtn_promisedTime.setOnClickListener(new Button.OnClickListener() { //  확인 버튼
             @Override
             public void onClick(View view) {
@@ -623,6 +661,7 @@ public class InputTemplateFragment extends Fragment {
                 }
             }
         });
+
         dialog_rejectBtn_promisedTime.setOnClickListener(new Button.OnClickListener() { //  취소 버튼
             @Override
             public void onClick(View view) {
@@ -631,6 +670,7 @@ public class InputTemplateFragment extends Fragment {
             }
         });
     }
+
     private boolean checkIf24hoursBefore(){
         LocalDate localDate = LocalDate.parse(inputData.getDateFrom(),DateTimeFormatter.ofPattern("uuuu-MM-dd").
                 withResolverStyle(ResolverStyle.STRICT));
