@@ -175,27 +175,60 @@
             app:layout_constraintRight_toRightOf="parent">
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <TextView
                 android:id="@+id/textview_save"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="top"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:text="저장"
                 android:textStyle="bold"
                 android:textColor="#33F">
             </TextView>
+
             <TextView
-                android:layout_width="25dp"
-                android:layout_height="match_parent">
-            </TextView>
-            <TextView
-                android:id="@+id/textview_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="취소"
-                android:textStyle="bold"
-                android:layout_gravity="top"
-                android:textColor="#33F">
+                android:layout_weight="1">
             </TextView>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/textview_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:text="취소"
+                    android:textStyle="bold"
+                    android:textColor="#33F">
+                </TextView>
+
+                <TextView
+                    android:id="@+id/textview_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:text="삭제"
+                    android:textStyle="bold"
+                    android:textColor="#33F"
+                    android:visibility="gone">
+                </TextView>
+
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
         </LinearLayout>
 
 

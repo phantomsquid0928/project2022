@@ -1,32 +1,23 @@
 package com.squid0928.project.fragments;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
-import android.widget.EditText;
-import android.widget.TableRow;
-import android.widget.TextView;
-import android.widget.TimePicker;
+import android.widget.ListView;
 
-import com.google.firebase.auth.FirebaseAuth;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
+
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.squid0928.project.MapsActivity;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.squid0928.project.R;
 
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Date;
+import org.threeten.bp.LocalDate;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,7 +37,8 @@ public class TimetableFragment extends Fragment {
 
     FirebaseUser user;
     private DatabaseReference mDatabase;
-    private CalendarView calendarView;
+    private MaterialCalendarView view_calendarView;
+    private ListView view_listView;
 
     public TimetableFragment() {
         // Required empty public constructor
@@ -82,7 +74,7 @@ public class TimetableFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+/*        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         View view;
@@ -90,7 +82,7 @@ public class TimetableFragment extends Fragment {
             view = inflater.inflate(R.layout.fragment_settings, null);
 
             calendarView = view.findViewById(R.id.calendarView);
-            /*
+
             calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
                 @Override
                 public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
@@ -106,13 +98,22 @@ public class TimetableFragment extends Fragment {
                     // 리스트에도 추가, 리스트뷰에도 추가,
                 }
             });
-            */
-            return view;
-        }
+            return view = inflater.inflate(R.layout.fragment_settings, null);
+        }*/
         return inflater.inflate(R.layout.fragment_timetable, container, false);
     }
 
-    public void onClick(View v) {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
+        view_calendarView = view.findViewById(R.id.calendarView);
+        view_listView = view.findViewById(R.id.listView);
+
+        view_calendarView.setSelectedDate(LocalDate.now());
+
+        //TODO  유저의 InputData 중 선택한 날짜의 시간 데이터를 받아서 리스트뷰와 연결
+        //  현재보다 이전(추억): 기간
+        //  현재보다 나중(약속): 시간
     }
 }

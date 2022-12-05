@@ -43,6 +43,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
+import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
 import com.squid0928.project.utils.InputData;
 
@@ -77,6 +78,7 @@ public class InputTemplateFragment extends Fragment{
     LinearLayout view_check_promise;
     TextView view_save;
     TextView view_cancel;
+    TextView view_delete;
     InputData inputData = new InputData();
     Uri photoUri;
     boolean mod;
@@ -202,6 +204,7 @@ public class InputTemplateFragment extends Fragment{
         view_btn_setAlarm = view.findViewById(R.id.btn_setAlarm);
         view_save = view.findViewById(R.id.textview_save);
         view_cancel = view.findViewById(R.id.textview_cancel);
+        view_delete = view.findViewById(R.id.textview_delete);
         //view_category.setAdapter(arrayAdapter_memory);  //  기본은 추억 범주
 
         ArrayAdapter<String> arrayAdapter_memory = new ArrayAdapter<>(getActivity(),
@@ -210,6 +213,10 @@ public class InputTemplateFragment extends Fragment{
                 android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.array_promise));
 
         //  LOAD InputData
+        if(inputData.getScheduleName()!=null){
+            view_delete.setVisibility(View.VISIBLE);
+            view_cancel.setVisibility(View.GONE);
+        }
         if(inputData.getPhoto()!=null)view_photo.setImageURI(Uri.parse(inputData.getPhoto())); // load ImageView
         if(inputData.getType()==InputData.MEMORY) { //  Type == Memory
             view_memory.setChecked(true);   //  load RadioButton
@@ -251,7 +258,6 @@ public class InputTemplateFragment extends Fragment{
         }
         if(inputData.getScheduleName()!=null)view_schedule_name.setText(inputData.getScheduleName()); //  load EditText
         if(inputData.getMemo()!=null)view_memo.setText(inputData.getMemo());    //  load EditText
-        //
 
         //  이미지뷰를 클릭했을 때
         view_photo.setOnClickListener(new ImageView.OnClickListener() {
@@ -472,6 +478,17 @@ public class InputTemplateFragment extends Fragment{
             }
         });
 
+        view_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //  삭제
+               //TODO 삭제 구현
+
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction().remove(InputTemplateFragment.this).commit();
+                fragmentManager.popBackStack();
+            }
+        });
     }
 
     //  추억_날짜, 머문 시간 입력
