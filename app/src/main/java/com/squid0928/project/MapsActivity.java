@@ -8,7 +8,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
@@ -40,6 +43,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.gms.tasks.CancellationToken;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -56,6 +61,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.squid0928.project.databinding.ActivityMapsBinding;
 import com.squid0928.project.fragments.FABFragment;
@@ -70,8 +80,11 @@ import com.squid0928.project.listeners.MapMarkerManager;
 import com.squid0928.project.listeners.MapMotionManager;
 import com.squid0928.project.utils.InputData;
 import com.squid0928.project.utils.Locations;
+import com.squid0928.project.utils.StorageManager;
 import com.squid0928.project.utils.UserData;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -110,12 +123,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private DatabaseReference mDatabaseRef;
     public static FirebaseFirestore db;
     public static FirebaseAuth mFirebaseAuth;
+    public static StorageManager storageManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("firebaseInfos");
         db = FirebaseFirestore.getInstance();
+        storageManager = new StorageManager(this, FirebaseStorage.getInstance());
 
 
         //loginFromPref();
@@ -133,6 +148,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     userdata = task.getResult().toObject(UserData.class);
                     getLocationPermission(); //permission 후 자동 맵 호출
                     getAlarmPermission();
+                    getStoragePermission();
                 } else{
                     Log.e("ff", "failed to get info from db");
                     finishAffinity();
@@ -423,6 +439,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(ContextCompat.checkSelfPermission(this.getApplicationContext(),Manifest.permission.SET_ALARM)!=PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SET_ALARM}, 356);
     }
+    public void getStoragePermission(){
+        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),Manifest.permission.READ_EXTERNAL_STORAGE) !=PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 3);
+        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),Manifest.permission.WRITE_EXTERNAL_STORAGE) !=PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 4);
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         mLocationPermissionsGranted = false;
@@ -439,6 +461,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Log.i("tt", "permission granted");
                 initMap();
             }
+            case 3:
+
         }
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

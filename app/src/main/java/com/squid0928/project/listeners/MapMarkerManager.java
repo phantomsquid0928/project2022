@@ -4,7 +4,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -30,8 +33,10 @@ import com.squid0928.project.utils.InputData;
 import com.squid0928.project.utils.Locations;
 import com.squid0928.project.utils.UserData;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
@@ -108,6 +113,28 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
             }
             else {
                 fragment = new InputTemplateFragment();
+            }
+
+            Uri file = Uri.parse(inputData.getPhoto());
+            File rootsd = mapsActivity.getApplicationContext().getExternalCacheDir();
+            File path1;
+            if (Build.MODEL.contains("Emulator")) {
+                path1 = new File( "mnt/user/0/primary/DCIM/project");
+            }
+            else {
+                path1 = new File(rootsd.getAbsolutePath() + "/photos");
+            }
+            //path1 = new File( "/mnt/user/0/primary/DCIM/projectImages/");
+            File dd = new File(path1 + "/" + inputData.getScheduleName());
+
+           // File dd = new File("Android/sdcard/DCIM/projectImages/" + inputData.getScheduleName());
+            Log.i("ff", file.toString() + ": : :: " + file.getEncodedPath());
+            if (inputData != null && inputData.getPhoto() != null && !dd.exists()) {
+                Log.i("ff", "loading...");
+                MapsActivity.storageManager.setFFPath(inputData.getPhoto());
+                //MapsActivity.storageManager.setPath(mapsActivity.getApplicationContext(), Uri.parse(Uri.parse(inputData.getPhoto()).getPath()));
+                Log.i("ff", "path: " + MapsActivity.storageManager.path);
+                MapsActivity.storageManager.loadImg(inputData.getScheduleName());
             }
             transaction.add(R.id.map, fragment, "fff");
             transaction.commit();
