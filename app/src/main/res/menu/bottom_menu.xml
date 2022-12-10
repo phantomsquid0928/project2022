@@ -14,7 +14,7 @@
         android:id="@+id/tab_timetable"
         android:enabled="true"
         android:title="time table"
-        android:icon = "@drawable/ic_baseline_people_outline_24"/>
+        android:icon = "@drawable/ic_baseline_calendar_month_24"/>
     <item
         android:id="@+id/tab_settings"
         android:enabled="true"

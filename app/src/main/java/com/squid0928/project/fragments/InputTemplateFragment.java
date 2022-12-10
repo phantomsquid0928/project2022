@@ -80,6 +80,7 @@ public class InputTemplateFragment extends Fragment {
     Uri photoUri;
     boolean mod;
     String oldname;
+    String oldPhoto;
 
     //String hashKey = UserID + Location?
 
@@ -107,6 +108,7 @@ public class InputTemplateFragment extends Fragment {
         this.inputData.setMemo(inputData.getMemo());
         mod = true;
         oldname = inputData.getScheduleName();
+        oldPhoto = inputData.getPhoto();
     }
 
 
@@ -433,6 +435,7 @@ public class InputTemplateFragment extends Fragment {
                     if (mod) {
                         result.putBoolean("mod", true);
                         result.putString("old", oldname);
+                        result.putString("oldimg", oldPhoto);
                     } else {
                         result.putBoolean("mod", false);
                     }

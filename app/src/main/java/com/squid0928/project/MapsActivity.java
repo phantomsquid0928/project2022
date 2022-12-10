@@ -229,6 +229,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         createTopSearch();
         createFab();
         createSlider();
+        getDeviceLocation();
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
             buildAlertMessageNoGps();
@@ -304,7 +305,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.setMyLocationEnabled(true);
             mMap.setOnMyLocationButtonClickListener(this);
             mMap.setOnMyLocationClickListener(this);
-            getDeviceLocation();
         }
         mMap.setOnMarkerClickListener(new MapMarkerManager(this, mMap));
         mMap.setOnMapClickListener(new MapClickManager(this, mMap));
@@ -396,7 +396,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         Log.i("ff", "" + currentLocation.getLatitude());
 
                         LatLng latLocation = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLocation));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLocation, 15));
                     }
                 });
             }
