@@ -198,17 +198,15 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
                         Log.i("ff", "we r in mod" + res.getScheduleName());
                         String oldname = result.getString("old");
                         String oldimg = result.getString("oldimg"); //oldimg 잇으면 fire storage삭제
-                        if (MapsActivity.userdata.getSavedInputMarkers().get(oldname).getPhoto() != null ||
-                        res.getPhoto() != null) {
-                            MapsActivity.storageManager.delImage(oldname);
-                            MapsActivity.storageManager.setFFPath(res.getPhoto());
-                            MapsActivity.storageManager.saveImg(res.getScheduleName());
-                        }
-                        if (MapsActivity.userdata.getSavedInputMarkers().get(oldname).getPhoto() == null ||
-                                res.getPhoto() != null) {
-                            //MapsActivity.storageManager.delImage(oldname);
-                            MapsActivity.storageManager.setFFPath(res.getPhoto());
-                            MapsActivity.storageManager.saveImg(res.getScheduleName());
+                        boolean isimgchange = result.getBoolean("imgchange");
+                        if (isimgchange) {
+                            if (res.getPhoto() == null || res.getPhoto() == "") { //사진삭제
+                                MapsActivity.storageManager.delImage(oldname);
+                            }
+                            if (res.getPhoto() != null) {//사진 추가
+                                MapsActivity.storageManager.setFFPath(res.getPhoto());
+                                MapsActivity.storageManager.saveImg(res.getScheduleName());
+                            }
                         }
                         MapMarkerManager.removeMarker(oldname);
                         target.getSavedInputMarkers().remove(oldname);

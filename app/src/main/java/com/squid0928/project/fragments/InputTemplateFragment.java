@@ -352,6 +352,7 @@ public class InputTemplateFragment extends Fragment{
                                 //  사진 삭제하기
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     view_photo.setImageResource(0);
+                                    inputData.setPhoto(null); //TODO 이상하면 밤구기
                                 }
                             });
                     builder.show();
@@ -479,6 +480,23 @@ public class InputTemplateFragment extends Fragment{
                     if (mod) {
                         result.putBoolean("mod", true);
                         result.putString("old", oldname);
+                        if (oldPhoto != null) {
+                            if (!oldPhoto.equals(inputData.getPhoto())) { //삭제
+                                result.putBoolean("imgchange", true);
+                            }
+                            else {
+                                result.putBoolean("imgchange", false);
+                            }
+                        }
+                        else {
+                            if (inputData.getPhoto() == null) { //아무거도 안함
+                                result.putBoolean("imgchange", false);
+                            }
+                            else {//추가
+                                result.putBoolean("imgchange", true);
+                            }
+                        }
+
                         result.putString("oldimg", oldPhoto);
                     } else {
                         result.putBoolean("mod", false);
