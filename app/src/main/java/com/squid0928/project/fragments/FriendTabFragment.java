@@ -63,7 +63,7 @@ public class FriendTabFragment extends Fragment implements MyItemRecyclerViewAda
         Fragment target = manager.findFragmentByTag("FabFriend");
         Fragment target2 = manager.findFragmentByTag("FabFriendMenu");
         Fragment target3 = manager.findFragmentByTag("addFriend");
-        Fragment target4 = manager.findFragmentByTag("friendManagePopup");
+        Fragment target4 = manager.findFragmentByTag("delFriend");
 
         if (target != null) {
             transaction.remove(target);
@@ -127,7 +127,7 @@ public class FriendTabFragment extends Fragment implements MyItemRecyclerViewAda
         String clickedFriend = mapsActivity.userdata.getFriends().get(position);
         Log.i("ff", "itemclick " + position + "name: " + clickedFriend/*.getAccount().getName()*/);
 
-        transaction.add(R.id.map, new FriendManageFragment(mapsActivity, map), "friendManagePopup");
+        transaction.add(R.id.map, new FriendTabTrayFragment(mapsActivity, map), "FabFriendMenu");
         transaction.commit();
 
     }

@@ -85,6 +85,8 @@ public class InputTemplateFragment extends Fragment{
     Uri photoUri;
     boolean mod;
     String oldname;
+    String oldPhoto;
+    MapsActivity mapsActivity = null;
 
     //String hashKey = UserID + Location?
 
@@ -112,6 +114,22 @@ public class InputTemplateFragment extends Fragment{
         this.inputData.setMemo(inputData.getMemo());
         mod = true;
         oldname = inputData.getScheduleName();
+        oldPhoto = inputData.getPhoto();
+    }
+    public InputTemplateFragment(InputData inputData, MapsActivity i) {
+        this.inputData.setPhoto(inputData.getPhoto());
+        this.inputData.setType(inputData.getType());
+        this.inputData.setCategory(inputData.getCategory());
+        this.inputData.setDateFrom(inputData.getDateFrom());
+        this.inputData.setDateTo(inputData.getDateTo());
+        this.inputData.setTimeStart(inputData.getTimeStart());
+        this.inputData.setTimeEnd(inputData.getTimeEnd());
+        this.inputData.setScheduleName(inputData.getScheduleName());
+        this.inputData.setMemo(inputData.getMemo());
+        mod = true;
+        oldname = inputData.getScheduleName();
+        oldPhoto = inputData.getPhoto();
+        this.mapsActivity = i;
     }
 
 
@@ -222,7 +240,17 @@ public class InputTemplateFragment extends Fragment{
             view_delete.setVisibility(View.VISIBLE);
             view_cancel.setVisibility(View.GONE);
         }
-        if(inputData.getPhoto()!=null)view_photo.setImageURI(Uri.parse(inputData.getPhoto())); // load ImageView
+        if(inputData.getPhoto()!=null) {
+            if (mapsActivity != null) {
+                Uri temp = Uri.parse(mapsActivity.getApplicationContext().getExternalCacheDir() + "/photos/" + mapsActivity.user + "/" + inputData.getScheduleName() + ".jpg");
+                Log.i("ff", "changing image to " + temp);
+                view_photo.setImageURI(temp);
+            }
+            else {
+                view_photo.setImageURI(Uri.parse(inputData.getPhoto())); // load ImageView
+            }
+        }
+
         if(inputData.getType()==InputData.MEMORY) { //  Type == Memory
             view_memory.setChecked(true);   //  load RadioButton
             view_category.setAdapter(arrayAdapter_memory);  //  load Spinner
@@ -451,6 +479,7 @@ public class InputTemplateFragment extends Fragment{
                     if (mod) {
                         result.putBoolean("mod", true);
                         result.putString("old", oldname);
+                        result.putString("oldimg", oldPhoto);
                     } else {
                         result.putBoolean("mod", false);
                     }

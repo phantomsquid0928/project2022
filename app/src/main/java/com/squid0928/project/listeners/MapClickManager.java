@@ -1,5 +1,6 @@
 package com.squid0928.project.listeners;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -14,11 +15,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.common.collect.Maps;
 import com.squid0928.project.fragments.InputTemplateFragment;
 import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
 import com.squid0928.project.utils.InputData;
 import com.squid0928.project.utils.Locations;
+import com.squid0928.project.utils.StorageManager;
 import com.squid0928.project.utils.UserData;
 
 import java.util.ArrayList;
@@ -84,6 +87,13 @@ public class MapClickManager implements GoogleMap.OnMapClickListener {
                 if (!transitionRes) {
                     //mapsActivity.markers.remove("myloc");
                     return;
+                }
+                if (res.getPhoto() != null) {
+                    Log.i("ff", "saving: " + Uri.parse(res.getPhoto()));
+                    MapsActivity.storageManager.setFFPath(res.getPhoto());
+                    //MapsActivity.storageManager.setPath(mapsActivity.getApplicationContext(), Uri.parse(Uri.parse(res.getPhoto()).getPath()));
+                    Log.i("ff", "path: " + MapsActivity.storageManager.path);
+                    MapsActivity.storageManager.saveImg(res.getScheduleName());
                 }
 
                 UserData target = MapsActivity.userdata; //TODO 바꿔라 개인정보
