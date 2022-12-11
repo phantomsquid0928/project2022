@@ -51,7 +51,7 @@ public class StorageManager {
                 path1 = new File( "mnt/user/0/primary/DCIM/project");
             }
             else {
-                path1 = new File(rootsd.getAbsolutePath() + "/photos");
+                path1 = new File(rootsd.getAbsolutePath() + "/photos/" + MapsActivity.user);
                 path1.mkdirs();
             }
             //path1 = new File( "/mnt/user/0/primary/DCIM/projectImages/");
@@ -64,7 +64,7 @@ public class StorageManager {
             }
 
             //저장하는 파일의 이름
-            final File file = new File(path1 + "/" + name);
+            final File file = new File(path1 + "/" + name + ".jpg");
             Log.i("ff", "" + file.getPath());
             try {
                 mapsActivity.getStoragePermission();

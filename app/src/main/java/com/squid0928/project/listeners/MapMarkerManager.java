@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -34,6 +35,7 @@ import com.squid0928.project.utils.Locations;
 import com.squid0928.project.utils.UserData;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -103,39 +105,55 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
             inputData = mapsActivity.userdata.getMarker(target);
             Log.i("ff", "inputdata exitst" + inputData.getType());
         }
+        File rootsd = mapsActivity.getApplicationContext().getExternalCacheDir();
+        File path1;
+
+        if (Build.MODEL.contains("Emulator")) {
+            path1 = new File( "mnt/user/0/primary/DCIM/project");
+        }
+        else {
+            path1 = new File(rootsd.getAbsolutePath() + "/photos");
+        }
+        //path1 = new File( "/mnt/user/0/primary/DCIM/projectImages/");
+        File dd = new File(path1 + "/" + MapsActivity.user + "/" + inputData.getScheduleName() + ".jpg");
+        if (inputData != null && inputData.getPhoto() != null && !dd.exists()) {
+            Log.i("ff", "loading...");
+            MapsActivity.storageManager.setFFPath(inputData.getPhoto());
+            //MapsActivity.storageManager.setPath(mapsActivity.getApplicationContext(), Uri.parse(Uri.parse(inputData.getPhoto()).getPath()));
+            Log.i("ff", "path: " + MapsActivity.storageManager.path);
+            MapsActivity.storageManager.loadImg(inputData.getScheduleName());
+        }
 
         Log.i("ff", "previous" + markerid + "\nnow " + marker.getId());
         if (markerid.equals(marker.getId())) {
             markerid = "";
             InputTemplateFragment fragment;
+
             if (inputData != null) {
                 fragment = new InputTemplateFragment(inputData); //TODO exist inputdata show
+                boolean exists = false;
+                try {
+                    InputStream is = mapsActivity.getApplicationContext().getContentResolver().openInputStream(Uri.parse(inputData.getPhoto()));
+                    exists = true;
+                }
+                catch (Exception e) {
+
+                }
+                if (!exists) {
+                    Log.i("ff", "file2 not exists");
+                    MapsActivity.storageManager.loadImg(inputData.getScheduleName());
+                    fragment = new InputTemplateFragment(inputData, mapsActivity);
+                }
             }
             else {
                 fragment = new InputTemplateFragment();
             }
 
             Uri file = Uri.parse(inputData.getPhoto());
-            File rootsd = mapsActivity.getApplicationContext().getExternalCacheDir();
-            File path1;
-            if (Build.MODEL.contains("Emulator")) {
-                path1 = new File( "mnt/user/0/primary/DCIM/project");
-            }
-            else {
-                path1 = new File(rootsd.getAbsolutePath() + "/photos");
-            }
-            //path1 = new File( "/mnt/user/0/primary/DCIM/projectImages/");
-            File dd = new File(path1 + "/" + inputData.getScheduleName());
 
            // File dd = new File("Android/sdcard/DCIM/projectImages/" + inputData.getScheduleName());
             Log.i("ff", file.toString() + ": : :: " + file.getEncodedPath());
-            if (inputData != null && inputData.getPhoto() != null && !dd.exists()) {
-                Log.i("ff", "loading...");
-                MapsActivity.storageManager.setFFPath(inputData.getPhoto());
-                //MapsActivity.storageManager.setPath(mapsActivity.getApplicationContext(), Uri.parse(Uri.parse(inputData.getPhoto()).getPath()));
-                Log.i("ff", "path: " + MapsActivity.storageManager.path);
-                MapsActivity.storageManager.loadImg(inputData.getScheduleName());
-            }
+
             transaction.add(R.id.map, fragment, "fff");
             transaction.commit();
             LatLng latLng = marker.getPosition();
