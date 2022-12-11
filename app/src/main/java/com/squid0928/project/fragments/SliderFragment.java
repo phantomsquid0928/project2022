@@ -150,15 +150,16 @@ public class SliderFragment extends Fragment implements RangeSlider.OnChangeList
         String lat = latest.toString();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         try {
+            targetoldest = oldest;
             Date date1 = sdf.parse(old);
             Date date2 = sdf.parse(lat);
-            long diff = date2.getTime() - date1.getTime();
+            long diff = date2.getTime() - date1.getTime() ;
             long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS); //둘다용
             LocalDate today = LocalDate.now();
             Date tdate = sdf.parse(today.toString());
-            long diff2 = tdate.getTime() - date1.getTime(); // 추억용
+            long diff2 = tdate.getTime() - date1.getTime() + 1; // 추억용
             long days2 = TimeUnit.DAYS.convert(diff2, TimeUnit.MILLISECONDS);
-            long diff3 = date2.getTime() - tdate.getTime();
+            long diff3 = date2.getTime() - tdate.getTime() + 1;
             long days3 = TimeUnit.DAYS.convert(diff3, TimeUnit.MILLISECONDS); //약속용
 
             slider.setValues((float)0, (float)days);
