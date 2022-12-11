@@ -17,6 +17,7 @@ import androidx.loader.content.CursorLoader;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.common.collect.Maps;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
@@ -124,38 +125,22 @@ public class StorageManager {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Log.i("ff", "img saved successful");
-                loadImg(name);
+                //loadImg(name);
             }
         });//파일에 담기 위함, 어쩔수 없음
     }
-    /*public void setPath(Context context, Uri contentURI) {
-        String result;
-        Cursor cursor = context.getContentResolver().query(contentURI, null,
-                null, null, null);
-
-        if (cursor == null) { // Source is Dropbox or other similar local file
-            // path
-            result = contentURI.getPath();
-        } else {
-            cursor.moveToFirst();
-            try {
-                int idx = cursor
-                        .getColumnIndex(MediaStore.Images.Media.);
-                result = cursor.getString(idx);
-            } catch (Exception e) {
-                Log.e("ff", e.getMessage());
-                //AppLog.handleException(ImageHelper.class.getName(), e);
-                result = "";
-            }
-            cursor.close();
-        }
-        Log.i("ff", "path: " + path);
-        path = result;
-    }*/
+    public void delImage(String oldname) {
+        StorageReference storageRef = mStorage.getReference();
+        StorageReference riversRef = storageRef.child("images/" + mapsActivity.user + "/" + oldname);
+        Task<Void> del = riversRef.delete();
+        del.addOnCompleteListener(snapshot -> {
+            Log.i("ff", "img deleted from db");
+        });
+    }
     public void setFFPath(String path) {
         this.path = path;
     }
-    public void setPath(final Context context, final Uri uri) {
+    /*public void setPath(final Context context, final Uri uri) {
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
@@ -217,7 +202,7 @@ public class StorageManager {
         path = null;
     }
 
-    /**
+    *//**
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
      *
@@ -226,7 +211,7 @@ public class StorageManager {
      * @param selection (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
-     */
+     *//*
     public static String getDataColumn(Context context, Uri uri, String selection,
                                        String[] selectionArgs) {
 
@@ -251,27 +236,27 @@ public class StorageManager {
     }
 
 
-    /**
+    *//**
      * @param uri The Uri to check.
      * @return Whether the Uri authority is ExternalStorageProvider.
-     */
+     *//*
     public static boolean isExternalStorageDocument(Uri uri) {
         return "com.android.externalstorage.documents".equals(uri.getAuthority());
     }
 
-    /**
+    *//**
      * @param uri The Uri to check.
      * @return Whether the Uri authority is DownloadsProvider.
-     */
+     *//*
     public static boolean isDownloadsDocument(Uri uri) {
         return "com.android.providers.downloads.documents".equals(uri.getAuthority());
     }
 
-    /**
+    *//**
      * @param uri The Uri to check.
      * @return Whether the Uri authority is MediaProvider.
-     */
+     *//*
     public static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
-    }
+    }*/
 }

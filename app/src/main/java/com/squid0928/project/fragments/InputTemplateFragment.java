@@ -508,6 +508,7 @@ public class InputTemplateFragment extends Fragment{
         view_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i("ff", "cancel clicked");
                 //  취소
                 Bundle result = new Bundle();
                 result.putSerializable("inputData", null);
@@ -524,6 +525,15 @@ public class InputTemplateFragment extends Fragment{
         view_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i("ff", "del clicked");
+                Bundle result = new Bundle();
+                result.putSerializable("inputData", null);
+                result.putBoolean("res", true);
+                result.putBoolean("mod", false);
+                result.putString("old", oldname);
+                result.putString("oldimg", oldPhoto);
+
+                getActivity().getSupportFragmentManager().setFragmentResult("key", result);
                 //  삭제
                //TODO 삭제 구현
 

@@ -108,7 +108,7 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
         File rootsd = mapsActivity.getApplicationContext().getExternalCacheDir();
         File path1;
 
-        if (Build.MODEL.contains("Emulator")) {
+        if (Build.MODEL.contains("Emulator")) { //TODO useless code
             path1 = new File( "mnt/user/0/primary/DCIM/project");
         }
         else {
@@ -167,9 +167,19 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
                     InputData res = (InputData)result.getSerializable("inputData");
                     boolean mod = result.getBoolean("mod");
                     boolean transitionRes = result.getBoolean("res");
-
                     if (!transitionRes) {
                         //mapsActivity.markers.remove("myloc");
+                        return;
+                    }
+                    if (res == null && transitionRes) {//삭제
+                        UserData target = mapsActivity.userdata;
+                        Log.i("ff", "delete all");
+                        String oldname = result.getString("old");
+                        MapMarkerManager.removeMarker(oldname);
+                        target.getSavedInputMarkers().remove(oldname);
+                        target.getSavedLocations().remove(oldname);
+                        MapsActivity.storageManager.delImage(oldname);
+                        mapsActivity.saveToDB();
                         return;
                     }
                     UserData target = mapsActivity.userdata; //TODO 바꿔라
@@ -180,6 +190,8 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
                         MapMarkerManager.removeMarker(oldname);
                         target.getSavedInputMarkers().remove(oldname);
                         target.getSavedLocations().remove(oldname);
+                        MapsActivity.storageManager.delImage(oldname);
+                        MapsActivity.storageManager.saveImg(res.getScheduleName());
                     }
 
                     Marker marker = MapMarkerManager.addMarker(res.getScheduleName(), latLng, res.getType()); //TODO 바꿔라
