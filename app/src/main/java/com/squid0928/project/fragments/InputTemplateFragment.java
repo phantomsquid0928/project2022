@@ -705,7 +705,7 @@ public class InputTemplateFragment extends Fragment{
                 LocalDate localDate = LocalDate.of(dialog_promised_date.getYear(), dialog_promised_date.getMonth()+1,
                         dialog_promised_date.getDayOfMonth());
                 LocalTime localTime = LocalTime.of(dialog_promised_time.getHour(), dialog_promised_time.getMinute());
-                if(LocalTime.now().isAfter(localTime))
+                if(!LocalTime.now().isAfter(localTime))
                 {
                     Toast.makeText(getActivity(), "정확한 시간을 입력해주세요.", Toast.LENGTH_SHORT).show();
                     dialog_promised_date_time.cancel();

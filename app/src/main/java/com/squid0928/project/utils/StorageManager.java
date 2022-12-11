@@ -39,10 +39,10 @@ public class StorageManager {
         this.mapsActivity = mapsActivity;
         this.mStorage = mStorage;
     }
-    public boolean loadImg(String name) {
+    public void loadImg(String name) {
         if (path == null) {
             Log.i("ff", "null, return");
-            return false;
+            return;
         }
         try{
             //로컬에 저장할 폴더의 위치

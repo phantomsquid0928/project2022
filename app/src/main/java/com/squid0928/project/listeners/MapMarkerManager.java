@@ -154,12 +154,12 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
             else {
                 fragment = new InputTemplateFragment();
             }
-            if (inputData != null) {
+            /*if (inputData != null && inputData.getPhoto()) {
                 Uri file = Uri.parse(inputData.getPhoto());
 
                 // File dd = new File("Android/sdcard/DCIM/projectImages/" + inputData.getScheduleName());
                 Log.i("ff", file.toString() + ": : :: " + file.getEncodedPath());
-            }
+            }*/
 
             transaction.add(R.id.map, fragment, "fff");
             transaction.commit();
