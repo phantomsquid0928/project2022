@@ -146,7 +146,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     userdata = task.getResult().toObject(UserData.class);
-                    getLocationPermission(); //permission 후 자동 맵 호출
+                    boolean suceed = getLocationPermission(); //permission 후 자동 맵 호출
+                    if (!suceed) {
+                        getLocationPermission();
+                    }
                     getAlarmPermission();
                     getStoragePermission();
                 } else{
@@ -246,10 +249,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         createTopSearch();
         createFab();
         createSlider();
+
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
             buildAlertMessageNoGps();
-            getDeviceLocation();
         }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -305,7 +308,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        getDeviceLocation();
         mUiSettings = mMap.getUiSettings();
 
         mUiSettings.setZoomControlsEnabled(true);
@@ -316,13 +318,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mUiSettings.setRotateGesturesEnabled(true);
         mUiSettings.setMapToolbarEnabled(true);
 
-        if (mLocationPermissionsGranted) {
+        if (mLocationPermissionsGranted && manager.isProviderEnabled( LocationManager.GPS_PROVIDER )) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
             mMap.setMyLocationEnabled(true);
             mMap.setOnMyLocationButtonClickListener(this);
             mMap.setOnMyLocationClickListener(this);
+            getDeviceLocation();
         }
         mMap.setOnMarkerClickListener(new MapMarkerManager(this, mMap));
         mMap.setOnMapClickListener(new MapClickManager(this, mMap));
@@ -423,22 +426,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         return null;
     }
-    private void getLocationPermission() {
+    private boolean getLocationPermission() {
         String[] permissions = {
             Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
         };
 
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(), permissions[0]) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
+            return false;
         }
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(), permissions[0]) == PackageManager.PERMISSION_GRANTED &&
         ContextCompat.checkSelfPermission(this.getApplicationContext(), permissions[1]) == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionsGranted = true;
-            mMap.setMyLocationEnabled(true);
-            mMap.setOnMyLocationButtonClickListener(this);
-            mMap.setOnMyLocationClickListener(this);
             initMap();
+            return true;
         }
+        return false;
     }
     private void getAlarmPermission(){
         if(ContextCompat.checkSelfPermission(this.getApplicationContext(),Manifest.permission.SET_ALARM)!=PackageManager.PERMISSION_GRANTED)
