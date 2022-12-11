@@ -39,10 +39,10 @@ public class StorageManager {
         this.mapsActivity = mapsActivity;
         this.mStorage = mStorage;
     }
-    public void loadImg(String name) {
+    public boolean loadImg(String name) {
         if (path == null) {
             Log.i("ff", "null, return");
-            return;
+            return false;
         }
         try{
             //로컬에 저장할 폴더의 위치
@@ -78,6 +78,7 @@ public class StorageManager {
                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                         //다운로드 성공 후 할 일
                         Log.i("ff", "success to download image");
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -98,6 +99,7 @@ public class StorageManager {
         } catch(Exception e){
             Log.i("ff2", e.getMessage());
         }
+
     }
 
     public void saveImg(String name) {    //getPath 후 호출

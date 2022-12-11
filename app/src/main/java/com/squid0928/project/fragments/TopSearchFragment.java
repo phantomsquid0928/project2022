@@ -115,7 +115,7 @@ public class TopSearchFragment extends Fragment implements View.OnClickListener{
         Marker marker = MapMarkerManager.addMarker(place.getName(), place, 1);
         Log.i("ff", "result ok" + place.getName() + place.getLatLng().toString());
         mapsActivity.markers.put("search", marker);
-        mapsActivity.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 10));
+        mapsActivity.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 15));
 
         /*
         final String placeId = place.getId();

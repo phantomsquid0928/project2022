@@ -464,7 +464,7 @@ public class InputTemplateFragment extends Fragment{
             public void onClick(View view) {
                 //  저장
                 Bundle result = new Bundle();
-                if(inputData.getScheduleName()!=null){
+                if(inputData.getScheduleName()!=null && !inputData.getScheduleName().equals("")){
                     if (MapsActivity.userdata.getSavedInputMarkers().containsKey(inputData.getScheduleName()) && oldname != inputData.getScheduleName()) {
                         Toast.makeText(getActivity(), "이미 있는 이름입니다.", Toast.LENGTH_SHORT).show();
                         return;

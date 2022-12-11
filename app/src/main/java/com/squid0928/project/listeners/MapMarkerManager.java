@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -121,6 +122,7 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
         }
         if (inputData != null && inputData.getPhoto() != null && !dd.exists()) {
             Log.i("ff", "loading...");
+            Toast.makeText(mapsActivity.getApplicationContext(), "없는 이미지를 다운로드 중입니다... 반영에 시간이 걸립니다.",Toast.LENGTH_SHORT).show();
             MapsActivity.storageManager.setFFPath(inputData.getPhoto());
             //MapsActivity.storageManager.setPath(mapsActivity.getApplicationContext(), Uri.parse(Uri.parse(inputData.getPhoto()).getPath()));
             Log.i("ff", "path: " + MapsActivity.storageManager.path);
@@ -144,6 +146,7 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
                 }
                 if (!exists) {
                     Log.i("ff", "file2 not exists");
+                    MapsActivity.storageManager.setFFPath(inputData.getPhoto());
                     MapsActivity.storageManager.loadImg(inputData.getScheduleName());
                     fragment = new InputTemplateFragment(inputData, mapsActivity);
                 }

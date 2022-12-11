@@ -245,7 +245,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         createTopSearch();
         createFab();
         createSlider();
-        getDeviceLocation();
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
             buildAlertMessageNoGps();
@@ -304,6 +303,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        getDeviceLocation();
         mUiSettings = mMap.getUiSettings();
 
         mUiSettings.setZoomControlsEnabled(true);
