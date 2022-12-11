@@ -204,7 +204,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
         bottomNav.setSelectedItemId(R.id.tab_map);
 
-        getDeviceLocation();
     }
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -250,6 +249,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
             buildAlertMessageNoGps();
+            getDeviceLocation();
         }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
