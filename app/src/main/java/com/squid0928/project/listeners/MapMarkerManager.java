@@ -115,7 +115,10 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
             path1 = new File(rootsd.getAbsolutePath() + "/photos");
         }
         //path1 = new File( "/mnt/user/0/primary/DCIM/projectImages/");
-        File dd = new File(path1 + "/" + MapsActivity.user + "/" + inputData.getScheduleName() + ".jpg");
+        File dd = null;
+        if (inputData != null) {
+            dd = new File(path1 + "/" + MapsActivity.user + "/" + inputData.getScheduleName() + ".jpg");
+        }
         if (inputData != null && inputData.getPhoto() != null && !dd.exists()) {
             Log.i("ff", "loading...");
             MapsActivity.storageManager.setFFPath(inputData.getPhoto());
@@ -148,11 +151,12 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
             else {
                 fragment = new InputTemplateFragment();
             }
+            if (inputData != null) {
+                Uri file = Uri.parse(inputData.getPhoto());
 
-            Uri file = Uri.parse(inputData.getPhoto());
-
-           // File dd = new File("Android/sdcard/DCIM/projectImages/" + inputData.getScheduleName());
-            Log.i("ff", file.toString() + ": : :: " + file.getEncodedPath());
+                // File dd = new File("Android/sdcard/DCIM/projectImages/" + inputData.getScheduleName());
+                Log.i("ff", file.toString() + ": : :: " + file.getEncodedPath());
+            }
 
             transaction.add(R.id.map, fragment, "fff");
             transaction.commit();
@@ -191,6 +195,7 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
                         target.getSavedInputMarkers().remove(oldname);
                         target.getSavedLocations().remove(oldname);
                         MapsActivity.storageManager.delImage(oldname);
+                        MapsActivity.storageManager.setFFPath(res.getPhoto());
                         MapsActivity.storageManager.saveImg(res.getScheduleName());
                     }
 

@@ -5,7 +5,6 @@
     android:id="@+id/coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true"
     tools:context="com.squid0928.project.MainActivity">
     <!--android:layout_marginBottom="100dp"-->
 
@@ -18,6 +17,7 @@
         app:behavior_hideable="true"
         app:behavior_peekHeight="300dp"
         app:behavior_draggable="false"
+        android:clickable="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
 
