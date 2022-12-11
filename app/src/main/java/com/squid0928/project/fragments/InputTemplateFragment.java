@@ -37,12 +37,14 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.google.common.collect.Maps;
+import com.squid0928.project.MapsActivity;
 import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
 import com.squid0928.project.utils.InputData;
@@ -52,13 +54,15 @@ import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.ResolverStyle;
+import org.threeten.bp.format.TextStyle;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
-public class InputTemplateFragment extends Fragment {
+public class InputTemplateFragment extends Fragment{
 
     Dialog dialog_stayed_date_time;
     ImageView view_photo;
@@ -76,6 +80,7 @@ public class InputTemplateFragment extends Fragment {
     LinearLayout view_check_promise;
     TextView view_save;
     TextView view_cancel;
+    TextView view_delete;
     InputData inputData = new InputData();
     Uri photoUri;
     boolean mod;
@@ -204,6 +209,7 @@ public class InputTemplateFragment extends Fragment {
         view_btn_setAlarm = view.findViewById(R.id.btn_setAlarm);
         view_save = view.findViewById(R.id.textview_save);
         view_cancel = view.findViewById(R.id.textview_cancel);
+        view_delete = view.findViewById(R.id.textview_delete);
         //view_category.setAdapter(arrayAdapter_memory);  //  기본은 추억 범주
 
         ArrayAdapter<String> arrayAdapter_memory = new ArrayAdapter<>(getActivity(),
@@ -212,6 +218,10 @@ public class InputTemplateFragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.array_promise));
 
         //  LOAD InputData
+        if(inputData.getScheduleName()!=null){
+            view_delete.setVisibility(View.VISIBLE);
+            view_cancel.setVisibility(View.GONE);
+        }
         if(inputData.getPhoto()!=null)view_photo.setImageURI(Uri.parse(inputData.getPhoto())); // load ImageView
         if(inputData.getType()==InputData.MEMORY) { //  Type == Memory
             view_memory.setChecked(true);   //  load RadioButton
@@ -220,13 +230,19 @@ public class InputTemplateFragment extends Fragment {
             view_check_memory.setVisibility(View.VISIBLE);  //  load Layout
             if (inputData.getDateFrom() != null && inputData.getDateTo() != null
                     && inputData.getTimeStart() != null && inputData.getTimeEnd() != null) {
+                LocalDate localDate_from = LocalDate.parse(inputData.getDateFrom());
+                LocalTime localTime_start = LocalTime.parse(inputData.getTimeStart());
+                LocalDate localDate_to = LocalDate.parse(inputData.getDateTo());
+                LocalTime localTime_end = LocalTime.parse(inputData.getTimeEnd());
                 view_check_stayed_time.setChecked(true);    //  load Checkbox
                 view_stayed_time.setVisibility(View.VISIBLE);
-                view_stayed_time.setText(inputData.getDateFrom()
-                        + " " + inputData.getTimeStart()
+                view_stayed_time.setText(localDate_from //  load TextView
+                        + " (" + localDate_from.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.KOREA)
+                        + ") " + localTime_start
                         + " ~ " + "\n"
-                        + inputData.getDateTo()
-                        + " " + inputData.getTimeEnd());
+                        + localDate_to + " ("
+                        + localDate_to.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.KOREA)
+                        + ") " + localTime_end);
             }
         }
         else if(inputData.getType()==InputData.PROMISE){    //  Type == Promise
@@ -236,15 +252,17 @@ public class InputTemplateFragment extends Fragment {
             view_check_memory.setVisibility(View.GONE);
             view_check_promise.setVisibility(View.VISIBLE);  //  load Layout
             if (inputData.getDateFrom() != null && inputData.getTimeStart() != null) {
-                view_promised_time.setText(inputData.getDateFrom()
-                        + " " + inputData.getTimeStart());
-                if(checkIf24hoursBefore())
+                LocalDate localDate = LocalDate.parse(inputData.getDateFrom());
+                LocalTime localTime = LocalTime.parse(inputData.getTimeStart());
+                view_promised_time.setText(localDate    //  load TextView
+                        + " (" + localDate.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.KOREA)
+                        + ") " + localTime);
+                if(checkIf24hoursBefore())  //  load Button
                     view_btn_setAlarm.setEnabled(true);
             }
         }
         if(inputData.getScheduleName()!=null)view_schedule_name.setText(inputData.getScheduleName()); //  load EditText
         if(inputData.getMemo()!=null)view_memo.setText(inputData.getMemo());    //  load EditText
-        //
 
         //  이미지뷰를 클릭했을 때
         view_photo.setOnClickListener(new ImageView.OnClickListener() {
@@ -457,6 +475,7 @@ public class InputTemplateFragment extends Fragment {
                 }
             }
         });
+
         view_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -473,30 +492,81 @@ public class InputTemplateFragment extends Fragment {
             }
         });
 
+        view_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //  삭제
+               //TODO 삭제 구현
+
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction().remove(InputTemplateFragment.this).commit();
+                fragmentManager.popBackStack();
+            }
+        });
     }
 
     //  추억_날짜, 머문 시간 입력
     private void setMemory() {
+        Button dialog_nextBtn_stayedTime;
+        Button dialog_cancelBtn_stayedTime;
         Button dialog_acceptBtn_stayedTime;
+        Button dialog_prevBtn_stayedTime;
+        LinearLayout dialog_date_time_from_set;
+        LinearLayout dialog_date_time_to_set;
         DatePicker dialog_stayed_date_from;
         TimePicker dialog_stayed_time_from;
         DatePicker dialog_stayed_date_to;
         TimePicker dialog_stayed_time_to;
+        TextView dialog_stayed_time_from_text;
         dialog_stayed_date_time = new Dialog(getActivity());
         dialog_stayed_date_time.setContentView(R.layout.set_stayed_date_time);
-        dialog_acceptBtn_stayedTime = dialog_stayed_date_time.findViewById(R.id.acceptBtn_stayedTime);
+
+        dialog_nextBtn_stayedTime = dialog_stayed_date_time.findViewById(R.id.stayed_date_time_nextBtn);
+        dialog_cancelBtn_stayedTime = dialog_stayed_date_time.findViewById(R.id.stayed_date_time_cancelBtn);
+        dialog_acceptBtn_stayedTime = dialog_stayed_date_time.findViewById(R.id.stayed_date_time_acceptBtn);
+        dialog_prevBtn_stayedTime = dialog_stayed_date_time.findViewById(R.id.stayed_date_time_prevBtn);
+        dialog_date_time_from_set = dialog_stayed_date_time.findViewById(R.id.date_time_from_set);
+        dialog_date_time_to_set = dialog_stayed_date_time.findViewById(R.id.date_time_to_set);
         dialog_stayed_date_from = dialog_stayed_date_time.findViewById(R.id.stayed_date_time_date_from);
         dialog_stayed_time_from = dialog_stayed_date_time.findViewById(R.id.stayed_date_time_from);
         dialog_stayed_date_to = dialog_stayed_date_time.findViewById(R.id.stayed_date_time_date_to);
         dialog_stayed_time_to = dialog_stayed_date_time.findViewById(R.id.stayed_date_time_to);
+        dialog_stayed_time_from_text=dialog_stayed_date_time.findViewById(R.id.stayed_date_time_text);
 
         if (!dialog_stayed_date_time.isShowing())
             dialog_stayed_date_time.show();
         Window window = dialog_stayed_date_time.getWindow();
         window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+
         //  추억: 현재보다 이후 날짜 선택 불가
         long date_now = System.currentTimeMillis();
         dialog_stayed_date_from.setMaxDate(date_now);
+
+        dialog_nextBtn_stayedTime.setOnClickListener(new View.OnClickListener() {   //  다음 버튼
+            @Override
+            public void onClick(View view) {
+                LocalDate localDate_from=LocalDate.of(dialog_stayed_date_from.getYear(), dialog_stayed_date_from.getMonth()+1,
+                        dialog_stayed_date_from.getDayOfMonth());
+                LocalTime localTime_start= LocalTime.of(dialog_stayed_time_from.getHour(), dialog_stayed_time_from.getMinute());
+                dialog_date_time_from_set.setVisibility(View.INVISIBLE);
+                dialog_date_time_to_set.setVisibility(View.VISIBLE);
+                dialog_stayed_time_from_text.setText(localDate_from.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").
+                        withResolverStyle(ResolverStyle.STRICT))
+                        + " (" + localDate_from.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.KOREA) + ") "
+                        + " " + localTime_start.format(DateTimeFormatter.ofPattern("HH:mm"))
+                        + " ~ ");
+            }
+        });
+
+        dialog_cancelBtn_stayedTime.setOnClickListener(new View.OnClickListener() { //  취소 버튼
+            @Override
+            public void onClick(View view) {
+                dialog_stayed_date_time.cancel();
+                view_check_stayed_time.setChecked(false);
+                view_stayed_time.setVisibility(View.GONE);
+            }
+        });
+
         dialog_acceptBtn_stayedTime.setOnClickListener(new Button.OnClickListener() {   // 확인 버튼
             @Override
             public void onClick(View view) {
@@ -534,10 +604,12 @@ public class InputTemplateFragment extends Fragment {
                         //  날짜, 시간 TextView에 띄우기
                         String concat = localDate_from.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").
                                 withResolverStyle(ResolverStyle.STRICT))
+                                + " (" + localDate_from.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.KOREA) + ") "
                                 + " " + localTime_start.format(DateTimeFormatter.ofPattern("HH:mm"))
                                 + " ~ " + "\n"
                                 + localDate_to.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").
                                 withResolverStyle(ResolverStyle.STRICT))
+                                + " (" + localDate_to.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.KOREA) + ") "
                                 + " " + localTime_end.format(DateTimeFormatter.ofPattern("HH:mm"));
                         view_stayed_time.setText(concat);
 
@@ -554,6 +626,15 @@ public class InputTemplateFragment extends Fragment {
                     }
             }
         });
+
+        dialog_prevBtn_stayedTime.setOnClickListener(new View.OnClickListener() {   //  이전 버튼
+            @Override
+            public void onClick(View view) {
+                dialog_date_time_to_set.setVisibility(View.INVISIBLE);
+                dialog_date_time_from_set.setVisibility(View.VISIBLE);
+            }
+        });
+
     }
 
     //  약속_날짜, 시간 입력
@@ -574,32 +655,44 @@ public class InputTemplateFragment extends Fragment {
             dialog_promised_date_time.show();
         Window window = dialog_promised_date_time.getWindow();
         window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+
         //  약속: 현재보다 이전 날짜 선택 불가
         long date_now = System.currentTimeMillis();
-        dialog_promised_date.setMinDate(date_now);  //
+        dialog_promised_date.setMinDate(date_now);
+
         dialog_acceptBtn_promisedTime.setOnClickListener(new Button.OnClickListener() { //  확인 버튼
             @Override
             public void onClick(View view) {
                 LocalDate localDate = LocalDate.of(dialog_promised_date.getYear(), dialog_promised_date.getMonth()+1,
                         dialog_promised_date.getDayOfMonth());
                 LocalTime localTime = LocalTime.of(dialog_promised_time.getHour(), dialog_promised_time.getMinute());
+                if(LocalTime.now().isAfter(localTime))
+                {
+                    Toast.makeText(getActivity(), "정확한 시간을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    dialog_promised_date_time.cancel();
+                    view_memory.setChecked(true);
+                }
                 //  날짜, 시간 TextView에 띄우기
-                String concat = localDate.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").
-                        withResolverStyle(ResolverStyle.STRICT))
-                        + " " + localTime.format(DateTimeFormatter.ofPattern("HH:mm"));
-                view_promised_time.setText(concat);
+                else {
+                    String concat = localDate.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").
+                            withResolverStyle(ResolverStyle.STRICT))
+                            + " (" + localDate.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.KOREA) + ") "
+                            + " " + localTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+                    view_promised_time.setText(concat);
 
-                //  DB에 저장
-                inputData.setDateFrom(localDate.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").
-                        withResolverStyle(ResolverStyle.STRICT)));
-                inputData.setTimeStart(localTime.format(DateTimeFormatter.ofPattern("HH:mm")));
+                    //  DB에 저장
+                    inputData.setDateFrom(localDate.format(DateTimeFormatter.ofPattern("uuuu-MM-dd").
+                            withResolverStyle(ResolverStyle.STRICT)));
+                    inputData.setTimeStart(localTime.format(DateTimeFormatter.ofPattern("HH:mm")));
 
-                if(checkIf24hoursBefore())
-                    view_btn_setAlarm.setEnabled(true);
-                if (dialog_promised_date_time.isShowing())
-                    dialog_promised_date_time.dismiss();
+                    if (checkIf24hoursBefore())
+                        view_btn_setAlarm.setEnabled(true);
+                    if (dialog_promised_date_time.isShowing())
+                        dialog_promised_date_time.dismiss();
+                }
             }
         });
+
         dialog_rejectBtn_promisedTime.setOnClickListener(new Button.OnClickListener() { //  취소 버튼
             @Override
             public void onClick(View view) {
@@ -608,6 +701,7 @@ public class InputTemplateFragment extends Fragment {
             }
         });
     }
+
     private boolean checkIf24hoursBefore(){
         LocalDate localDate = LocalDate.parse(inputData.getDateFrom(),DateTimeFormatter.ofPattern("uuuu-MM-dd").
                 withResolverStyle(ResolverStyle.STRICT));
