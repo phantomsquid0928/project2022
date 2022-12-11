@@ -37,7 +37,7 @@ public class TimetableFragment extends Fragment {
 
     FirebaseUser user;
     private DatabaseReference mDatabase;
-    private MaterialCalendarView view_calendarView;
+    private CalendarView view_calendarView;
     private ListView view_listView;
 
     public TimetableFragment() {
@@ -110,7 +110,7 @@ public class TimetableFragment extends Fragment {
         view_calendarView = view.findViewById(R.id.calendarView);
         view_listView = view.findViewById(R.id.listView);
 
-        view_calendarView.setSelectedDate(LocalDate.now());
+        view_calendarView.setDate(System.currentTimeMillis());
 
         //TODO  유저의 InputData 중 선택한 날짜의 시간 데이터를 받아서 리스트뷰와 연결
         //  현재보다 이전(추억): 기간
