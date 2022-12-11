@@ -203,6 +203,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         });
         bottomNav.setSelectedItemId(R.id.tab_map);
+
+        getDeviceLocation();
     }
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
