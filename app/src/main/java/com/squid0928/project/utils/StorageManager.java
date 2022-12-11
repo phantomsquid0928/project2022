@@ -135,6 +135,7 @@ public class StorageManager {
         StorageReference storageRef = mStorage.getReference();
         StorageReference riversRef = storageRef.child("images/" + mapsActivity.user + "/" + oldname);
         Task<Void> del = riversRef.delete();
+
         del.addOnCompleteListener(snapshot -> {
             Log.i("ff", "img deleted from db");
         });
