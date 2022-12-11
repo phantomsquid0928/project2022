@@ -12,12 +12,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
 
+import com.google.common.collect.Maps;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.squid0928.project.MapsActivity;
 import com.squid0928.project.R;
+import com.squid0928.project.utils.InputData;
 
 import org.threeten.bp.LocalDate;
+
+import java.util.Collection;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -111,7 +116,11 @@ public class TimetableFragment extends Fragment {
         view_listView = view.findViewById(R.id.listView);
 
         view_calendarView.setSelectedDate(LocalDate.now());
+        Collection<InputData> temp = MapsActivity.userdata.getSavedInputMarkers().values();
 
+        for(InputData target : temp) {
+
+        }
         //TODO  유저의 InputData 중 선택한 날짜의 시간 데이터를 받아서 리스트뷰와 연결
         //  현재보다 이전(추억): 기간
         //  현재보다 나중(약속): 시간

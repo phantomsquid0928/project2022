@@ -78,7 +78,7 @@ public class StorageManager {
                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                         //다운로드 성공 후 할 일
                         Log.i("ff", "success to download image");
-
+                        Toast.makeText(mapsActivity.getApplicationContext(), "다운로드가 완료되었습니다.", Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
