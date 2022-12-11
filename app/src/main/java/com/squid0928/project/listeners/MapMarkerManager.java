@@ -182,11 +182,15 @@ public class MapMarkerManager implements GoogleMap.OnMarkerClickListener {
                         UserData target = mapsActivity.userdata;
                         Log.i("ff", "delete all");
                         String oldname = result.getString("old");
+                        if (target.getSavedInputMarkers().get(oldname).getPhoto() != null) {
+                            MapsActivity.storageManager.delImage(oldname);
+                        }
                         MapMarkerManager.removeMarker(oldname);
                         target.getSavedInputMarkers().remove(oldname);
                         target.getSavedLocations().remove(oldname);
-                        MapsActivity.storageManager.delImage(oldname);
                         mapsActivity.saveToDB();
+
+                        mapsActivity.slider.adjustRange(0);
                         return;
                     }
                     UserData target = mapsActivity.userdata; //TODO 바꿔라
