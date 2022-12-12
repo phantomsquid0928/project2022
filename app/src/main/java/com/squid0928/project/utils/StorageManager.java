@@ -99,7 +99,7 @@ public class StorageManager {
         } catch(Exception e){
             Log.i("ff2", e.getMessage());
         }
-
+        return true;
     }
 
     public void saveImg(String name) {    //getPath 후 호출
