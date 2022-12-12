@@ -341,6 +341,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             mMap.setMyLocationEnabled(true);
         }
+        /*else {
+            new Thread () {
+                public void run() {
+                    if (mLocationPermissionsGranted) {
+                        mMap.setMyLocationEnabled(true);
+                        this.interrupt();
+                    }
+                    Log.i("ff", "trying enable location");
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.start();
+        }*/
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationClickListener(this);
         mMap.setOnMarkerClickListener(new MapMarkerManager(this, mMap));
@@ -414,7 +430,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return true;
     }
     public boolean finished = false;
-    private void getDeviceLocation() {
+    private Location getDeviceLocation() {
+        Location location = null;
         Log.d("ff", "getting location of user");
         locationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         //final Location[] ret = {};
@@ -422,7 +439,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (mLocationPermissionsGranted) {
                 Log.i("ff", "trying...");
                 Task<Location> locationResult = locationProviderClient.getLastLocation();
-                Task<Location> rest = locationResult.addOnCompleteListener(new OnCompleteListener<Location>() {
+                locationResult.addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
                         Location currentLocation = task.getResult();
@@ -437,10 +454,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLocation, 15));
                     }
                 });
+                while(locationResult.isSuccessful()) {
+                    Log.i("ff", "" + locationResult.isSuccessful());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return location;
     }
     private boolean getLocationPermission() {
         String[] permissions = {
@@ -484,6 +505,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mLocationPermissionsGranted = true;
                 Log.i("tt", "permission granted");
                 initMap();
+                getDeviceLocation();
             }
             case 3:
 
