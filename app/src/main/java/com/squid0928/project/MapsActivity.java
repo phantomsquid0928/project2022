@@ -324,6 +324,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        Log.i("ff", "map is opening");
         mMap = googleMap;
         mUiSettings = mMap.getUiSettings();
 
@@ -336,29 +337,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mUiSettings.setMapToolbarEnabled(true);
 
         if (mLocationPermissionsGranted && manager.isProviderEnabled( LocationManager.GPS_PROVIDER )) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
+            Log.i("ff", "location enabled");
             mMap.setMyLocationEnabled(true);
+            mMap.setOnMyLocationButtonClickListener(this);
+            mMap.setOnMyLocationClickListener(this);
         }
-        /*else {
-            new Thread () {
-                public void run() {
-                    if (mLocationPermissionsGranted) {
-                        mMap.setMyLocationEnabled(true);
-                        this.interrupt();
-                    }
-                    Log.i("ff", "trying enable location");
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }.start();
-        }*/
-        mMap.setOnMyLocationButtonClickListener(this);
-        mMap.setOnMyLocationClickListener(this);
+
         mMap.setOnMarkerClickListener(new MapMarkerManager(this, mMap));
         mMap.setOnMapClickListener(new MapClickManager(this, mMap));
         //mMap.setOnMapLongClickListener(new MapLongClickManager(this, mMap));
@@ -370,38 +354,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    /*@Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        db.collection("userdata").document(user).set(user_data.get(user));
-    }*/
-    /*public boolean loginFromPref() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String id = preferences.getString("id", "<<>>");
-        String pass = preferences.getString("pass", "<<>>");
-        if (id.equals("<<>>") || pass.equals("<<>>")) {
-            return false;
-        }
 
-        mFirebaseAuth.signInWithEmailAndPassword(id, pass).addOnCompleteListener(MapsActivity.this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task)
-            {
-                System.out.println("login buttons");
-                // 로그인이 성공적이면
-                if(task.isSuccessful()) {
-                    return;
-                } else // 로그인 실패
-                {
-                    mFirebaseAuth.signOut();
-                    Intent intent = new Intent(MapsActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    return;
-                }
-            }
-        });
-        return
-    }*/
     public void saveToDB() {
         db.collection("userdata").document(user).set(userdata);
     }
@@ -470,6 +423,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(), permissions[0]) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
+            mLocationPermissionsGranted = false;
             return false;
         }
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(), permissions[0]) == PackageManager.PERMISSION_GRANTED &&
@@ -492,13 +446,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        mLocationPermissionsGranted = false;
 
         switch(requestCode) {
             case LOCATION_PERMISSION_REQUEST_CODE: {
                 for (int i = 0; i < grantResults.length; i++) {
                     if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                         mLocationPermissionsGranted = false;
+                        Toast.makeText(this, "퍼미션이 없으면 제대로 실행할 수 없습니다", Toast.LENGTH_SHORT).show();
+                        ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
                         return;
                     }
                 }
@@ -516,6 +471,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
     @Override
     public boolean onMyLocationButtonClick() {
+        Log.i("ff", "location button clicked");
 
         FragmentManager manager = getSupportFragmentManager();
         Fragment createdLast = manager.findFragmentByTag("fff");
