@@ -53,6 +53,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.slider.Slider;
+import com.google.common.collect.Maps;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -146,10 +147,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     userdata = task.getResult().toObject(UserData.class);
-                    boolean suceed = getLocationPermission(); //permission 후 자동 맵 호출
-                    if (!suceed) {
-                        getLocationPermission();
-                    }
+                    getLocationPermission();
+                    new Thread() {
+                        String[] permissions = {
+                                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
+                        };
+                        public void run() {
+                            if (ContextCompat.checkSelfPermission(getApplicationContext(), permissions[0]) == PackageManager.PERMISSION_GRANTED &&
+                                    ContextCompat.checkSelfPermission(getApplicationContext(), permissions[1]) == PackageManager.PERMISSION_GRANTED) {
+                                getDeviceLocation();
+                                this.interrupt();
+                            }
+
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }.start();
                     getAlarmPermission();
                     getStoragePermission();
                 } else{
@@ -215,6 +231,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                         startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        finishAffinity();
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -323,10 +340,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return;
             }
             mMap.setMyLocationEnabled(true);
-            mMap.setOnMyLocationButtonClickListener(this);
-            mMap.setOnMyLocationClickListener(this);
-            getDeviceLocation();
         }
+        mMap.setOnMyLocationButtonClickListener(this);
+        mMap.setOnMyLocationClickListener(this);
         mMap.setOnMarkerClickListener(new MapMarkerManager(this, mMap));
         mMap.setOnMapClickListener(new MapClickManager(this, mMap));
         //mMap.setOnMapLongClickListener(new MapLongClickManager(this, mMap));
@@ -397,34 +413,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         return true;
     }
-    private Location getDeviceLocation() {
+    public boolean finished = false;
+    private void getDeviceLocation() {
         Log.d("ff", "getting location of user");
         locationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         //final Location[] ret = {};
-
         try {
             if (mLocationPermissionsGranted) {
                 Log.i("ff", "trying...");
                 Task<Location> locationResult = locationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener(new OnCompleteListener<Location>() {
+                Task<Location> rest = locationResult.addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
                         Location currentLocation = task.getResult();
                         if (currentLocation == null) {
                             Log.i("ff", "DANGER");
+                            finished = false;
                             return;
                         }
                         Log.i("ff", "" + currentLocation.getLatitude());
-
+                        finished = true;
                         LatLng latLocation = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLocation, 15));
                     }
                 });
             }
-        } catch (SecurityException e) {
-            Log.i("ff", "no security");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return null;
     }
     private boolean getLocationPermission() {
         String[] permissions = {
@@ -529,4 +545,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Marker marker = MapMarkerManager.addMarker("poi - " + pointOfInterest.name, latlng,1);
         markers.put("poi - " + pointOfInterest.name, marker);
     }
+
 }
