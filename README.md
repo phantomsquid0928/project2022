@@ -4,8 +4,8 @@
 
 # Contributors
 
-phantomsquid0928@gmail.com
-inhee
+phantomsquid0928
+inhee98
 
 
 
